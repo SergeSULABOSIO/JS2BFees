@@ -1,0 +1,12 @@
+{
+  "id" : 47,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 7,
+  "nom" : "SOINS MEDICAUX",
+  "limiteAnnuelle" : 1000.0,
+  "idMonnaie" : 13,
+  "signatureMonnaie" : 1562451661903,
+  "monnaie" : "$",
+  "beta" : 0
+}

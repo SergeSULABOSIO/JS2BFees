@@ -1,0 +1,11 @@
+{
+  "id" : 18,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 6,
+  "nom" : "3ème Trimestre",
+  "debut" : 1583533221351,
+  "fin" : 1594074021351,
+  "signature" : 1562451621379,
+  "beta" : 0
+}

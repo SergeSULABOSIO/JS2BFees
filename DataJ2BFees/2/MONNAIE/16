@@ -1,0 +1,12 @@
+{
+  "id" : 16,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 8,
+  "nom" : "FRANCS CONGOLAIS",
+  "code" : "Fc",
+  "nature" : 0,
+  "tauxMonnaieLocale" : 1.0,
+  "signature" : 1562452097934,
+  "beta" : 0
+}

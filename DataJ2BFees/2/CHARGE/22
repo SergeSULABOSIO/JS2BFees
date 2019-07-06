@@ -1,0 +1,12 @@
+{
+  "id" : 22,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 4,
+  "nom" : "SALAIRE DU PERSONNEL",
+  "limiteAnnuelle" : 5000.0,
+  "idMonnaie" : 7,
+  "signatureMonnaie" : 1562446856751,
+  "monnaie" : "$",
+  "beta" : 0
+}

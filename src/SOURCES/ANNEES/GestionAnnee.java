@@ -5,8 +5,10 @@
  */
 package SOURCES.ANNEES;
 
+import SOURCES.CALLBACK.EcouteurActualisation;
 import SOURCES.Callback.EcouteurAnneeScolaire;
 import SOURCES.Callback.EcouteurEnregistrement;
+import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
 import SOURCES.Interfaces.InterfaceAgent;
 import SOURCES.Interfaces.InterfaceCharge;
@@ -18,8 +20,15 @@ import SOURCES.Interfaces.InterfaceMonnaie;
 import SOURCES.Interfaces.InterfacePeriode;
 import SOURCES.Interfaces.InterfaceRevenu;
 import SOURCES.Interfaces.InterfaceUtilisateur;
+import SOURCES.OBJETS.Agent;
+import SOURCES.OBJETS.Charge;
+import SOURCES.OBJETS.Classe;
+import SOURCES.OBJETS.Cours;
 import SOURCES.OBJETS.Exercice;
+import SOURCES.OBJETS.Frais;
 import SOURCES.OBJETS.Monnaie;
+import SOURCES.OBJETS.Periode;
+import SOURCES.OBJETS.Revenu;
 import SOURCES.Objets.Entreprise;
 import SOURCES.Objets.FileManager;
 import SOURCES.Objets.Utilisateur;
@@ -51,9 +60,19 @@ public class GestionAnnee {
     private SortiesExercice sortiesExercice = null;
     private InterfaceExercice newIannee = null;
     private FileManager fm;
+    private Vector<InterfaceAgent> agents = new Vector<>();
+    private Vector<InterfaceCharge> charges = new Vector<>();
+    private Vector<InterfaceClasse> classes = new Vector<>();
+    private Vector<InterfaceCours> cours = new Vector<>();
+    private Vector<InterfaceFrais> fraises = new Vector<>();
+    private Vector<InterfaceMonnaie> monnaies = new Vector<>();
+    private Vector<InterfacePeriode> periodes = new Vector<>();
+    private Vector<InterfaceRevenu> revenus = new Vector<>();
+    private EcouteurActualisation ecouteurActualisation;
 
-    public GestionAnnee(FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output) {
+    public GestionAnnee(FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output, EcouteurActualisation ecouteurActualisation) {
         this.fm = fm;
+        this.ecouteurActualisation = ecouteurActualisation;
         this.progress = progress;
         this.tabOnglet = tabOnglet;
         this.utilisateur = utilisateur;
@@ -73,7 +92,305 @@ public class GestionAnnee {
         this.donneesExercice = new DonneesExercice(anneeExistant, agents, charges, classes, cours, frais, monnaies, revenus, periodes);
     }
 
-    public void ga_initUI() {
+    public void ga_setDonneesFromFileManager(String selectedAnnee) {
+        if (fm != null) {
+            fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
+                @Override
+                public void onDone(String message, Vector data) {
+                    System.out.println("CHARGEMENT ANNEE: " + message);
+                    progress.setVisible(false);
+                    progress.setIndeterminate(false);
+
+                    for (Object Oannee : data) {
+                        Exercice annee = (Exercice) Oannee;
+                        if (annee.getNom().equals(selectedAnnee)) {
+                            System.out.println(" * " + annee.getNom());
+                            newIannee = annee;
+                            break;
+                        }
+
+                    }
+                    loadAgents();
+                    //donneesExercice = new DonneesExercice(newIannee, agents, charges, classes, cours, frais, monnaies, revenus, periodes);
+                    //ga_initUI(newIannee.getNom());
+                }
+
+                @Override
+                public void onError(String string) {
+                    progress.setVisible(false);
+                    progress.setIndeterminate(false);
+                }
+
+                @Override
+                public void onProcessing(String string) {
+                    progress.setVisible(true);
+                    progress.setIndeterminate(true);
+                }
+            });
+
+        }
+    }
+
+    private void loadAgents() {
+        agents.removeAllElements();
+        fm.fm_ouvrirTout(0, Agent.class, UtilFees.DOSSIER_AGENT, new EcouteurOuverture() {
+            @Override
+            public void onDone(String message, Vector data) {
+                System.out.println(message);
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+                for(Object o: data){
+                    Agent agent = (Agent)o;
+                    if(agent.getIdExercice() == newIannee.getId()){
+                        agents.add(agent);
+                        System.out.println(" * " + agent.toString());
+                    }
+                }
+                
+                loadCharges();
+            }
+
+            @Override
+            public void onError(String string) {
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+            }
+
+            @Override
+            public void onProcessing(String string) {
+                progress.setVisible(true);
+                progress.setIndeterminate(true);
+            }
+        });
+    }
+    
+    
+    private void loadCharges() {
+        charges.removeAllElements();
+        fm.fm_ouvrirTout(0, Charge.class, UtilFees.DOSSIER_CHARGE, new EcouteurOuverture() {
+            @Override
+            public void onDone(String message, Vector data) {
+                System.out.println(message);
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+                for(Object o: data){
+                    Charge charge = (Charge)o;
+                    if(charge.getIdExercice() == newIannee.getId()){
+                        charges.add(charge);
+                        System.out.println(" * " + charge.toString());
+                    }
+                }
+                loadClasses();
+            }
+
+            @Override
+            public void onError(String string) {
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+            }
+
+            @Override
+            public void onProcessing(String string) {
+                progress.setVisible(true);
+                progress.setIndeterminate(true);
+            }
+        });
+    }
+    
+    private void loadClasses() {
+        classes.removeAllElements();
+        fm.fm_ouvrirTout(0, Classe.class, UtilFees.DOSSIER_CLASSE, new EcouteurOuverture() {
+            @Override
+            public void onDone(String message, Vector data) {
+                System.out.println(message);
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+                for(Object o: data){
+                    Classe classe = (Classe)o;
+                    if(classe.getIdExercice() == newIannee.getId()){
+                        classes.add(classe);
+                        System.out.println(" * " + classe.toString());
+                    }
+                }
+                loadCours();
+            }
+
+            @Override
+            public void onError(String string) {
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+            }
+
+            @Override
+            public void onProcessing(String string) {
+                progress.setVisible(true);
+                progress.setIndeterminate(true);
+            }
+        });
+    }
+    
+    private void loadCours() {
+        cours.removeAllElements();
+        fm.fm_ouvrirTout(0, Cours.class, UtilFees.DOSSIER_COURS, new EcouteurOuverture() {
+            @Override
+            public void onDone(String message, Vector data) {
+                System.out.println(message);
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+                for(Object o: data){
+                    Cours Ocours = (Cours)o;
+                    if(Ocours.getIdExercice() == newIannee.getId()){
+                        cours.add(Ocours);
+                        System.out.println(" * " + Ocours.toString());
+                    }
+                }
+                loadFrais();
+            }
+
+            @Override
+            public void onError(String string) {
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+            }
+
+            @Override
+            public void onProcessing(String string) {
+                progress.setVisible(true);
+                progress.setIndeterminate(true);
+            }
+        });
+    }
+    
+    private void loadFrais() {
+        fraises.removeAllElements();
+        fm.fm_ouvrirTout(0, Frais.class, UtilFees.DOSSIER_FRAIS, new EcouteurOuverture() {
+            @Override
+            public void onDone(String message, Vector data) {
+                System.out.println(message);
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+                for(Object o: data){
+                    Frais frais = (Frais)o;
+                    if(frais.getIdExercice() == newIannee.getId()){
+                        fraises.add(frais);
+                        System.out.println(" * " + frais.toString());
+                    }
+                }
+                loadMonnaie();
+            }
+
+            @Override
+            public void onError(String string) {
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+            }
+
+            @Override
+            public void onProcessing(String string) {
+                progress.setVisible(true);
+                progress.setIndeterminate(true);
+            }
+        });
+    }
+    
+    private void loadMonnaie() {
+        monnaies.removeAllElements();
+        fm.fm_ouvrirTout(0, Monnaie.class, UtilFees.DOSSIER_MONNAIE, new EcouteurOuverture() {
+            @Override
+            public void onDone(String message, Vector data) {
+                System.out.println(message);
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+                for(Object o: data){
+                    Monnaie monnaie = (Monnaie)o;
+                    if(monnaie.getIdExercice() == newIannee.getId()){
+                        monnaies.add(monnaie);
+                        System.out.println(" * " + monnaie.toString());
+                    }
+                }
+                loadPeriode();
+            }
+
+            @Override
+            public void onError(String string) {
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+            }
+
+            @Override
+            public void onProcessing(String string) {
+                progress.setVisible(true);
+                progress.setIndeterminate(true);
+            }
+        });
+    }
+    
+    private void loadPeriode() {
+        periodes.removeAllElements();
+        fm.fm_ouvrirTout(0, Periode.class, UtilFees.DOSSIER_PERIODE, new EcouteurOuverture() {
+            @Override
+            public void onDone(String message, Vector data) {
+                System.out.println(message);
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+                for(Object o: data){
+                    Periode periode = (Periode)o;
+                    if(periode.getIdExercice() == newIannee.getId()){
+                        periodes.add(periode);
+                        System.out.println(" * " + periode.toString());
+                    }
+                }
+                loadRevenu();
+            }
+
+            @Override
+            public void onError(String string) {
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+            }
+
+            @Override
+            public void onProcessing(String string) {
+                progress.setVisible(true);
+                progress.setIndeterminate(true);
+            }
+        });
+    }
+    
+    private void loadRevenu() {
+        revenus.removeAllElements();
+        fm.fm_ouvrirTout(0, Revenu.class, UtilFees.DOSSIER_REVENU, new EcouteurOuverture() {
+            @Override
+            public void onDone(String message, Vector data) {
+                System.out.println(message);
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+                for(Object o: data){
+                    Revenu revenu = (Revenu)o;
+                    if(revenu.getIdExercice() == newIannee.getId()){
+                        revenus.add(revenu);
+                        System.out.println(" * " + revenu.toString());
+                    }
+                }
+                donneesExercice = new DonneesExercice(newIannee, agents, charges, classes, cours, fraises, monnaies, revenus, periodes);
+                ga_initUI(newIannee.getNom());
+            }
+
+            @Override
+            public void onError(String string) {
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+            }
+
+            @Override
+            public void onProcessing(String string) {
+                progress.setVisible(true);
+                progress.setIndeterminate(true);
+            }
+        });
+    }
+
+    public void ga_initUI(String nomTab) {
         panel = new Panel(tabOnglet, parametreExercice, donneesExercice, new EcouteurAnneeScolaire() {
             @Override
             public void onEnregistre(SortiesExercice se) {
@@ -83,7 +400,7 @@ public class GestionAnnee {
             }
         });
         //Chargement du gestionnaire sur l'onglet
-        tabOnglet.addTab("New Année Scolaire", panel);
+        tabOnglet.addTab(nomTab, panel);
         tabOnglet.setSelectedComponent(panel);
     }
 
@@ -96,8 +413,10 @@ public class GestionAnnee {
                         EcouteurEnregistrement ee = sortiesExercice.getEcouteurEnregistrement();
                         Utilisateur user = fm.fm_getSession().getUtilisateur();
                         ee.onUploading("Chargement...");
+
                         progress.setVisible(true);
                         progress.setIndeterminate(true);
+
                         sleep(50);
 
                         //DEBUT D'ENREGISTREMENT
@@ -333,7 +652,18 @@ public class GestionAnnee {
         }
         return -1;
     }
-    
+
+    private int getIdPeriode(long signature) {
+        if (sortiesExercice != null) {
+            for (InterfacePeriode ic : sortiesExercice.getListePeriodes()) {
+                if (ic.getSignature() == signature) {
+                    return ic.getId();
+                }
+            }
+        }
+        return -1;
+    }
+
     private String getNomClasse(long signature) {
         if (sortiesExercice != null) {
             for (InterfaceClasse ic : sortiesExercice.getListeClasse()) {
@@ -344,7 +674,7 @@ public class GestionAnnee {
         }
         return "";
     }
-    
+
     private String getNomPeriode(long signature) {
         if (sortiesExercice != null) {
             for (InterfacePeriode ic : sortiesExercice.getListePeriodes()) {
@@ -366,7 +696,7 @@ public class GestionAnnee {
         }
         return -1;
     }
-    
+
     private int getIdMonnaie(long signature) {
         if (sortiesExercice != null) {
             for (InterfaceMonnaie ia : sortiesExercice.getListeMonnaies()) {
@@ -516,12 +846,12 @@ public class GestionAnnee {
                 iff.setIdUtilisateur(user.getId());
                 iff.setIdEntreprise(user.getIdEntreprise());
                 //Il faut actualiser les liaisons aussi
-                for(LiaisonClasseFrais lcf: iff.getLiaisonsClasses()){
+                for (LiaisonClasseFrais lcf : iff.getLiaisonsClasses()) {
                     lcf.setIdClasse(getIdClasse(lcf.getSignatureClasse()));
                     lcf.setNomClasse(getNomClasse(lcf.getSignatureClasse()));
                 }
-                for(LiaisonPeriodeFrais lcp: iff.getLiaisonsPeriodes()){
-                    lcp.setIdPeriode(getIdClasse(lcp.getSignaturePeriode()));
+                for (LiaisonPeriodeFrais lcp : iff.getLiaisonsPeriodes()) {
+                    lcp.setIdPeriode(getIdPeriode(lcp.getSignaturePeriode()));
                     lcp.setNomPeriode(getNomPeriode(lcp.getSignaturePeriode()));
                 }
                 iff.setBeta(InterfaceExercice.BETA_EXISTANT);
@@ -536,7 +866,7 @@ public class GestionAnnee {
                     //Après enregistrement
                     ee.onDone("Enregistrés avec succès!");
                     donneesExercice.setFrais(listeNewFraisTempo);
-
+                    ecouteurActualisation.onActualise();
                     progress.setVisible(false);
                     progress.setIndeterminate(false);
                 }
@@ -562,38 +892,3 @@ public class GestionAnnee {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

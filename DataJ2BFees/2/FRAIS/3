@@ -1,0 +1,74 @@
+{
+  "id" : 3,
+  "idUtilisateur" : 12,
+  "idEntreprise" : 2,
+  "idExercice" : 2,
+  "idMonnaie" : 3,
+  "montantDefaut" : 20.0,
+  "nom" : "INSCRIPTION",
+  "monnaie" : "$",
+  "signatureMonnaie" : 1562446658025,
+  "liaisonsClasses" : [ {
+    "idClasse" : 7,
+    "nomClasse" : "1e",
+    "signatureClasse" : 1562446658031,
+    "montant" : 20.0
+  }, {
+    "idClasse" : 8,
+    "nomClasse" : "2e",
+    "signatureClasse" : 1562446658032,
+    "montant" : 20.0
+  }, {
+    "idClasse" : 9,
+    "nomClasse" : "3e",
+    "signatureClasse" : 1562446658033,
+    "montant" : 20.0
+  }, {
+    "idClasse" : 10,
+    "nomClasse" : "4e",
+    "signatureClasse" : 1562446658034,
+    "montant" : 20.0
+  }, {
+    "idClasse" : 11,
+    "nomClasse" : "5e",
+    "signatureClasse" : 1562446658036,
+    "montant" : 20.0
+  }, {
+    "idClasse" : 12,
+    "nomClasse" : "6e",
+    "signatureClasse" : 1562446658037,
+    "montant" : 20.0
+  } ],
+  "liaisonsPeriodes" : [ {
+    "idPeriode" : 4,
+    "nomPeriode" : "1er Trimestre",
+    "signaturePeriode" : 1562446657961,
+    "pourcentage" : 100.0
+  }, {
+    "idPeriode" : 4,
+    "nomPeriode" : "1er Trimestre",
+    "signaturePeriode" : 1562446657961,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 4,
+    "nomPeriode" : "1er Trimestre",
+    "signaturePeriode" : 1562446657961,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 4,
+    "nomPeriode" : "1er Trimestre",
+    "signaturePeriode" : 1562446657961,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 4,
+    "nomPeriode" : "1er Trimestre",
+    "signaturePeriode" : 1562446657961,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 4,
+    "nomPeriode" : "1er Trimestre",
+    "signaturePeriode" : 1562446657961,
+    "pourcentage" : 0.0
+  } ],
+  "beta" : 0
+}

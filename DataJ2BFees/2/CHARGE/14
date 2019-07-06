@@ -1,0 +1,12 @@
+{
+  "id" : 14,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 2,
+  "nom" : "AUTRES",
+  "limiteAnnuelle" : 1000.0,
+  "idMonnaie" : 3,
+  "signatureMonnaie" : 1562446658025,
+  "monnaie" : "$",
+  "beta" : 0
+}

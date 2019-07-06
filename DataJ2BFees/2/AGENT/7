@@ -1,0 +1,14 @@
+{
+  "id" : 7,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 7,
+  "nom" : "SULA",
+  "postnom" : "BOSIO",
+  "prenom" : "Serge",
+  "sexe" : 0,
+  "niveauEtude" : 3,
+  "signature" : 1562451661946,
+  "categorie" : 0,
+  "beta" : 0
+}

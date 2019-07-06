@@ -1,0 +1,9 @@
+{
+  "id" : 1,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "nom" : "ANNEE 2019-2020",
+  "debut" : 1562443460481,
+  "fin" : 1594065860481,
+  "beta" : 0
+}

@@ -10,6 +10,7 @@ import BEAN_BARRE_OUTILS.Bouton;
 import BEAN_BARRE_OUTILS.BoutonListener;
 import ICONES.Icones;
 import SOURCES.ANNEES.GestionAnnee;
+import SOURCES.CALLBACK.EcouteurActualisation;
 import SOURCES.Callback.EcouteurLongin;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
@@ -47,6 +48,7 @@ public class Principal extends javax.swing.JFrame {
     private FileManager fm = new FileManager("http://www.visiterlardc.com/s2b/processeurS2B.php");
     private JFrame moi = null;
     private Session session;
+    private EcouteurActualisation ecouteurActualisation = null;
     
     //Les GEstionnaires
     public GestionAnnee gestionAnnee = null;
@@ -58,6 +60,14 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         moi = this;
         fm.fm_setEcouteurFenetre(moi);  // On écoute désormais les mouvements de la fenetre
+        
+        ecouteurActualisation = new EcouteurActualisation() {
+            @Override
+            public void onActualise() {
+                lf_construireListeAnneesScolaires();
+            }
+        };
+        
         lf_initIcones();
         lf_construirePageLogin();
         loadUserSession();
@@ -203,13 +213,14 @@ public class Principal extends javax.swing.JFrame {
             public void OnEcouteLeClick() {
                 if (comboListeAnneesScolaires.getSelectedIndex() == 0) {
                     //Nouvelle année scolaire
-                    gestionAnnee = new GestionAnnee(fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null);
+                    gestionAnnee = new GestionAnnee(fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurActualisation);
                     gestionAnnee.ga_setDonnees(null, new Vector<InterfaceAgent>(), new Vector<InterfaceCharge>(), new Vector<InterfaceClasse>(), new Vector<InterfaceCours>(), new Vector<InterfaceFrais>(), new Vector<InterfaceMonnaie>(), new Vector<InterfaceRevenu>(), new Vector<>());
-                    gestionAnnee.ga_initUI();
+                    gestionAnnee.ga_initUI("Nouvel Exercice");
                 } else {
                     //On ouvre une année scolaire existante
                     System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
-                    
+                    gestionAnnee = new GestionAnnee(fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurActualisation);
+                    gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem()+"");
                 }
 
             }
@@ -266,7 +277,6 @@ public class Principal extends javax.swing.JFrame {
         }     
         
         
-        
         System.out.println("Liste d'années: Construction");
 
         fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
@@ -276,7 +286,7 @@ public class Principal extends javax.swing.JFrame {
                 System.out.println("GESTION ANNEE: " + message);
                 for (Object oRetrieved : data) {
                     Exercice annee = (Exercice) oRetrieved;
-                    comboListeAnneesScolaires.addItem(annee.getId() + " - " + annee.getNom());
+                    comboListeAnneesScolaires.addItem(annee.getNom());
                 }
                 System.out.println("Liste d'années: Fin");
                 
@@ -388,6 +398,7 @@ public class Principal extends javax.swing.JFrame {
 
         comboListeAnneesScolaires.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Liste d'Années --" }));
         comboListeAnneesScolaires.setToolTipText("Liste d'années scolaires actuellement stockées en base de données");
+        comboListeAnneesScolaires.setPreferredSize(new java.awt.Dimension(200, 22));
         comboListeAnneesScolaires.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 comboListeAnneesScolairesItemStateChanged(evt);

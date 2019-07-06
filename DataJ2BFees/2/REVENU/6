@@ -1,0 +1,12 @@
+{
+  "id" : 6,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 3,
+  "idMonnaie" : 5,
+  "signatureMonnaie" : 1562446819554,
+  "nom" : "AUTRES REVENUS",
+  "monnaie" : "$",
+  "volumeAnnuel" : 1000.0,
+  "beta" : 0
+}

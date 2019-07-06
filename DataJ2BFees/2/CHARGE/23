@@ -1,0 +1,12 @@
+{
+  "id" : 23,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 4,
+  "nom" : "ENERGIES (Eau, Electité, etc)",
+  "limiteAnnuelle" : 500.0,
+  "idMonnaie" : 7,
+  "signatureMonnaie" : 1562446856751,
+  "monnaie" : "$",
+  "beta" : 0
+}

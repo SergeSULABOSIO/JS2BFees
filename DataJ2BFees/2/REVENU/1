@@ -1,0 +1,12 @@
+{
+  "id" : 1,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idMonnaie" : 1,
+  "signatureMonnaie" : 1562443460565,
+  "nom" : "FRAIS SCOLAIRES",
+  "monnaie" : "$",
+  "volumeAnnuel" : 100000.0,
+  "beta" : 0
+}

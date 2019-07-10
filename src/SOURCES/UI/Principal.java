@@ -427,7 +427,7 @@ public class Principal extends javax.swing.JFrame {
 
             }
         });
-        btLitige.setForeground(Color.ORANGE);
+        btLitige.setForeground(UtilFees.COULEUR_ORANGE);
         
         bOutils.AjouterBouton(btLicence);
         bOutils.AjouterSeparateur();
@@ -656,7 +656,9 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
+        btLoginConnexion.setBackground(new java.awt.Color(251, 155, 12));
         btLoginConnexion.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btLoginConnexion.setForeground(new java.awt.Color(26, 46, 77));
         btLoginConnexion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Facture01.png"))); // NOI18N
         btLoginConnexion.setText("CONNEXION");
         btLoginConnexion.addActionListener(new java.awt.event.ActionListener() {
@@ -670,7 +672,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        labLoginNouveauCompte.setForeground(new java.awt.Color(0, 0, 204));
+        labLoginNouveauCompte.setForeground(new java.awt.Color(26, 46, 77));
         labLoginNouveauCompte.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         labLoginNouveauCompte.setText("Nouveau compte");
         labLoginNouveauCompte.addMouseListener(new java.awt.event.MouseAdapter() {

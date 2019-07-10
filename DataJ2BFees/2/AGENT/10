@@ -1,0 +1,14 @@
+{
+  "id" : 10,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "nom" : "MAKULA",
+  "postnom" : "BOFANDO",
+  "prenom" : "ALAIN",
+  "sexe" : 0,
+  "niveauEtude" : 3,
+  "signature" : 1562758858326,
+  "categorie" : 0,
+  "beta" : 0
+}

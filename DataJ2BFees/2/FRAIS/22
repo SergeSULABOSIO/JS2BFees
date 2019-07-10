@@ -1,0 +1,39 @@
+{
+  "id" : 22,
+  "idUtilisateur" : 12,
+  "idEntreprise" : 2,
+  "idExercice" : 10,
+  "idMonnaie" : 11,
+  "montantDefaut" : 50.0,
+  "nom" : "LABORATOIRE",
+  "monnaie" : "$",
+  "signatureMonnaie" : -3568991352569219860,
+  "liaisonsClasses" : [ {
+    "idClasse" : 31,
+    "nomClasse" : "G1",
+    "signatureClasse" : 5436227362013001218,
+    "montant" : 50.0
+  }, {
+    "idClasse" : 32,
+    "nomClasse" : "G2",
+    "signatureClasse" : 8622607814607577912,
+    "montant" : 50.0
+  }, {
+    "idClasse" : 33,
+    "nomClasse" : "G3",
+    "signatureClasse" : 1029162942004851298,
+    "montant" : 50.0
+  } ],
+  "liaisonsPeriodes" : [ {
+    "idPeriode" : 16,
+    "nomPeriode" : "PREMIERE SESSION",
+    "signaturePeriode" : 6796499755821696056,
+    "pourcentage" : 100.0
+  }, {
+    "idPeriode" : 17,
+    "nomPeriode" : "DEUXIEME SESSION",
+    "signaturePeriode" : -6635318221919830516,
+    "pourcentage" : 0.0
+  } ],
+  "beta" : 0
+}

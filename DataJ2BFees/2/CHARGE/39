@@ -1,0 +1,12 @@
+{
+  "id" : 39,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "nom" : "LOYER",
+  "limiteAnnuelle" : 1000.0,
+  "idMonnaie" : 11,
+  "signatureMonnaie" : -3568991352569219860,
+  "monnaie" : "$",
+  "beta" : 0
+}

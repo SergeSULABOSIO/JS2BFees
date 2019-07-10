@@ -202,3 +202,13 @@ public class Frais implements InterfaceFrais{
         return "TEST_Frais{" + "id=" + id + ", idUtilisateur=" + idUtilisateur + ", idEntreprise=" + idEntreprise + ", idExercice=" + idExercice + ", idMonnaie=" + idMonnaie + ", montantDefaut=" + montantDefaut + ", nom=" + nom + ", monnaie=" + monnaie + ", signatureMonnaie=" + signatureMonnaie + ", liaisonsClasses=" + liaisonsClasses + ", liaisonsPeriodes=" + liaisonsPeriodes + ", beta=" + beta + '}';
     }
 }
+
+
+
+
+
+
+
+
+
+

@@ -2,10 +2,10 @@
   "id" : 23,
   "idUtilisateur" : 12,
   "idEntreprise" : 2,
-  "idExercice" : 4,
+  "idExercice" : 7,
   "nom" : "5e",
   "capacite" : 50,
   "nomLocal" : "LOCAL 5",
-  "signature" : 1562446856756,
+  "signature" : -804653676464689084,
   "beta" : 0
 }

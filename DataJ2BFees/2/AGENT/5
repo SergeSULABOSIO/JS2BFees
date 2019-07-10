@@ -2,13 +2,13 @@
   "id" : 5,
   "idEntreprise" : 2,
   "idUtilisateur" : 12,
-  "idExercice" : 5,
+  "idExercice" : 7,
   "nom" : "SULA",
   "postnom" : "BOSIO",
   "prenom" : "Serge",
   "sexe" : 0,
   "niveauEtude" : 3,
-  "signature" : 1562451490732,
+  "signature" : 7480722955329256281,
   "categorie" : 0,
   "beta" : 0
 }

@@ -2,11 +2,11 @@
   "id" : 25,
   "idEntreprise" : 2,
   "idUtilisateur" : 12,
-  "idExercice" : 4,
+  "idExercice" : 7,
   "nom" : "LOYER",
   "limiteAnnuelle" : 1000.0,
   "idMonnaie" : 7,
-  "signatureMonnaie" : 1562446856751,
+  "signatureMonnaie" : 2880711153016304626,
   "monnaie" : "$",
   "beta" : 0
 }

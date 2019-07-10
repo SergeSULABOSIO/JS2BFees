@@ -2,11 +2,11 @@
   "id" : 7,
   "idEntreprise" : 2,
   "idUtilisateur" : 12,
-  "idExercice" : 4,
+  "idExercice" : 7,
   "nom" : "DOLLARS AMERICAINS",
   "code" : "$",
   "nature" : 1,
   "tauxMonnaieLocale" : 1620.0,
-  "signature" : 1562446856751,
+  "signature" : 2880711153016304626,
   "beta" : 0
 }

@@ -1,11 +1,11 @@
 {
-  "id" : 20,
+  "id" : 32,
   "idUtilisateur" : 12,
   "idEntreprise" : 2,
-  "idExercice" : 7,
-  "nom" : "2e",
+  "idExercice" : 10,
+  "nom" : "G2",
   "capacite" : 50,
   "nomLocal" : "LOCAL 2",
-  "signature" : -3592271342937308107,
+  "signature" : 8622607814607577912,
   "beta" : 0
 }

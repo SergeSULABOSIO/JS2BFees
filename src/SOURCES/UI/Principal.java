@@ -331,84 +331,6 @@ public class Principal extends javax.swing.JFrame {
                         btTresorerie.setVisible(true);
                     }
                 }
-
-                /*
-            
-            
-            
-            if (bOutils != null) {
-                bOutils.SupprimerBouton(btLicence);
-                bOutils.SupprimerBouton(btAnnee);
-                bOutils.SupprimerBouton(btAyantDroit);
-                bOutils.SupprimerBouton(btFacture);
-                bOutils.SupprimerBouton(btInscription);
-                bOutils.SupprimerBouton(btInscription);
-                bOutils.SupprimerBouton(btLitige);
-                bOutils.SupprimerBouton(btPaie);
-                bOutils.SupprimerBouton(btTresorerie);
-            }
-
-            
-            if (comboListeAnneesScolaires.getSelectedIndex() == 0) {    //tentative de création
-                if (user.getDroitExercice() == InterfaceUtilisateur.DROIT_CONTROLER) {
-                    bOutils.AjouterBouton(btAnnee);
-                }
-            } else {  //tentative de modification ou suppression
-                if (user.getDroitExercice() != InterfaceUtilisateur.DROIT_PAS_ACCES) {
-                    bOutils.AjouterBouton(btAnnee);
-                }
-            }
-
-            if (comboListeAnneesScolaires.getSelectedIndex() > 0) {
-                String selectedExerc = comboListeAnneesScolaires.getSelectedItem() + "";
-                fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
-                    @Override
-                    public void onDone(String string, Vector data) {
-                        lf_progress(false, "", progressEtat);
-                        for (Object o : data) {
-                            Exercice exerc = (Exercice) o;
-                            if (exerc.getNom().equals(selectedExerc)) {
-                                btAnnee.setIcone(icones.getCalendrier_02());
-                                btAnnee.setText("Exercice", 9, false);
-                                btAnnee.setInfosBulle("Paramètres de l'exercice " + exerc.getNom());
-
-                                if (user.getDroitFacture() != InterfaceUtilisateur.DROIT_PAS_ACCES) {
-                                    bOutils.AjouterBouton(btFacture);
-                                }
-                                if (user.getDroitInscription() != InterfaceUtilisateur.DROIT_PAS_ACCES) {
-                                    bOutils.AjouterBouton(btInscription);
-                                }
-                                if (user.getDroitPaie() != InterfaceUtilisateur.DROIT_PAS_ACCES) {
-                                    bOutils.AjouterBouton(btPaie);
-                                }
-                                if (user.getDroitLitige() != InterfaceUtilisateur.DROIT_PAS_ACCES) {
-                                    bOutils.AjouterBouton(btLitige);
-                                }
-                                if (user.getDroitTresorerie() != InterfaceUtilisateur.DROIT_PAS_ACCES) {
-                                    bOutils.AjouterBouton(btTresorerie);
-                                }
-                                break;
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(String string) {
-                        lf_progress(false, "", progressEtat);
-                    }
-
-                    @Override
-                    public void onProcessing(String string) {
-                        lf_progress(true, "", progressEtat);
-                    }
-                });
-            }
-            
-            
-            
-            
-            
-            **/
             }
         }
     }
@@ -436,6 +358,7 @@ public class Principal extends javax.swing.JFrame {
                 } else {
                     //On ouvre une année scolaire existante
                     System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
+                    
                     gestionAnnee = new GestionAnnee(fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
                     gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
                 }

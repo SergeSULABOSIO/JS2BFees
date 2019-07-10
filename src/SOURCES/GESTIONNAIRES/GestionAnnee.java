@@ -40,6 +40,7 @@ import SOURCES.Utilitaires.LiaisonPeriodeFrais;
 import SOURCES.Utilitaires.ParametreExercice;
 import SOURCES.Utilitaires.SortiesExercice;
 import java.util.Vector;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 
@@ -58,7 +59,7 @@ public class GestionAnnee {
     public JTabbedPane tabOnglet;
     public JProgressBar progress;
     //private SortiesExercice sortiesExercice = null;
-    
+
     private InterfaceExercice newIannee = null;
     private FileManager fm;
     private Vector<InterfaceAgent> agents = new Vector<>();
@@ -95,40 +96,49 @@ public class GestionAnnee {
 
     public void ga_setDonneesFromFileManager(String selectedAnnee) {
         if (fm != null) {
-            fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
-                @Override
-                public void onDone(String message, Vector data) {
-                    System.out.println("CHARGEMENT ANNEE: " + message);
-                    progress.setVisible(false);
-                    progress.setIndeterminate(false);
+            boolean mustLoadData = true;
+            int nbOnglets = tabOnglet.getComponentCount();
+            for (int i = 0; i < nbOnglets; i++) {
+                JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
+                String titreOnglet = tabOnglet.getTitleAt(i);
+                System.out.println("Onglet - " + titreOnglet);
+                if (titreOnglet.equals(selectedAnnee)) {
+                    System.out.println(" * Lannée " + titreOnglet + " est déjà ouverte, inutile de charger les données. On va juste activer l'onglet");
+                    tabOnglet.setSelectedIndex(i);
+                    mustLoadData = false;
+                }
+            }
 
-                    for (Object Oannee : data) {
-                        Exercice annee = (Exercice) Oannee;
-                        if (annee.getNom().equals(selectedAnnee)) {
-                            System.out.println(" * " + annee.getNom());
-                            newIannee = annee;
-                            break;
+            if (mustLoadData == true) {
+                fm.fm_ouvrirTout(100, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
+                    @Override
+                    public void onDone(String message, Vector data) {
+                        System.out.println("CHARGEMENT ANNEE: " + message);
+                        for (Object Oannee : data) {
+                            Exercice annee = (Exercice) Oannee;
+                            if (annee.getNom().equals(selectedAnnee)) {
+                                System.out.println(" * " + annee.getNom());
+                                newIannee = annee;
+                                break;
+                            }
+
                         }
-
+                        loadAgents();
                     }
-                    loadAgents();
-                    //donneesExercice = new DonneesExercice(newIannee, agents, charges, classes, cours, frais, monnaies, revenus, periodes);
-                    //ga_initUI(newIannee.getNom());
-                }
 
-                @Override
-                public void onError(String string) {
-                    progress.setVisible(false);
-                    progress.setIndeterminate(false);
-                }
+                    @Override
+                    public void onError(String string) {
+                        progress.setVisible(false);
+                        progress.setIndeterminate(false);
+                    }
 
-                @Override
-                public void onProcessing(String string) {
-                    progress.setVisible(true);
-                    progress.setIndeterminate(true);
-                }
-            });
-
+                    @Override
+                    public void onProcessing(String string) {
+                        progress.setVisible(true);
+                        progress.setIndeterminate(true);
+                    }
+                });
+            }
         }
     }
 
@@ -139,8 +149,6 @@ public class GestionAnnee {
             public void onDone(String message, Vector data) {
                 if (newIannee != null) {
                     System.out.println(message);
-                    progress.setVisible(false);
-                    progress.setIndeterminate(false);
                     for (Object o : data) {
                         Agent agent = (Agent) o;
                         if (agent.getIdExercice() == newIannee.getId()) {
@@ -172,8 +180,6 @@ public class GestionAnnee {
             @Override
             public void onDone(String message, Vector data) {
                 System.out.println(message);
-                progress.setVisible(false);
-                progress.setIndeterminate(false);
                 for (Object o : data) {
                     Charge charge = (Charge) o;
                     if (charge.getIdExercice() == newIannee.getId()) {
@@ -204,8 +210,6 @@ public class GestionAnnee {
             @Override
             public void onDone(String message, Vector data) {
                 System.out.println(message);
-                progress.setVisible(false);
-                progress.setIndeterminate(false);
                 for (Object o : data) {
                     Classe classe = (Classe) o;
                     if (classe.getIdExercice() == newIannee.getId()) {
@@ -236,8 +240,6 @@ public class GestionAnnee {
             @Override
             public void onDone(String message, Vector data) {
                 System.out.println(message);
-                progress.setVisible(false);
-                progress.setIndeterminate(false);
                 for (Object o : data) {
                     Cours Ocours = (Cours) o;
                     if (Ocours.getIdExercice() == newIannee.getId()) {
@@ -268,19 +270,17 @@ public class GestionAnnee {
             @Override
             public void onDone(String message, Vector data) {
                 System.out.println(message);
-                progress.setVisible(false);
-                progress.setIndeterminate(false);
                 for (Object o : data) {
                     Frais frais = (Frais) o;
                     if (frais.getIdExercice() == newIannee.getId()) {
                         fraises.add(frais);
                         System.out.println(" * " + frais.getNom());
                         System.out.println("Liaison classe:");
-                        for(LiaisonClasseFrais lc: frais.getLiaisonsClasses()){
+                        for (LiaisonClasseFrais lc : frais.getLiaisonsClasses()) {
                             System.out.println(" ** " + lc.toString());
                         }
                         System.out.println("Liaison période:");
-                        for(LiaisonPeriodeFrais lp: frais.getLiaisonsPeriodes()){
+                        for (LiaisonPeriodeFrais lp : frais.getLiaisonsPeriodes()) {
                             System.out.println(" ** " + lp.toString());
                         }
                     }
@@ -308,8 +308,6 @@ public class GestionAnnee {
             @Override
             public void onDone(String message, Vector data) {
                 System.out.println(message);
-                progress.setVisible(false);
-                progress.setIndeterminate(false);
                 for (Object o : data) {
                     Monnaie monnaie = (Monnaie) o;
                     if (monnaie.getIdExercice() == newIannee.getId()) {
@@ -340,8 +338,6 @@ public class GestionAnnee {
             @Override
             public void onDone(String message, Vector data) {
                 System.out.println(message);
-                progress.setVisible(false);
-                progress.setIndeterminate(false);
                 for (Object o : data) {
                     Periode periode = (Periode) o;
                     if (periode.getIdExercice() == newIannee.getId()) {
@@ -372,8 +368,6 @@ public class GestionAnnee {
             @Override
             public void onDone(String message, Vector data) {
                 System.out.println(message);
-                progress.setVisible(false);
-                progress.setIndeterminate(false);
                 for (Object o : data) {
                     Revenu revenu = (Revenu) o;
                     if (revenu.getIdExercice() == newIannee.getId()) {
@@ -383,6 +377,8 @@ public class GestionAnnee {
                 }
                 donneesExercice = new DonneesExercice(newIannee, agents, charges, classes, cours, fraises, monnaies, revenus, periodes);
                 ga_initUI(newIannee.getNom());
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
             }
 
             @Override
@@ -575,7 +571,7 @@ public class GestionAnnee {
             }
         });
     }
-    
+
     private void saveMonnaies(SortiesExercice se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
         Vector<InterfaceMonnaie> listeNewMonnaie = se.getListeMonnaies();
         Vector<InterfaceMonnaie> listeNewMonnaieTempo = new Vector<>();
@@ -943,7 +939,7 @@ public class GestionAnnee {
                 frais.setIdExercice(annee.getId());
                 frais.setIdUtilisateur(user.getId());
                 frais.setIdEntreprise(user.getIdEntreprise());
-                
+
                 System.out.println("FRAIS: " + frais.toString());
                 System.out.println(" * LIAISON CLASSE:");
                 /* */
@@ -959,7 +955,7 @@ public class GestionAnnee {
                     lcp.setNomPeriode(getNomPeriode(se, lcp.getSignaturePeriode()));
                     System.out.println(" * * " + lcp.toString());
                 }
-                
+
                 System.out.println("-----");
                 frais.setBeta(InterfaceExercice.BETA_EXISTANT);
                 listeNewFraisTempo.add(frais);
@@ -998,202 +994,3 @@ public class GestionAnnee {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

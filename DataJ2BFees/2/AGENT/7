@@ -1,0 +1,14 @@
+{
+  "id" : 7,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 7,
+  "nom" : "MUTA",
+  "postnom" : "KANKUNGWALA",
+  "prenom" : "CHRISTIAN",
+  "sexe" : 0,
+  "niveauEtude" : 3,
+  "signature" : 1562758297344,
+  "categorie" : 0,
+  "beta" : 0
+}

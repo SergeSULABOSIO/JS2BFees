@@ -264,7 +264,7 @@ public class Principal extends javax.swing.JFrame {
         btEtatBackup.setText("<Pas disponible>");
 
         moi.setTitle(texteTitre);
-
+        
         lf_progress(false, "", progressEtat);
     }
 

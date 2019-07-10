@@ -79,7 +79,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="tabPrincipal" pref="420" max="32767" attributes="0"/>
+                  <Component id="tabPrincipal" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="panOutils" max="32767" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -94,7 +94,7 @@
     <Container class="javax.swing.JPanel" name="barreEtat">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="c8" id="orange" palette="1" red="ff" type="palette"/>
+          <Color blue="c" green="9b" red="fb" type="rgb"/>
         </Property>
       </Properties>
 
@@ -405,7 +405,7 @@
     <Container class="javax.swing.JPanel" name="panOutils">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="99" green="0" red="0" type="rgb"/>
+          <Color blue="4d" green="2e" red="1a" type="rgb"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>

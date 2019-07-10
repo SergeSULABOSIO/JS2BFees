@@ -6,6 +6,7 @@
 package SOURCES.UTILITAIRES;
 
 import SOURCES.Interfaces.InterfaceUtilisateur;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -28,6 +29,12 @@ public class UtilFees {
     public static String DOSSIER_REVENU = "REVENU";
     public static String DOSSIER_CHARGE = "CHARGE";
     public static String DOSSIER_FRAIS = "FRAIS";
+    
+    public static Color COULEUR_BLEU = new Color(26, 45, 77);       //Pour plus d'infos visiter le lien https://www.colorhexa.com/1a2e4d
+    public static Color COULEUR_BLEU_CLAIRE_1 = new Color(68,117,192);    //Une variante claire
+    public static Color COULEUR_BLEU_CLAIRE_2 = new Color(141,171,217);    //Une variante claire
+    public static Color COULEUR_ORANGE = new Color(251, 155, 12);   //Pour plus d'information, visiter le lien https://www.colorhexa.com/fb9b0c
+    public static Color COULEUR_ROUGE = new Color(251,36,12);       //Une variante  
 
     public static Date convertDatePaiement(String Sdate) {
         try {

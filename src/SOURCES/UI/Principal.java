@@ -29,6 +29,8 @@ import SOURCES.Objets.Paiement;
 import SOURCES.Objets.Session;
 import SOURCES.Objets.Utilisateur;
 import SOURCES.UTILITAIRES.UtilFees;
+import SOURCES.Utilitaires.CouleurBasique;
+import SOURCES.Utilitaires.UtilExercice;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
@@ -49,6 +51,7 @@ public class Principal extends javax.swing.JFrame {
     private JFrame moi = null;
     private Session session;
     private EcouteurExercice ecouteurExercice = null;
+    private CouleurBasique couleurBasique;
 
     //Les GEstionnaires
     public GestionAnnee gestionAnnee = null;
@@ -58,6 +61,7 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
+        lf_initCouleurs();
         panOutils.setVisible(false);
         moi = this;
         fm.fm_setEcouteurFenetre(moi);  // On écoute désormais les mouvements de la fenetre
@@ -65,6 +69,17 @@ public class Principal extends javax.swing.JFrame {
         lf_initIcones();
         lf_construirePageLogin();
         loadUserSession();
+    }
+    
+    private void lf_initCouleurs(){
+        couleurBasique = new CouleurBasique();
+        couleurBasique.setCouleur_background_normal(Color.white);
+        couleurBasique.setCouleur_background_selection(UtilFees.COULEUR_BLEU);
+        couleurBasique.setCouleur_encadrement_selection(UtilFees.COULEUR_ORANGE);
+        couleurBasique.setCouleur_foreground_objet_existant(UtilFees.COULEUR_BLEU);
+        couleurBasique.setCouleur_foreground_objet_modifie(UtilFees.COULEUR_BLEU_CLAIRE_1);
+        couleurBasique.setCouleur_foreground_objet_nouveau(UtilFees.COULEUR_ROUGE);
+        
     }
 
     private void updateListeExercice(String selectedExercice) {
@@ -344,28 +359,27 @@ public class Principal extends javax.swing.JFrame {
                 UtilFees.lancerPageWebAdmin();
             }
         });
-        btLicence.setForeground(Color.ORANGE);
-        btLicence.setBackground(Color.BLUE);
+        btLicence.setForeground(UtilFees.COULEUR_ORANGE);
         
         btAnnee = new Bouton(12, "Démarrer", "Créer une voulle année scolaire", true, icones.getDémarrer_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
                 if (comboListeAnneesScolaires.getSelectedIndex() == 0) {
                     //Nouvelle année scolaire
-                    gestionAnnee = new GestionAnnee(fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
+                    gestionAnnee = new GestionAnnee(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
                     gestionAnnee.ga_setDonnees(null, new Vector<InterfaceAgent>(), new Vector<InterfaceCharge>(), new Vector<InterfaceClasse>(), new Vector<InterfaceCours>(), new Vector<InterfaceFrais>(), new Vector<InterfaceMonnaie>(), new Vector<InterfaceRevenu>(), new Vector<>());
                     gestionAnnee.ga_initUI("Nouvel Exercice");
                 } else {
                     //On ouvre une année scolaire existante
                     System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
                     
-                    gestionAnnee = new GestionAnnee(fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
+                    gestionAnnee = new GestionAnnee(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
                     gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
                 }
 
             }
         });
-        btAnnee.setForeground(Color.ORANGE);
+        btAnnee.setForeground(UtilFees.COULEUR_ORANGE);
         
         btAyantDroit = new Bouton(12, "Ayant D.", "Les Ayant-droits", true, icones.getUtilisateur_03(), new BoutonListener() {
             @Override
@@ -373,7 +387,7 @@ public class Principal extends javax.swing.JFrame {
 
             }
         });
-        btAyantDroit.setForeground(Color.ORANGE);
+        btAyantDroit.setForeground(UtilFees.COULEUR_ORANGE);
         
         btFacture = new Bouton(12, "Facture", "Paiement des frais", true, icones.getFacture_03(), new BoutonListener() {
             @Override
@@ -381,7 +395,7 @@ public class Principal extends javax.swing.JFrame {
 
             }
         });
-        btFacture.setForeground(Color.ORANGE);
+        btFacture.setForeground(UtilFees.COULEUR_ORANGE);
         
         btInscription = new Bouton(12, "Inscription", "Inscriptin des étudiants", true, icones.getFacture_03(), new BoutonListener() {
             @Override
@@ -389,7 +403,7 @@ public class Principal extends javax.swing.JFrame {
 
             }
         });
-        btInscription.setForeground(Color.ORANGE);
+        btInscription.setForeground(UtilFees.COULEUR_ORANGE);
         
         btPaie = new Bouton(12, "Paie", "Paie des Agents de l'établissement", true, icones.getFacture_03(), new BoutonListener() {
             @Override
@@ -397,7 +411,7 @@ public class Principal extends javax.swing.JFrame {
 
             }
         });
-        btPaie.setForeground(Color.ORANGE);
+        btPaie.setForeground(UtilFees.COULEUR_ORANGE);
 
         btTresorerie = new Bouton(12, "Trésorerie", "La trésorerie (Encaissements & Décaissements)", true, icones.getFacture_03(), new BoutonListener() {
             @Override
@@ -405,7 +419,7 @@ public class Principal extends javax.swing.JFrame {
 
             }
         });
-        btTresorerie.setForeground(Color.ORANGE);
+        btTresorerie.setForeground(UtilFees.COULEUR_ORANGE);
         
         btLitige = new Bouton(12, "Litiges", "Litiges et reglèment des dettes", true, icones.getFournisseur_03(), new BoutonListener() {
             @Override
@@ -557,7 +571,7 @@ public class Principal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        barreEtat.setBackground(java.awt.Color.orange);
+        barreEtat.setBackground(new java.awt.Color(251, 155, 12));
 
         jToolBar1.setBackground(new java.awt.Color(255, 255, 255));
         jToolBar1.setFloatable(false);
@@ -766,7 +780,7 @@ public class Principal extends javax.swing.JFrame {
 
         tabPrincipal.addTab("Login", panLogin);
 
-        panOutils.setBackground(new java.awt.Color(0, 0, 153));
+        panOutils.setBackground(new java.awt.Color(26, 46, 77));
         panOutils.setForeground(new java.awt.Color(255, 255, 255));
 
         barreOutils.setFloatable(false);
@@ -840,7 +854,7 @@ public class Principal extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tabPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+                    .addComponent(tabPrincipal)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(panOutils, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(0, 0, 0)))

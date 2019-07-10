@@ -34,6 +34,7 @@ import SOURCES.Objets.FileManager;
 import SOURCES.Objets.Utilisateur;
 import SOURCES.UI.Panel;
 import SOURCES.UTILITAIRES.UtilFees;
+import SOURCES.Utilitaires.CouleurBasique;
 import SOURCES.Utilitaires.DonneesExercice;
 import SOURCES.Utilitaires.LiaisonClasseFrais;
 import SOURCES.Utilitaires.LiaisonPeriodeFrais;
@@ -71,8 +72,10 @@ public class GestionAnnee {
     private Vector<InterfacePeriode> periodes = new Vector<>();
     private Vector<InterfaceRevenu> revenus = new Vector<>();
     private EcouteurExercice ecouteurExercice;
+    private CouleurBasique couleurBasique;
 
-    public GestionAnnee(FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output, EcouteurExercice ecouteurExercice) {
+    public GestionAnnee(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output, EcouteurExercice ecouteurExercice) {
+        this.couleurBasique = couleurBasique;
         this.fm = fm;
         this.ecouteurExercice = ecouteurExercice;
         this.progress = progress;
@@ -396,7 +399,7 @@ public class GestionAnnee {
     }
 
     public void ga_initUI(String nomTab) {
-        panel = new Panel(tabOnglet, parametreExercice, donneesExercice, new EcouteurAnneeScolaire() {
+        panel = new Panel(couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurAnneeScolaire() {
             @Override
             public void onEnregistre(SortiesExercice se) {
                 if (se != null) {

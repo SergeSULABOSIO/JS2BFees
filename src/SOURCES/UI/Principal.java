@@ -642,8 +642,6 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(5, 5, 5))
         );
 
-        panLoginInfos.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
         btLoginConnexion.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btLoginConnexion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Facture01.png"))); // NOI18N
         btLoginConnexion.setText("CONNEXION");
@@ -759,11 +757,11 @@ public class Principal extends javax.swing.JFrame {
         panLoginLayout.setVerticalGroup(
             panLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panLoginLayout.createSequentialGroup()
-                .addContainerGap(87, Short.MAX_VALUE)
+                .addContainerGap(89, Short.MAX_VALUE)
                 .addComponent(panLoginInfos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panLoginMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addContainerGap(78, Short.MAX_VALUE))
         );
 
         tabPrincipal.addTab("Login", panLogin);

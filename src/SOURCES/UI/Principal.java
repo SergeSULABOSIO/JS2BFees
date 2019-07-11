@@ -30,7 +30,6 @@ import SOURCES.Objets.Session;
 import SOURCES.Objets.Utilisateur;
 import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires.CouleurBasique;
-import SOURCES.Utilitaires.UtilExercice;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
@@ -45,28 +44,37 @@ import javax.swing.JProgressBar;
 public class Principal extends javax.swing.JFrame {
 
     public BarreOutils bOutils = null;
-    public Bouton btAnnee, btInscription, btFacture, btAyantDroit, btTresorerie, btPaie, btLitige, btLicence;
+    public Bouton btAnnee, btInscription, btFacture, btAyantDroit, btTresorerie, btPaie, btLitige, btLicence, btLogo;
     private Icones icones = null;
-    private FileManager fm = new FileManager("http://www.visiterlardc.com/s2b/processeurS2B.php");
+    private FileManager fm = null;
     private JFrame moi = null;
     private Session session;
     private EcouteurExercice ecouteurExercice = null;
     private CouleurBasique couleurBasique;
-
+    
     //Les GEstionnaires
     public GestionAnnee gestionAnnee = null;
-
+    
     /**
      * Creates new form Principal
      */
+    
     public Principal() {
         initComponents();
         lf_initCouleurs();
         panOutils.setVisible(false);
         moi = this;
+        lf_initIcones();
+        btLogo = new Bouton(12, "", "Votre logo - Cliquer pour ouvrir votre page web", true, icones.getSablier_03(), new BoutonListener() {
+            @Override
+            public void OnEcouteLeClick() {
+                UtilFees.lancerPageWebAdmin();
+            }
+        });
+        btLogo.setForeground(couleurBasique.getCouleur_encadrement_selection());
+        fm = new FileManager("http://www.visiterlardc.com/s2b", "processeurS2B.php", btLogo.getBouton());
         fm.fm_setEcouteurFenetre(moi);  // On écoute désormais les mouvements de la fenetre
         lf_initEcouteurExercice();
-        lf_initIcones();
         lf_construirePageLogin();
         loadUserSession();
     }
@@ -352,8 +360,8 @@ public class Principal extends javax.swing.JFrame {
 
     public void lf_construireBoutons() {
         bOutils = new BarreOutils(barreOutils);
-
-        btLicence = new Bouton(12, "Licence", "Payer votre abonnement", true, icones.getAdresse_02(), new BoutonListener() {
+        
+        btLicence = new Bouton(12, ":: Licence ::", "Payer votre abonnement", true, icones.getAdresse_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
                 UtilFees.lancerPageWebAdmin();
@@ -397,7 +405,7 @@ public class Principal extends javax.swing.JFrame {
         });
         btFacture.setForeground(UtilFees.COULEUR_ORANGE);
         
-        btInscription = new Bouton(12, "Inscription", "Inscriptin des étudiants", true, icones.getFacture_03(), new BoutonListener() {
+        btInscription = new Bouton(12, "Adhésion", "Inscrire des étudiants", true, icones.getFacture_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
 
@@ -424,11 +432,12 @@ public class Principal extends javax.swing.JFrame {
         btLitige = new Bouton(12, "Litiges", "Litiges et reglèment des dettes", true, icones.getFournisseur_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-
+                
             }
         });
         btLitige.setForeground(UtilFees.COULEUR_ORANGE);
         
+        bOutils.AjouterBouton(btLogo);
         bOutils.AjouterBouton(btLicence);
         bOutils.AjouterSeparateur();
         bOutils.AjouterBouton(btAnnee);
@@ -561,7 +570,6 @@ public class Principal extends javax.swing.JFrame {
         progressLogin = new javax.swing.JProgressBar();
         panOutils = new javax.swing.JPanel();
         barreOutils = new javax.swing.JToolBar();
-        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -764,11 +772,11 @@ public class Principal extends javax.swing.JFrame {
         panLoginLayout.setHorizontalGroup(
             panLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panLoginLayout.createSequentialGroup()
-                .addContainerGap(229, Short.MAX_VALUE)
+                .addContainerGap(249, Short.MAX_VALUE)
                 .addGroup(panLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(panLoginInfos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panLoginMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(230, Short.MAX_VALUE))
+                .addContainerGap(249, Short.MAX_VALUE))
         );
         panLoginLayout.setVerticalGroup(
             panLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -790,13 +798,6 @@ public class Principal extends javax.swing.JFrame {
         barreOutils.setOrientation(javax.swing.SwingConstants.VERTICAL);
         barreOutils.setRollover(true);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Facture02.png"))); // NOI18N
-        jButton1.setToolTipText("Elève");
-        jButton1.setFocusable(false);
-        jButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        barreOutils.add(jButton1);
-
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Facture02.png"))); // NOI18N
         jButton2.setToolTipText("Inscription");
         jButton2.setFocusable(false);
@@ -812,7 +813,7 @@ public class Principal extends javax.swing.JFrame {
         );
         panOutilsLayout.setVerticalGroup(
             panOutilsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(barreOutils, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(barreOutils, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jMenu1.setText("Fichier");
@@ -857,9 +858,7 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tabPrincipal)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(panOutils, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(0, 0, 0)))
+                    .addComponent(panOutils, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addComponent(barreEtat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -979,7 +978,6 @@ public class Principal extends javax.swing.JFrame {
     private UI.JS2bTextField chLoginIDEcole;
     private UI.JS2BPassword chLoginMotDePasse;
     private javax.swing.JComboBox<String> comboListeAnneesScolaires;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;

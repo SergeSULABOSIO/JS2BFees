@@ -550,21 +550,29 @@ public class GestionAnnee {
         fm.fm_enregistrer(newIannee, UtilFees.DOSSIER_ANNEE, new EcouteurStandard() {
             @Override
             public void onDone(String message) {
-                tabOnglet.setTitleAt(tabOnglet.getSelectedIndex(), newIannee.getNom());
-                ecouteurExercice.onExerciceAdded(newIannee.getNom());
-                System.out.println(message);
-                //Après enregistrement
-                ee.onDone(newIannee.getNom() + " enregistrée (" + newIannee.getId() + ").");
-                donneesExercice.setExercice(newIannee);
+                int index = tabOnglet.getSelectedIndex();
+                if (index != -1) {
+                    tabOnglet.setTitleAt(index, newIannee.getNom());
+                    ecouteurExercice.onExerciceAdded(newIannee.getNom());
+                    System.out.println(message);
+                    //Après enregistrement
+                    ee.onDone(newIannee.getNom() + " enregistrée (" + newIannee.getId() + ").");
+                    donneesExercice.setExercice(newIannee);
 
-                //On enregistre les éventuelles éléments dépendant de l'année scolaire
-                saveChildes(se, ee, user, newIannee);
+                    //On enregistre les éventuelles éléments dépendant de l'année scolaire
+                    saveChildes(se, ee, user, newIannee);
+                } else {
+                    progress.setVisible(false);
+                    progress.setIndeterminate(false);
+                }
             }
 
             @Override
             public void onError(String message) {
                 System.err.println(message);
                 ee.onError("Erreur !");
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
             }
 
             @Override

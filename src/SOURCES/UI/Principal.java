@@ -380,7 +380,6 @@ public class Principal extends javax.swing.JFrame {
                 } else {
                     //On ouvre une année scolaire existante
                     System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
-                    
                     gestionAnnee = new GestionAnnee(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
                     gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
                 }

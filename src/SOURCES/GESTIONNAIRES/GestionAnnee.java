@@ -5,32 +5,26 @@
  */
 package SOURCES.GESTIONNAIRES;
 
-import SOURCES.CALLBACK.EcouteurExercice;
+import SOURCES.CALLBACK.EcouteurGestionExercice;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
-import SOURCES.Callback_Exercice.EcouteurAnneeScolaire;
-import SOURCES.Callback_Exercice.EcouteurEnregistrement;
-import SOURCES.Interfaces.InterfaceUtilisateur;
-import SOURCES.Objets.Entreprise;
+import SOURCES.Callback_Exercice.EcouteurExerice;
 import SOURCES.Objets.FileManager;
-import SOURCES.Objets.Utilisateur;
 import SOURCES.UI_Exercice.PanelExercice;
 import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires_Exercice.DonneesExercice;
 import SOURCES.Utilitaires_Exercice.ParametreExercice;
 import SOURCES.Utilitaires_Exercice.SortiesExercice;
-import Source.Interface.InterfaceAgent;
-import Source.Interface.InterfaceCharge;
-import Source.Interface.InterfaceCours;
+import Source.Callbacks.EcouteurEnregistrement;
 import Source.Interface.InterfaceExercice;
 import Source.Interface.InterfaceFrais;
 import Source.Interface.InterfaceMonnaie;
-import Source.Interface.InterfaceRevenu;
 import Source.Objet.Agent;
 import Source.Objet.Charge;
 import Source.Objet.Classe;
 import Source.Objet.CouleurBasique;
 import Source.Objet.Cours;
+import Source.Objet.Entreprise;
 import Source.Objet.Exercice;
 import Source.Objet.Frais;
 import Source.Objet.LiaisonFraisClasse;
@@ -38,11 +32,7 @@ import Source.Objet.LiaisonFraisPeriode;
 import Source.Objet.Monnaie;
 import Source.Objet.Periode;
 import Source.Objet.Revenu;
-import TEST.InterfaceClasse;
-import TEST.InterfacePeriode;
-import TEST.LiaisonClasseFrais;
-import TEST.LiaisonPeriodeFrais;
-import java.awt.Panel;
+import Source.Objet.Utilisateur;
 import java.util.Vector;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -54,7 +44,7 @@ import javax.swing.JTabbedPane;
  */
 public class GestionAnnee {
 
-    public Panel panel = null;
+    public PanelExercice panel = null;
     public Entreprise entreprise;
     public Utilisateur utilisateur;
     public Monnaie monnaie_output;
@@ -64,7 +54,7 @@ public class GestionAnnee {
     public JProgressBar progress;
     //private SortiesExercice sortiesExercice = null;
 
-    private InterfaceExercice newIannee = null;
+    private Exercice newIannee = null;
     private FileManager fm;
     private Vector<Agent> agents = new Vector<>();
     private Vector<Charge> charges = new Vector<>();
@@ -74,10 +64,10 @@ public class GestionAnnee {
     private Vector<Monnaie> monnaies = new Vector<>();
     private Vector<Periode> periodes = new Vector<>();
     private Vector<Revenu> revenus = new Vector<>();
-    private EcouteurExercice ecouteurExercice;
+    private EcouteurGestionExercice ecouteurExercice;
     private CouleurBasique couleurBasique;
 
-    public GestionAnnee(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output, EcouteurExercice ecouteurExercice) {
+    public GestionAnnee(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output, EcouteurGestionExercice ecouteurExercice) {
         this.couleurBasique = couleurBasique;
         this.fm = fm;
         this.ecouteurExercice = ecouteurExercice;
@@ -121,7 +111,7 @@ public class GestionAnnee {
                     public void onDone(String message, Vector data) {
                         System.out.println("CHARGEMENT ANNEE: " + message);
                         for (Object Oannee : data) {
-                            InterfaceExercice annee = (InterfaceExercice) Oannee;
+                            Exercice annee = (Exercice) Oannee;
                             if (annee.getNom().equals(selectedAnnee)) {
                                 System.out.println(" * " + annee.getNom());
                                 newIannee = annee;
@@ -403,7 +393,7 @@ public class GestionAnnee {
 
     public void ga_initUI(String nomTab) {
         
-        panel = new PanelExercice(couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurAnneeScolaire() {
+        panel = new PanelExercice(couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurExerice() {
             @Override
             public void onEnregistre(SortiesExercice se) {
                 if (se != null) {
@@ -540,11 +530,11 @@ public class GestionAnnee {
         }
     }
 
-    private void saveChildes(SortiesExercice se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice newIannee) {
+    private void saveChildes(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice newIannee) {
         saveMonnaies(se, ee, user, newIannee);
     }
 
-    private void saveExercice(SortiesExercice se, EcouteurEnregistrement ee, InterfaceExercice newIa, InterfaceUtilisateur user) {
+    private void saveExercice(SortiesExercice se, EcouteurEnregistrement ee, Exercice newIa, Utilisateur user) {
         System.out.println(" * EXERCICE: " + newIannee.toString());
         //On précise qui est en train d'enregistrer cette donnée
         newIa.setIdUtilisateur(user.getId());
@@ -587,11 +577,11 @@ public class GestionAnnee {
         });
     }
 
-    private void saveMonnaies(SortiesExercice se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
-        Vector<InterfaceMonnaie> listeNewMonnaie = se.getListeMonnaies();
-        Vector<InterfaceMonnaie> listeNewMonnaieTempo = new Vector<>();
+    private void saveMonnaies(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+        Vector<Monnaie> listeNewMonnaie = se.getListeMonnaies();
+        Vector<Monnaie> listeNewMonnaieTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        for (InterfaceMonnaie im : listeNewMonnaie) {
+        for (Monnaie im : listeNewMonnaie) {
             if (im.getBeta() == InterfaceMonnaie.BETA_MODIFIE || im.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 im.setIdExercice(annee.getId());
                 im.setIdUtilisateur(user.getId());
@@ -628,11 +618,11 @@ public class GestionAnnee {
         }
     }
 
-    private void saveClasses(SortiesExercice se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
-        Vector<InterfaceClasse> listeNewClasses = se.getListeClasse();
-        Vector<InterfaceClasse> listeNewClassesTempo = new Vector<>();
+    private void saveClasses(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+        Vector<Classe> listeNewClasses = se.getListeClasse();
+        Vector<Classe> listeNewClassesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        for (InterfaceClasse ic : listeNewClasses) {
+        for (Classe ic : listeNewClasses) {
             if (ic.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ic.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 ic.setIdExercice(annee.getId());
                 ic.setIdUtilisateur(user.getId());
@@ -669,11 +659,11 @@ public class GestionAnnee {
         }
     }
 
-    private void savePeriodes(SortiesExercice se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
-        Vector<InterfacePeriode> listeNewPeriodes = se.getListePeriodes();
-        Vector<InterfacePeriode> listeNewPeriodesTempo = new Vector<>();
+    private void savePeriodes(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+        Vector<Periode> listeNewPeriodes = se.getListePeriodes();
+        Vector<Periode> listeNewPeriodesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        for (InterfacePeriode ip : listeNewPeriodes) {
+        for (Periode ip : listeNewPeriodes) {
             if (ip.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ip.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 ip.setIdExercice(annee.getId());
                 ip.setIdUtilisateur(user.getId());
@@ -710,11 +700,11 @@ public class GestionAnnee {
         }
     }
 
-    private void saveAgents(SortiesExercice se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
-        Vector<InterfaceAgent> listeNewAgents = se.getListeAgents();
-        Vector<InterfaceAgent> listeNewAgentsTempo = new Vector<>();
+    private void saveAgents(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+        Vector<Agent> listeNewAgents = se.getListeAgents();
+        Vector<Agent> listeNewAgentsTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        for (InterfaceAgent ia : listeNewAgents) {
+        for (Agent ia : listeNewAgents) {
             if (ia.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ia.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 ia.setIdExercice(annee.getId());
                 ia.setIdUtilisateur(user.getId());
@@ -753,7 +743,7 @@ public class GestionAnnee {
 
     private int getIdClasse(SortiesExercice se, long signature) {
         if (se != null) {
-            for (InterfaceClasse ic : se.getListeClasse()) {
+            for (Classe ic : se.getListeClasse()) {
                 if (ic.getSignature() == signature) {
                     return ic.getId();
                 }
@@ -764,7 +754,7 @@ public class GestionAnnee {
 
     private int getIdPeriode(SortiesExercice se, long signature) {
         if (se != null) {
-            for (InterfacePeriode ic : se.getListePeriodes()) {
+            for (Periode ic : se.getListePeriodes()) {
                 if (ic.getSignature() == signature) {
                     return ic.getId();
                 }
@@ -775,7 +765,7 @@ public class GestionAnnee {
 
     private String getNomClasse(SortiesExercice se, long signature) {
         if (se != null) {
-            for (InterfaceClasse ic : se.getListeClasse()) {
+            for (Classe ic : se.getListeClasse()) {
                 if (ic.getSignature() == signature) {
                     return ic.getNom();
                 }
@@ -786,7 +776,7 @@ public class GestionAnnee {
 
     private String getNomPeriode(SortiesExercice se, long signature) {
         if (se != null) {
-            for (InterfacePeriode ic : se.getListePeriodes()) {
+            for (Periode ic : se.getListePeriodes()) {
                 if (ic.getSignature() == signature) {
                     return ic.getNom();
                 }
@@ -797,7 +787,7 @@ public class GestionAnnee {
 
     private int getIdAgent(SortiesExercice se, long signature) {
         if (se != null) {
-            for (InterfaceAgent ia : se.getListeAgents()) {
+            for (Agent ia : se.getListeAgents()) {
                 if (ia.getSignature() == signature) {
                     return ia.getId();
                 }
@@ -817,11 +807,11 @@ public class GestionAnnee {
         return -1;
     }
 
-    private void saveCours(SortiesExercice se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
-        Vector<InterfaceCours> listeNewCours = se.getListeCours();
-        Vector<InterfaceCours> listeNewCoursTempo = new Vector<>();
+    private void saveCours(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+        Vector<Cours> listeNewCours = se.getListeCours();
+        Vector<Cours> listeNewCoursTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        for (InterfaceCours ic : listeNewCours) {
+        for (Cours ic : listeNewCours) {
             if (ic.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ic.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 ic.setIdClasse(getIdClasse(se, ic.getSignatureClasse()));
                 ic.setIdEnseignant(getIdAgent(se, ic.getSignatureEnseignant()));
@@ -860,11 +850,11 @@ public class GestionAnnee {
         }
     }
 
-    private void saveRevenus(SortiesExercice se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
-        Vector<InterfaceRevenu> listeNewRevenus = se.getListeRevenus();
-        Vector<InterfaceRevenu> listeNewRevenusTempo = new Vector<>();
+    private void saveRevenus(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+        Vector<Revenu> listeNewRevenus = se.getListeRevenus();
+        Vector<Revenu> listeNewRevenusTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        for (InterfaceRevenu ir : listeNewRevenus) {
+        for (Revenu ir : listeNewRevenus) {
             if (ir.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ir.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 ir.setIdMonnaie(getIdMonnaie(se, ir.getSignatureMonnaie()));
                 ir.setIdExercice(annee.getId());
@@ -902,11 +892,11 @@ public class GestionAnnee {
         }
     }
 
-    private void saveCharges(SortiesExercice se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
-        Vector<InterfaceCharge> listeNewCharges = se.getListeCharges();
-        Vector<InterfaceCharge> listeNewChargesTempo = new Vector<>();
+    private void saveCharges(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+        Vector<Charge> listeNewCharges = se.getListeCharges();
+        Vector<Charge> listeNewChargesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        for (InterfaceCharge ic : listeNewCharges) {
+        for (Charge ic : listeNewCharges) {
             if (ic.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ic.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 ic.setIdMonnaie(getIdMonnaie(se, ic.getSignatureMonnaie()));
                 ic.setIdExercice(annee.getId());
@@ -944,11 +934,11 @@ public class GestionAnnee {
         }
     }
 
-    private void saveFrais(SortiesExercice se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
-        Vector<InterfaceFrais> listeNewFrais = se.getListeFrais();
-        Vector<InterfaceFrais> listeNewFraisTempo = new Vector<>();
+    private void saveFrais(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+        Vector<Frais> listeNewFrais = se.getListeFrais();
+        Vector<Frais> listeNewFraisTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        for (InterfaceFrais frais : listeNewFrais) {
+        for (Frais frais : listeNewFrais) {
             if (frais.getBeta() == InterfaceFrais.BETA_MODIFIE || frais.getBeta() == InterfaceFrais.BETA_NOUVEAU) {
                 frais.setIdMonnaie(getIdMonnaie(se, frais.getSignatureMonnaie()));
                 frais.setIdExercice(annee.getId());
@@ -958,14 +948,14 @@ public class GestionAnnee {
                 System.out.println("FRAIS: " + frais.toString());
                 System.out.println(" * LIAISON CLASSE:");
                 /* */
-                for (LiaisonClasseFrais lcf : frais.getLiaisonsClasses()) {
+                for (LiaisonFraisClasse lcf : frais.getLiaisonsClasses()) {
                     lcf.setIdClasse(getIdClasse(se, lcf.getSignatureClasse()));
                     lcf.setNomClasse(getNomClasse(se, lcf.getSignatureClasse()));
                     System.out.println(" * * " + lcf.toString());
                 }
                 System.out.println("-----------");
                 System.out.println(" * LIAISON PERIODE:");
-                for (LiaisonPeriodeFrais lcp : frais.getLiaisonsPeriodes()) {
+                for (LiaisonFraisPeriode lcp : frais.getLiaisonsPeriodes()) {
                     lcp.setIdPeriode(getIdPeriode(se, lcp.getSignaturePeriode()));
                     lcp.setNomPeriode(getNomPeriode(se, lcp.getSignaturePeriode()));
                     System.out.println(" * * " + lcp.toString());

@@ -10,27 +10,34 @@ import BEAN_BARRE_OUTILS.Bouton;
 import BEAN_BARRE_OUTILS.BoutonListener;
 import ICONES.Icones;
 import SOURCES.GESTIONNAIRES.GestionAnnee;
-import SOURCES.CALLBACK.EcouteurExercice;
+import SOURCES.CALLBACK.EcouteurGestionExercice;
 import SOURCES.Callback.EcouteurLongin;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
 import SOURCES.GESTIONNAIRES.GestionAdhesion;
-import SOURCES.Interface.InterfaceAgent;
-import SOURCES.Interface.InterfaceCharge;
-import SOURCES.Interface.InterfaceClasse;
-import SOURCES.Interface.InterfaceCours;
-import SOURCES.Interface.InterfaceFrais;
-import SOURCES.Interface.InterfaceMonnaie;
-import SOURCES.Interface.InterfaceRevenu;
-import SOURCES.Interfaces.InterfaceUtilisateur;
-import SOURCES.Objets.Entreprise;
 import SOURCES.Objets.FileManager;
 import SOURCES.Objets.Paiement;
 import SOURCES.Objets.Session;
-import SOURCES.Objets.Utilisateur;
 import SOURCES.UTILITAIRES.UtilFees;
-import SOURCES.Utilitaires.CouleurBasique;
+import Source.Interface.InterfaceAgent;
+import Source.Interface.InterfaceCharge;
+import Source.Interface.InterfaceCours;
+import Source.Interface.InterfaceFrais;
+import Source.Interface.InterfaceMonnaie;
+import Source.Interface.InterfaceRevenu;
+import Source.Interface.InterfaceUtilisateur;
+import Source.Objet.Agent;
+import Source.Objet.Charge;
+import Source.Objet.Classe;
+import Source.Objet.CouleurBasique;
+import Source.Objet.Cours;
+import Source.Objet.Entreprise;
 import Source.Objet.Exercice;
+import Source.Objet.Frais;
+import Source.Objet.Monnaie;
+import Source.Objet.Revenu;
+import Source.Objet.Utilisateur;
+import TEST.InterfaceClasse;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
@@ -50,7 +57,7 @@ public class Principal extends javax.swing.JFrame {
     private FileManager fm = null;
     private JFrame moi = null;
     private Session session;
-    private EcouteurExercice ecouteurExercice = null;
+    private EcouteurGestionExercice ecouteurExercice = null;
     private CouleurBasique couleurBasique;
 
     //Les GEstionnaires
@@ -126,7 +133,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void lf_initEcouteurExercice() {
-        ecouteurExercice = new EcouteurExercice() {
+        ecouteurExercice = new EcouteurGestionExercice() {
             @Override
             public void onExerciceAdded(String nomExercice) {
                 System.out.println("EXERCICE ADDED");
@@ -370,7 +377,7 @@ public class Principal extends javax.swing.JFrame {
                 if (comboListeAnneesScolaires.getSelectedIndex() == 0) {
                     //Nouvelle année scolaire
                     gestionAnnee = new GestionAnnee(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
-                    gestionAnnee.ga_setDonnees(null, new Vector<InterfaceAgent>(), new Vector<InterfaceCharge>(), new Vector<InterfaceClasse>(), new Vector<InterfaceCours>(), new Vector<InterfaceFrais>(), new Vector<InterfaceMonnaie>(), new Vector<InterfaceRevenu>(), new Vector<>());
+                    gestionAnnee.ga_setDonnees(null, new Vector<Agent>(), new Vector<Charge>(), new Vector<Classe>(), new Vector<Cours>(), new Vector<Frais>(), new Vector<Monnaie>(), new Vector<Revenu>(), new Vector<>());
                     gestionAnnee.ga_initUI("Nouvel Exercice");
                 } else {
                     //On ouvre une année scolaire existante

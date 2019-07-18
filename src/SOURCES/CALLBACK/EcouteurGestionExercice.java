@@ -9,7 +9,7 @@ package SOURCES.CALLBACK;
  *
  * @author HP Pavilion
  */
-public abstract class EcouteurExercice {
+public abstract class EcouteurGestionExercice {
     public abstract void onExerciceAdded(String nomExercice);
     public abstract void onExerciceDeleteded(String nom);
 }

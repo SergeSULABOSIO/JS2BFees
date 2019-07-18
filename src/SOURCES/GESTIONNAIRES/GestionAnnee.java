@@ -373,8 +373,6 @@ public class GestionAnnee {
                 }
                 donneesExercice = new DonneesExercice(newIannee, agents, charges, classes, cours, fraises, monnaies, revenus, periodes);
                 ga_initUI(newIannee.getNom());
-                progress.setVisible(false);
-                progress.setIndeterminate(false);
             }
 
             @Override
@@ -392,7 +390,6 @@ public class GestionAnnee {
     }
 
     public void ga_initUI(String nomTab) {
-        
         panel = new PanelExercice(couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurExerice() {
             @Override
             public void onEnregistre(SortiesExercice se) {
@@ -456,6 +453,8 @@ public class GestionAnnee {
         //Chargement du gestionnaire sur l'onglet
         tabOnglet.addTab(nomTab, panel);
         tabOnglet.setSelectedComponent(panel);
+        progress.setVisible(false);
+        progress.setIndeterminate(false);
     }
 
     private void detruireChields() {

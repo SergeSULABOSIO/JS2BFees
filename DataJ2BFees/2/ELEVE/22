@@ -1,0 +1,18 @@
+{
+  "id" : 22,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 33,
+  "signature" : 6448835401177049990,
+  "classe" : "G3",
+  "adresse" : "",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "AKAKATSHI",
+  "postnom" : "TOTO",
+  "prenom" : "JEAN",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1563288269734,
+  "beta" : 0
+}

@@ -14,15 +14,15 @@ import SOURCES.CALLBACK.EcouteurExercice;
 import SOURCES.Callback.EcouteurLongin;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
-import SOURCES.Interfaces.InterfaceAgent;
-import SOURCES.Interfaces.InterfaceCharge;
-import SOURCES.Interfaces.InterfaceClasse;
-import SOURCES.Interfaces.InterfaceCours;
-import SOURCES.Interfaces.InterfaceFrais;
-import SOURCES.Interfaces.InterfaceMonnaie;
-import SOURCES.Interfaces.InterfaceRevenu;
+import SOURCES.GESTIONNAIRES.GestionAdhesion;
+import SOURCES.Interface.InterfaceAgent;
+import SOURCES.Interface.InterfaceCharge;
+import SOURCES.Interface.InterfaceClasse;
+import SOURCES.Interface.InterfaceCours;
+import SOURCES.Interface.InterfaceFrais;
+import SOURCES.Interface.InterfaceMonnaie;
+import SOURCES.Interface.InterfaceRevenu;
 import SOURCES.Interfaces.InterfaceUtilisateur;
-import SOURCES.OBJETS.Exercice;
 import SOURCES.Objets.Entreprise;
 import SOURCES.Objets.FileManager;
 import SOURCES.Objets.Paiement;
@@ -30,6 +30,7 @@ import SOURCES.Objets.Session;
 import SOURCES.Objets.Utilisateur;
 import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires.CouleurBasique;
+import Source.Objet.Exercice;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
@@ -51,14 +52,14 @@ public class Principal extends javax.swing.JFrame {
     private Session session;
     private EcouteurExercice ecouteurExercice = null;
     private CouleurBasique couleurBasique;
-    
+
     //Les GEstionnaires
     public GestionAnnee gestionAnnee = null;
-    
+    public GestionAdhesion gestionAdhesion = null;
+
     /**
      * Creates new form Principal
      */
-    
     public Principal() {
         initComponents();
         lf_initCouleurs();
@@ -78,16 +79,10 @@ public class Principal extends javax.swing.JFrame {
         lf_construirePageLogin();
         loadUserSession();
     }
-    
-    private void lf_initCouleurs(){
+
+    private void lf_initCouleurs() {
         couleurBasique = new CouleurBasique();
-        couleurBasique.setCouleur_background_normal(Color.white);
-        couleurBasique.setCouleur_background_selection(UtilFees.COULEUR_BLEU);
-        couleurBasique.setCouleur_encadrement_selection(UtilFees.COULEUR_ORANGE);
-        couleurBasique.setCouleur_foreground_objet_existant(UtilFees.COULEUR_BLEU);
-        couleurBasique.setCouleur_foreground_objet_modifie(UtilFees.COULEUR_BLEU_CLAIRE_1);
-        couleurBasique.setCouleur_foreground_objet_nouveau(UtilFees.COULEUR_ROUGE);
-        
+
     }
 
     private void updateListeExercice(String selectedExercice) {
@@ -287,7 +282,7 @@ public class Principal extends javax.swing.JFrame {
         btEtatBackup.setText("<Pas disponible>");
 
         moi.setTitle(texteTitre);
-        
+
         lf_progress(false, "", progressEtat);
     }
 
@@ -307,7 +302,7 @@ public class Principal extends javax.swing.JFrame {
                     btAnnee.setText("Démarrer", 12, true);
                     btAnnee.setInfosBulle("Commencer par créer un Exercice (Année scolaire ou Année académique)");
                     btAnnee.setIcone(icones.getDémarrer_03());
-                    
+
                     if (user.getDroitExercice() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btAnnee.setVisible(false);
                     } else {
@@ -322,35 +317,35 @@ public class Principal extends javax.swing.JFrame {
                     btAnnee.setText("Exercice", 12, true);
                     btAnnee.setInfosBulle("Ouvrir l'Exercice séléctionné");
                     btAnnee.setIcone(icones.getCalendrier_03());
-                    
+
                     if (user.getDroitExercice() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btAnnee.setVisible(false);
                     } else {
                         btAnnee.setVisible(true);
                     }
-                    if (user.getDroitInscription()== InterfaceUtilisateur.DROIT_PAS_ACCES) {
+                    if (user.getDroitInscription() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btInscription.setVisible(false);
-                    }else{
+                    } else {
                         btInscription.setVisible(true);
                     }
-                    if (user.getDroitFacture()== InterfaceUtilisateur.DROIT_PAS_ACCES) {
+                    if (user.getDroitFacture() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btFacture.setVisible(false);
-                    }else{
+                    } else {
                         btFacture.setVisible(true);
                     }
-                    if (user.getDroitLitige()== InterfaceUtilisateur.DROIT_PAS_ACCES) {
+                    if (user.getDroitLitige() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btLitige.setVisible(false);
-                    }else{
+                    } else {
                         btLitige.setVisible(true);
                     }
-                    if (user.getDroitPaie()== InterfaceUtilisateur.DROIT_PAS_ACCES) {
+                    if (user.getDroitPaie() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btPaie.setVisible(false);
-                    }else{
+                    } else {
                         btPaie.setVisible(true);
                     }
-                    if (user.getDroitTresorerie()== InterfaceUtilisateur.DROIT_PAS_ACCES) {
+                    if (user.getDroitTresorerie() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btTresorerie.setVisible(false);
-                    }else{
+                    } else {
                         btTresorerie.setVisible(true);
                     }
                 }
@@ -360,7 +355,7 @@ public class Principal extends javax.swing.JFrame {
 
     public void lf_construireBoutons() {
         bOutils = new BarreOutils(barreOutils);
-        
+
         btLicence = new Bouton(12, ":: Licence ::", "Payer votre abonnement", true, icones.getAdresse_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
@@ -368,7 +363,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         btLicence.setForeground(UtilFees.COULEUR_ORANGE);
-        
+
         btAnnee = new Bouton(12, "Démarrer", "Créer une voulle année scolaire", true, icones.getDémarrer_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
@@ -387,15 +382,15 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         btAnnee.setForeground(UtilFees.COULEUR_ORANGE);
-        
+
         btAyantDroit = new Bouton(12, "Ayant D.", "Les Ayant-droits", true, icones.getUtilisateur_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-
+                
             }
         });
         btAyantDroit.setForeground(UtilFees.COULEUR_ORANGE);
-        
+
         btFacture = new Bouton(12, "Facture", "Paiement des frais", true, icones.getFacture_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
@@ -403,15 +398,20 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         btFacture.setForeground(UtilFees.COULEUR_ORANGE);
-        
-        btInscription = new Bouton(12, "Adhésion", "Inscrire des étudiants", true, icones.getFacture_03(), new BoutonListener() {
+
+        btInscription = new Bouton(12, "Adhésion", "Inscrire des étudiants", true, icones.getAjouter_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-
+                if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
+                    //On ouvre les inscriptions
+                    System.out.println("Modification et/ou Suppression des inscriptions de " + comboListeAnneesScolaires.getSelectedItem());
+                    gestionAdhesion = new GestionAdhesion(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                    gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
+                }
             }
         });
         btInscription.setForeground(UtilFees.COULEUR_ORANGE);
-        
+
         btPaie = new Bouton(12, "Paie", "Paie des Agents de l'établissement", true, icones.getFacture_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
@@ -427,28 +427,29 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         btTresorerie.setForeground(UtilFees.COULEUR_ORANGE);
-        
+
         btLitige = new Bouton(12, "Litiges", "Litiges et reglèment des dettes", true, icones.getFournisseur_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                
+
             }
         });
         btLitige.setForeground(UtilFees.COULEUR_ORANGE);
-        
+
         bOutils.AjouterBouton(btLogo);
         bOutils.AjouterBouton(btLicence);
         bOutils.AjouterSeparateur();
         bOutils.AjouterBouton(btAnnee);
         bOutils.AjouterBouton(btInscription);
-        bOutils.AjouterBouton(btFacture);
         bOutils.AjouterBouton(btLitige);
-        bOutils.AjouterBouton(btPaie);
+        bOutils.AjouterBouton(btFacture);
         bOutils.AjouterBouton(btTresorerie);
+        bOutils.AjouterBouton(btPaie);
         
+
         panOutils.setVisible(true);
         barreOutils.setVisible(true);
-        
+
         appliquerDroit();
     }
 

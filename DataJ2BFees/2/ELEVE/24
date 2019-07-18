@@ -1,0 +1,18 @@
+{
+  "id" : 24,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 32,
+  "signature" : -1803025851644499966,
+  "classe" : "G2",
+  "adresse" : "",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "TONGO",
+  "postnom" : "BATANTU",
+  "prenom" : "NANCY",
+  "status" : 0,
+  "sexe" : 1,
+  "dateNaissance" : 1563288924387,
+  "beta" : 0
+}

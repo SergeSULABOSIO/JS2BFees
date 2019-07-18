@@ -1,0 +1,18 @@
+{
+  "id" : 39,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 33,
+  "signature" : -2074257278290885758,
+  "classe" : "G3",
+  "adresse" : "",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "AMEDE",
+  "postnom" : "MUFANSONI",
+  "prenom" : "TONTON",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1563290791154,
+  "beta" : 0
+}

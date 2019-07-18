@@ -1,0 +1,18 @@
+{
+  "id" : 14,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 33,
+  "signature" : -2375735493371751808,
+  "classe" : "G3",
+  "adresse" : "",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "MATATA",
+  "postnom" : "PONYO",
+  "prenom" : "MAPON",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1563288010530,
+  "beta" : 0
+}

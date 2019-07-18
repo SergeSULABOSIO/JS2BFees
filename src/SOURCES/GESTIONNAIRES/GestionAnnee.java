@@ -6,40 +6,43 @@
 package SOURCES.GESTIONNAIRES;
 
 import SOURCES.CALLBACK.EcouteurExercice;
-import SOURCES.Callback.EcouteurAnneeScolaire;
-import SOURCES.Callback.EcouteurEnregistrement;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
-import SOURCES.Interfaces.InterfaceAgent;
-import SOURCES.Interfaces.InterfaceCharge;
-import SOURCES.Interfaces.InterfaceClasse;
-import SOURCES.Interfaces.InterfaceCours;
-import SOURCES.Interfaces.InterfaceExercice;
-import SOURCES.Interfaces.InterfaceFrais;
-import SOURCES.Interfaces.InterfaceMonnaie;
-import SOURCES.Interfaces.InterfacePeriode;
-import SOURCES.Interfaces.InterfaceRevenu;
+import SOURCES.Callback_Exercice.EcouteurAnneeScolaire;
+import SOURCES.Callback_Exercice.EcouteurEnregistrement;
 import SOURCES.Interfaces.InterfaceUtilisateur;
-import SOURCES.OBJETS.Agent;
-import SOURCES.OBJETS.Charge;
-import SOURCES.OBJETS.Classe;
-import SOURCES.OBJETS.Cours;
-import SOURCES.OBJETS.Exercice;
-import SOURCES.OBJETS.Frais;
-import SOURCES.OBJETS.Monnaie;
-import SOURCES.OBJETS.Periode;
-import SOURCES.OBJETS.Revenu;
 import SOURCES.Objets.Entreprise;
 import SOURCES.Objets.FileManager;
 import SOURCES.Objets.Utilisateur;
-import SOURCES.UI.Panel;
+import SOURCES.UI_Exercice.PanelExercice;
 import SOURCES.UTILITAIRES.UtilFees;
-import SOURCES.Utilitaires.CouleurBasique;
-import SOURCES.Utilitaires.DonneesExercice;
-import SOURCES.Utilitaires.LiaisonClasseFrais;
-import SOURCES.Utilitaires.LiaisonPeriodeFrais;
-import SOURCES.Utilitaires.ParametreExercice;
-import SOURCES.Utilitaires.SortiesExercice;
+import SOURCES.Utilitaires_Exercice.DonneesExercice;
+import SOURCES.Utilitaires_Exercice.ParametreExercice;
+import SOURCES.Utilitaires_Exercice.SortiesExercice;
+import Source.Interface.InterfaceAgent;
+import Source.Interface.InterfaceCharge;
+import Source.Interface.InterfaceCours;
+import Source.Interface.InterfaceExercice;
+import Source.Interface.InterfaceFrais;
+import Source.Interface.InterfaceMonnaie;
+import Source.Interface.InterfaceRevenu;
+import Source.Objet.Agent;
+import Source.Objet.Charge;
+import Source.Objet.Classe;
+import Source.Objet.CouleurBasique;
+import Source.Objet.Cours;
+import Source.Objet.Exercice;
+import Source.Objet.Frais;
+import Source.Objet.LiaisonFraisClasse;
+import Source.Objet.LiaisonFraisPeriode;
+import Source.Objet.Monnaie;
+import Source.Objet.Periode;
+import Source.Objet.Revenu;
+import TEST.InterfaceClasse;
+import TEST.InterfacePeriode;
+import TEST.LiaisonClasseFrais;
+import TEST.LiaisonPeriodeFrais;
+import java.awt.Panel;
 import java.util.Vector;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -63,14 +66,14 @@ public class GestionAnnee {
 
     private InterfaceExercice newIannee = null;
     private FileManager fm;
-    private Vector<InterfaceAgent> agents = new Vector<>();
-    private Vector<InterfaceCharge> charges = new Vector<>();
-    private Vector<InterfaceClasse> classes = new Vector<>();
-    private Vector<InterfaceCours> cours = new Vector<>();
-    private Vector<InterfaceFrais> fraises = new Vector<>();
-    private Vector<InterfaceMonnaie> monnaies = new Vector<>();
-    private Vector<InterfacePeriode> periodes = new Vector<>();
-    private Vector<InterfaceRevenu> revenus = new Vector<>();
+    private Vector<Agent> agents = new Vector<>();
+    private Vector<Charge> charges = new Vector<>();
+    private Vector<Classe> classes = new Vector<>();
+    private Vector<Cours> cours = new Vector<>();
+    private Vector<Frais> fraises = new Vector<>();
+    private Vector<Monnaie> monnaies = new Vector<>();
+    private Vector<Periode> periodes = new Vector<>();
+    private Vector<Revenu> revenus = new Vector<>();
     private EcouteurExercice ecouteurExercice;
     private CouleurBasique couleurBasique;
 
@@ -90,7 +93,7 @@ public class GestionAnnee {
         this.parametreExercice = new ParametreExercice(entreprise, utilisateur.getNom() + " " + utilisateur.getPrenom(), utilisateur.getId(), monnaie_output);
     }
 
-    public void ga_setDonnees(Exercice anneeExistant, Vector<InterfaceAgent> agents, Vector<InterfaceCharge> charges, Vector<InterfaceClasse> classes, Vector<InterfaceCours> cours, Vector<InterfaceFrais> frais, Vector<InterfaceMonnaie> monnaies, Vector<InterfaceRevenu> revenus, Vector<InterfacePeriode> periodes) {
+    public void ga_setDonnees(Exercice anneeExistant, Vector<Agent> agents, Vector<Charge> charges, Vector<Classe> classes, Vector<Cours> cours, Vector<Frais> frais, Vector<Monnaie> monnaies, Vector<Revenu> revenus, Vector<Periode> periodes) {
         if (anneeExistant != null) {
             newIannee = anneeExistant;
         }
@@ -118,7 +121,7 @@ public class GestionAnnee {
                     public void onDone(String message, Vector data) {
                         System.out.println("CHARGEMENT ANNEE: " + message);
                         for (Object Oannee : data) {
-                            Exercice annee = (Exercice) Oannee;
+                            InterfaceExercice annee = (InterfaceExercice) Oannee;
                             if (annee.getNom().equals(selectedAnnee)) {
                                 System.out.println(" * " + annee.getNom());
                                 newIannee = annee;
@@ -279,11 +282,11 @@ public class GestionAnnee {
                         fraises.add(frais);
                         System.out.println(" * " + frais.getNom());
                         System.out.println("Liaison classe:");
-                        for (LiaisonClasseFrais lc : frais.getLiaisonsClasses()) {
+                        for (LiaisonFraisClasse lc : frais.getLiaisonsClasses()) {
                             System.out.println(" ** " + lc.toString());
                         }
                         System.out.println("Liaison période:");
-                        for (LiaisonPeriodeFrais lp : frais.getLiaisonsPeriodes()) {
+                        for (LiaisonFraisPeriode lp : frais.getLiaisonsPeriodes()) {
                             System.out.println(" ** " + lp.toString());
                         }
                     }
@@ -399,7 +402,8 @@ public class GestionAnnee {
     }
 
     public void ga_initUI(String nomTab) {
-        panel = new Panel(couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurAnneeScolaire() {
+        
+        panel = new PanelExercice(couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurAnneeScolaire() {
             @Override
             public void onEnregistre(SortiesExercice se) {
                 if (se != null) {

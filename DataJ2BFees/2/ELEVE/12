@@ -1,0 +1,18 @@
+{
+  "id" : 12,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 33,
+  "signature" : -7437332485630364592,
+  "classe" : "G3",
+  "adresse" : "",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "MOTEMA",
+  "postnom" : "YALOKOMBO",
+  "prenom" : "SERGINE",
+  "status" : 0,
+  "sexe" : 1,
+  "dateNaissance" : 1563287619008,
+  "beta" : 0
+}

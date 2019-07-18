@@ -1,0 +1,36 @@
+{
+  "id" : 2,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idEleve" : -1,
+  "eleve" : "MIKEBA MUNENE CELINE",
+  "listeLiaisons" : [ {
+    "signatureEleve" : -1,
+    "idFrais" : 10,
+    "montant" : 100.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  }, {
+    "signatureEleve" : -1,
+    "idFrais" : 11,
+    "montant" : 0.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  }, {
+    "signatureEleve" : -1,
+    "idFrais" : 22,
+    "montant" : 0.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  }, {
+    "signatureEleve" : -1,
+    "idFrais" : 9,
+    "montant" : 0.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  } ],
+  "signature" : -1606981648888351768,
+  "signatureEleve" : 2871409828769339677,
+  "beta" : 0
+}

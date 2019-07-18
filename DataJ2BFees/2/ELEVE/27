@@ -1,0 +1,18 @@
+{
+  "id" : 27,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 33,
+  "signature" : -812753113232921857,
+  "classe" : "G3",
+  "adresse" : "",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "MBEMBE",
+  "postnom" : "TABU",
+  "prenom" : "LEONTINE",
+  "status" : 0,
+  "sexe" : 1,
+  "dateNaissance" : 1563289040218,
+  "beta" : 0
+}

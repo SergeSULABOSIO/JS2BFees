@@ -1,0 +1,18 @@
+{
+  "id" : 46,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 32,
+  "signature" : 3021484693047129352,
+  "classe" : "G2",
+  "adresse" : "",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "ESISO",
+  "postnom" : "AMBISA",
+  "prenom" : "GENEROSE",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1563476113689,
+  "beta" : 0
+}

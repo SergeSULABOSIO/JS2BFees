@@ -5,7 +5,7 @@
  */
 package SOURCES.UTILITAIRES;
 
-import SOURCES.Interfaces.InterfaceUtilisateur;
+import Source.Interface.InterfaceUtilisateur;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.net.URL;
@@ -29,6 +29,8 @@ public class UtilFees {
     public static String DOSSIER_REVENU = "REVENU";
     public static String DOSSIER_CHARGE = "CHARGE";
     public static String DOSSIER_FRAIS = "FRAIS";
+    public static String DOSSIER_ELEVE = "ELEVE";
+    public static String DOSSIER_AYANT_DROIT = "AYANT_DROIT";
     
     public static Color COULEUR_BLEU = new Color(26, 45, 77);       //Pour plus d'infos visiter le lien https://www.colorhexa.com/1a2e4d
     public static Color COULEUR_BLEU_CLAIRE_1 = new Color(68,117,192);    //Une variante claire

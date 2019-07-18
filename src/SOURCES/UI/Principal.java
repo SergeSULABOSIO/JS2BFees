@@ -16,15 +16,9 @@ import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
 import SOURCES.GESTIONNAIRES.GestionAdhesion;
 import SOURCES.Objets.FileManager;
-import SOURCES.Objets.Paiement;
+import SOURCES.Objets.PaiementLicence;
 import SOURCES.Objets.Session;
 import SOURCES.UTILITAIRES.UtilFees;
-import Source.Interface.InterfaceAgent;
-import Source.Interface.InterfaceCharge;
-import Source.Interface.InterfaceCours;
-import Source.Interface.InterfaceFrais;
-import Source.Interface.InterfaceMonnaie;
-import Source.Interface.InterfaceRevenu;
 import Source.Interface.InterfaceUtilisateur;
 import Source.Objet.Agent;
 import Source.Objet.Charge;
@@ -37,7 +31,6 @@ import Source.Objet.Frais;
 import Source.Objet.Monnaie;
 import Source.Objet.Revenu;
 import Source.Objet.Utilisateur;
-import TEST.InterfaceClasse;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
@@ -278,7 +271,7 @@ public class Principal extends javax.swing.JFrame {
             btEtatEntreprise.setVisible(false);
         }
 
-        Paiement licence = session.getPaiement();
+        PaiementLicence licence = session.getPaiement();
         if (licence != null) {
             String dateExpirationL = UtilFees.convertDatePaiement(licence.getDateExpiration()).toLocaleString();
             btEtatLicence.setText(dateExpirationL);

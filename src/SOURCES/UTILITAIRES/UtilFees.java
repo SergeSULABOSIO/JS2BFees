@@ -5,7 +5,7 @@
  */
 package SOURCES.UTILITAIRES;
 
-import SOURCES.Interfaces.InterfaceUtilisateur;
+import Source.Interface.InterfaceUtilisateur;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.net.URL;

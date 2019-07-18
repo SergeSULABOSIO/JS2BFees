@@ -5,38 +5,31 @@
  */
 package SOURCES.GESTIONNAIRES;
 
-import SOURCES.Callback.EcouteurEnregistrement;
-import SOURCES.Callback.EcouteurInscription;
+
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
-import SOURCES.Interface.InterfaceAyantDroit;
-import SOURCES.Interface.InterfaceClasse;
-import SOURCES.Interface.InterfaceEleve;
-import SOURCES.Interface.InterfaceEntreprise;
-import SOURCES.Interface.InterfaceExercice;
-import SOURCES.Interface.InterfaceFrais;
-import SOURCES.Interface.InterfaceMonnaie;
-import SOURCES.Interface.InterfacePaiement;
-import SOURCES.Interface.InterfacePeriode;
-import SOURCES.Interfaces.InterfaceUtilisateur;
-import SOURCES.OBJETS.Classe;
-import SOURCES.OBJETS.Exercice;
-import SOURCES.OBJETS.Frais;
-import SOURCES.OBJETS.Monnaie;
-import SOURCES.Objets.Entreprise;
 import SOURCES.Objets.FileManager;
-import SOURCES.Objets.Utilisateur;
-import SOURCES.UI.PanelInscription;
 import SOURCES.UI.PanelLitige;
 import SOURCES.UTILITAIRES.UtilFees;
-import SOURCES.Utilitaires.CouleurBasique;
 import SOURCES.Utilitaires.DonneesLitige;
-import SOURCES.Utilitaires.LiaisonClasseFrais;
-import SOURCES.Utilitaires.LiaisonPeriodeFrais;
 import SOURCES.Utilitaires.ParametresLitige;
-import SOURCES.Utilitaires.SortiesInscription;
-import TEST_EXEMPLE.TEST_Ayantdroit;
-import TEST_EXEMPLE.TEST_Eleve;
+import SOURCES.Utilitaires_Insc.SortiesInscription;
+import Source.Callbacks.EcouteurEnregistrement;
+import Source.Interface.InterfaceExercice;
+import Source.Interface.InterfaceMonnaie;
+import Source.Objet.Ayantdroit;
+import Source.Objet.Classe;
+import Source.Objet.CouleurBasique;
+import Source.Objet.Eleve;
+import Source.Objet.Entreprise;
+import Source.Objet.Exercice;
+import Source.Objet.Frais;
+import Source.Objet.LiaisonFraisClasse;
+import Source.Objet.LiaisonFraisPeriode;
+import Source.Objet.Monnaie;
+import Source.Objet.Paiement;
+import Source.Objet.Periode;
+import Source.Objet.Utilisateur;
 import static java.lang.Thread.sleep;
 import java.util.Vector;
 import javax.swing.JPanel;
@@ -57,15 +50,15 @@ public class GestionLitiges {
     public JTabbedPane tabOnglet;
     public JProgressBar progress;
 
-    private InterfaceExercice exercice = null;
+    private Exercice exercice = null;
     private FileManager fm;
-    private Vector<InterfaceClasse> classes = new Vector<>();
-    private Vector<InterfaceFrais> frais = new Vector<>();
-    private Vector<InterfaceEleve> eleves = new Vector<>();
-    private Vector<InterfaceAyantDroit> ayantDroits = new Vector<>();
-    private Vector<InterfaceMonnaie> monnaies = new Vector<>();
-    private Vector<InterfacePeriode> periodes = new Vector<>();
-    private Vector<InterfacePaiement> paiements = new Vector<>();
+    private Vector<Classe> classes = new Vector<>();
+    private Vector<Frais> frais = new Vector<>();
+    private Vector<Eleve> eleves = new Vector<>();
+    private Vector<Ayantdroit> ayantDroits = new Vector<>();
+    private Vector<Monnaie> monnaies = new Vector<>();
+    private Vector<Periode> periodes = new Vector<>();
+    private Vector<Paiement> paiements = new Vector<>();
     private CouleurBasique couleurBasique;
 
     public GestionLitiges(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
@@ -78,7 +71,7 @@ public class GestionLitiges {
     }
 
     private void initParamsEtDonnees() {
-        this.parametreLitige = new ParametresLitige(utilisateur.getId(), utilisateur.getNom() + " " + utilisateur.getPrenom(), (InterfaceEntreprise)entreprise, exercice, monnaies.firstElement(), monnaies, classes, frais, periodes);
+        this.parametreLitige = new ParametresLitige(utilisateur.getId(), utilisateur.getNom() + " " + utilisateur.getPrenom(), entreprise, exercice, monnaies.firstElement(), monnaies, classes, frais, periodes);
         this.donneesLitige = new DonneesLitige(eleves, ayantDroits, paiements);
     }
 
@@ -103,7 +96,7 @@ public class GestionLitiges {
                     public void onDone(String message, Vector data) {
                         System.out.println("CHARGEMENT ANNEE: " + message);
                         for (Object Oannee : data) {
-                            InterfaceExercice annee = (InterfaceExercice) Oannee;
+                            Exercice annee = (Exercice) Oannee;
                             if (annee.getNom().equals(selectedAnnee)) {
                                 System.out.println(" * " + annee.getNom());
                                 exercice = annee;
@@ -132,12 +125,12 @@ public class GestionLitiges {
 
     private void loadEleves() {
         eleves.removeAllElements();
-        fm.fm_ouvrirTout(0, TEST_Eleve.class, UtilFees.DOSSIER_ELEVE, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Eleve.class, UtilFees.DOSSIER_ELEVE, new EcouteurOuverture() {
             @Override
             public void onDone(String message, Vector data) {
                 System.out.println(message);
                 for (Object o : data) {
-                    TEST_Eleve classe = (TEST_Eleve) o;
+                    Eleve classe = (Eleve) o;
                     if (classe.getIdExercice() == exercice.getId()) {
                         eleves.add(classe);
                         System.out.println(" * " + classe.toString());
@@ -162,12 +155,12 @@ public class GestionLitiges {
 
     private void loadAyantDroit() {
         ayantDroits.removeAllElements();
-        fm.fm_ouvrirTout(0, TEST_Ayantdroit.class, UtilFees.DOSSIER_AYANT_DROIT, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Ayantdroit.class, UtilFees.DOSSIER_AYANT_DROIT, new EcouteurOuverture() {
             @Override
             public void onDone(String message, Vector data) {
                 System.out.println(message);
                 for (Object o : data) {
-                    TEST_Ayantdroit classe = (TEST_Ayantdroit) o;
+                    Ayantdroit classe = (Ayantdroit) o;
                     if (classe.getIdExercice() == exercice.getId()) {
                         ayantDroits.add(classe);
                         System.out.println(" * " + classe.toString());
@@ -197,7 +190,7 @@ public class GestionLitiges {
             public void onDone(String message, Vector data) {
                 System.out.println(message);
                 for (Object o : data) {
-                    InterfaceClasse classe = (InterfaceClasse) o;
+                    Classe classe = (Classe) o;
                     if (classe.getIdExercice() == exercice.getId()) {
                         classes.add(classe);
                         System.out.println(" * " + classe.toString());
@@ -227,7 +220,7 @@ public class GestionLitiges {
             public void onDone(String message, Vector data) {
                 System.out.println(message);
                 for (Object o : data) {
-                    InterfaceMonnaie classe = (InterfaceMonnaie) o;
+                    Monnaie classe = (Monnaie) o;
                     if (classe.getIdExercice() == exercice.getId()) {
                         monnaies.add(classe);
                         System.out.println(" * " + classe.toString());
@@ -257,16 +250,16 @@ public class GestionLitiges {
             public void onDone(String message, Vector data) {
                 System.out.println(message);
                 for (Object o : data) {
-                    InterfaceFrais oFrais = (InterfaceFrais) o;
+                    Frais oFrais = (Frais) o;
                     if (oFrais.getIdExercice() == exercice.getId()) {
                         frais.add(oFrais);
                         System.out.println(" * " + oFrais.getNom());
                         System.out.println("Liaison classe:");
-                        for (LiaisonClasseFrais lc : oFrais.getLiaisonsClasses()) {
+                        for (LiaisonFraisClasse lc : oFrais.getLiaisonsClasses()) {
                             System.out.println(" ** " + lc.toString());
                         }
                         System.out.println("Liaison période:");
-                        for (LiaisonPeriodeFrais lp : oFrais.getLiaisonsPeriodes()) {
+                        for (LiaisonFraisPeriode lp : oFrais.getLiaisonsPeriodes()) {
                             System.out.println(" ** " + lp.toString());
                         }
                     }
@@ -370,11 +363,11 @@ public class GestionLitiges {
         }
     }
 
-    private void saveEleves(SortiesInscription se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
-        Vector<InterfaceEleve> listeNewEleves = se.getListeEleves();
-        Vector<InterfaceEleve> listeNewElevesTempo = new Vector<>();
+    private void saveEleves(SortiesInscription se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+        Vector<Eleve> listeNewEleves = se.getListeEleves();
+        Vector<Eleve> listeNewElevesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        for (InterfaceEleve ia : listeNewEleves) {
+        for (Eleve ia : listeNewEleves) {
             if (ia.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ia.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 ia.setIdExercice(annee.getId());
                 ia.setIdUtilisateur(user.getId());
@@ -411,12 +404,12 @@ public class GestionLitiges {
         }
     }
 
-    private void saveAyantDroits(SortiesInscription se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
-        Vector<InterfaceAyantDroit> listeNewAy = se.getListeAyantDroit();
-        Vector<InterfaceAyantDroit> listeNewAYTempo = new Vector<>();
+    private void saveAyantDroits(SortiesInscription se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+        Vector<Ayantdroit> listeNewAy = se.getListeAyantDroit();
+        Vector<Ayantdroit> listeNewAYTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
         System.out.println("AYANT DROIT **** ");
-        for (InterfaceAyantDroit ia : listeNewAy) {
+        for (Ayantdroit ia : listeNewAy) {
             if (ia.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ia.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 ia.setIdExercice(annee.getId());
                 ia.setIdUtilisateur(user.getId());

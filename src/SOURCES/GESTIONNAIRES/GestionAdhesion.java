@@ -5,7 +5,6 @@
  */
 package SOURCES.GESTIONNAIRES;
 
-
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
 import SOURCES.Callback_Insc.EcouteurInscription;
@@ -263,8 +262,6 @@ public class GestionAdhesion {
                         }
                     }
                 }
-                progress.setVisible(false);
-                progress.setIndeterminate(false);
                 initUI(exercice.getNom() + " - Adhésion");
             }
 
@@ -314,10 +311,12 @@ public class GestionAdhesion {
                 }
             }
         });
-
+        
         //Chargement du gestionnaire sur l'onglet
         tabOnglet.addTab(nomTab, panel);
         tabOnglet.setSelectedComponent(panel);
+        progress.setVisible(false);
+        progress.setIndeterminate(false);
     }
 
     private void action_save(SortiesInscription se) {

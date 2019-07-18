@@ -6,7 +6,7 @@
     "telephone" : "+243844803514",
     "email" : "sulabosiog@gmail.com",
     "siteWeb" : "www.aib-brokers.com",
-    "logo" : "logo/2_556811.png",
+    "logo" : "logo/2_281475.png",
     "rccm" : "CDFK0014-15-200",
     "idnat" : "Idnat09988",
     "numeroImpot" : "Imp0988839393",
@@ -47,6 +47,6 @@
     "dateActivation" : "2019-07-01 16:28:08",
     "dateExpiration" : "2020-01-01 16:28:08"
   },
-  "token" : "1563053401787",
-  "derniereConnexion" : 1563053401787
+  "token" : "1563477252576",
+  "derniereConnexion" : 1563477252576
 }

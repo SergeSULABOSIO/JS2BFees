@@ -106,7 +106,7 @@ public class GestionAnnee {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(100, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
                     @Override
                     public void onDone(String message, Vector data) {
                         System.out.println("CHARGEMENT ANNEE: " + message);

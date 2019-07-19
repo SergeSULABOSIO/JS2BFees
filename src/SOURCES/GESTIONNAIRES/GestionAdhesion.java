@@ -42,6 +42,7 @@ import javax.swing.JTabbedPane;
  */
 public class GestionAdhesion {
 
+    public static String NOM = "ADHESION (INSCRIPTION)";
     public PanelInscription panel = null;
     public Entreprise entreprise;
     public Utilisateur utilisateur;
@@ -81,7 +82,7 @@ public class GestionAdhesion {
                 JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
                 String titreOnglet = tabOnglet.getTitleAt(i);
                 System.out.println("Onglet - " + titreOnglet);
-                if (titreOnglet.equals(selectedAnnee + " - Adhésion")) {
+                if (titreOnglet.equals(NOM)) {
                     System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
                     tabOnglet.remove(i);
                     mustLoadData = true;
@@ -262,7 +263,7 @@ public class GestionAdhesion {
                         }
                     }
                 }
-                initUI(exercice.getNom() + " - Adhésion");
+                initUI(NOM);
             }
 
             @Override

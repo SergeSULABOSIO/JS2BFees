@@ -15,6 +15,7 @@ import SOURCES.Callback.EcouteurLongin;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
 import SOURCES.GESTIONNAIRES.GestionAdhesion;
+import SOURCES.GESTIONNAIRES.GestionLitiges;
 import SOURCES.Objets.FileManager;
 import SOURCES.Objets.PaiementLicence;
 import SOURCES.Objets.Session;
@@ -56,6 +57,7 @@ public class Principal extends javax.swing.JFrame {
     //Les GEstionnaires
     public GestionAnnee gestionAnnee = null;
     public GestionAdhesion gestionAdhesion = null;
+    public GestionLitiges gestionLitiges = null;
 
     /**
      * Creates new form Principal
@@ -249,7 +251,7 @@ public class Principal extends javax.swing.JFrame {
         btEtatLicence.setIcon(icones.getAdresse_01());
         btEtatBackup.setIcon(icones.getServeur_01());
         barreEtat.setVisible(true);
-
+        
         lf_construireListeAnneesScolaires();
         lf_construireBoutons();
 
@@ -386,7 +388,7 @@ public class Principal extends javax.swing.JFrame {
         btAyantDroit = new Bouton(12, "Ayant D.", "Les Ayant-droits", true, icones.getUtilisateur_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                
+
             }
         });
         btAyantDroit.setForeground(UtilFees.COULEUR_ORANGE);
@@ -404,7 +406,7 @@ public class Principal extends javax.swing.JFrame {
             public void OnEcouteLeClick() {
                 if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
                     //On ouvre les inscriptions
-                    System.out.println("Modification et/ou Suppression des inscriptions de " + comboListeAnneesScolaires.getSelectedItem());
+                    System.out.println("Ouverture des adhésions");
                     gestionAdhesion = new GestionAdhesion(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                     gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
                 }
@@ -431,7 +433,12 @@ public class Principal extends javax.swing.JFrame {
         btLitige = new Bouton(12, "Litiges", "Litiges et reglèment des dettes", true, icones.getFournisseur_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-
+                if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
+                    //On ouvre les inscriptions
+                    System.out.println("Ouverture des litiges");
+                    gestionLitiges = new GestionLitiges(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                    gestionLitiges.gl_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
+                }
             }
         });
         btLitige.setForeground(UtilFees.COULEUR_ORANGE);
@@ -445,7 +452,6 @@ public class Principal extends javax.swing.JFrame {
         bOutils.AjouterBouton(btFacture);
         bOutils.AjouterBouton(btTresorerie);
         bOutils.AjouterBouton(btPaie);
-        
 
         panOutils.setVisible(true);
         barreOutils.setVisible(true);

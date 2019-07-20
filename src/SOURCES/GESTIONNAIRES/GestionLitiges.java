@@ -5,18 +5,12 @@
  */
 package SOURCES.GESTIONNAIRES;
 
-
 import SOURCES.Callback.EcouteurOuverture;
-import SOURCES.Callback.EcouteurStandard;
 import SOURCES.Objets.FileManager;
 import SOURCES.UI.PanelLitige;
 import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires.DonneesLitige;
 import SOURCES.Utilitaires.ParametresLitige;
-import SOURCES.Utilitaires_Insc.SortiesInscription;
-import Source.Callbacks.EcouteurEnregistrement;
-import Source.Interface.InterfaceExercice;
-import Source.Interface.InterfaceMonnaie;
 import Source.Objet.Ayantdroit;
 import Source.Objet.Classe;
 import Source.Objet.CouleurBasique;
@@ -30,7 +24,6 @@ import Source.Objet.Monnaie;
 import Source.Objet.Paiement;
 import Source.Objet.Periode;
 import Source.Objet.Utilisateur;
-import static java.lang.Thread.sleep;
 import java.util.Vector;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -42,6 +35,7 @@ import javax.swing.JTabbedPane;
  */
 public class GestionLitiges {
 
+    public static String NOM = "LITIGE";
     public PanelLitige panel = null;
     public Entreprise entreprise;
     public Utilisateur utilisateur;
@@ -75,7 +69,7 @@ public class GestionLitiges {
         this.donneesLitige = new DonneesLitige(eleves, ayantDroits, paiements);
     }
 
-    public void gi_setDonneesFromFileManager(String selectedAnnee) {
+    public void gl_setDonneesFromFileManager(String selectedAnnee) {
         if (fm != null) {
             boolean mustLoadData = true;
             int nbOnglets = tabOnglet.getComponentCount();
@@ -83,7 +77,7 @@ public class GestionLitiges {
                 JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
                 String titreOnglet = tabOnglet.getTitleAt(i);
                 System.out.println("Onglet - " + titreOnglet);
-                if (titreOnglet.equals(selectedAnnee + " - Adhésion")) {
+                if (titreOnglet.equals(NOM)) {
                     System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
                     tabOnglet.remove(i);
                     mustLoadData = true;
@@ -91,7 +85,7 @@ public class GestionLitiges {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(100, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
                     @Override
                     public void onDone(String message, Vector data) {
                         System.out.println("CHARGEMENT ANNEE: " + message);
@@ -226,6 +220,66 @@ public class GestionLitiges {
                         System.out.println(" * " + classe.toString());
                     }
                 }
+                loadPeriodes();
+            }
+
+            @Override
+            public void onError(String string) {
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+            }
+
+            @Override
+            public void onProcessing(String string) {
+                progress.setVisible(true);
+                progress.setIndeterminate(true);
+            }
+        });
+    }
+
+    private void loadPeriodes() {
+        periodes.removeAllElements();
+        fm.fm_ouvrirTout(0, Periode.class, UtilFees.DOSSIER_PERIODE, new EcouteurOuverture() {
+            @Override
+            public void onDone(String message, Vector data) {
+                System.out.println(message);
+                for (Object o : data) {
+                    Periode classe = (Periode) o;
+                    if (classe.getIdExercice() == exercice.getId()) {
+                        periodes.add(classe);
+                        System.out.println(" * " + classe.toString());
+                    }
+                }
+                loadPaiements();
+            }
+
+            @Override
+            public void onError(String string) {
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
+            }
+
+            @Override
+            public void onProcessing(String string) {
+                progress.setVisible(true);
+                progress.setIndeterminate(true);
+            }
+        });
+    }
+
+    private void loadPaiements() {
+        paiements.removeAllElements();
+        fm.fm_ouvrirTout(0, Paiement.class, UtilFees.DOSSIER_PAIEMENT, new EcouteurOuverture() {
+            @Override
+            public void onDone(String message, Vector data) {
+                System.out.println(message);
+                for (Object o : data) {
+                    Paiement classe = (Paiement) o;
+                    if (classe.getIdExercice() == exercice.getId()) {
+                        paiements.add(classe);
+                        System.out.println(" * " + classe.toString());
+                    }
+                }
                 loadEleves();
             }
 
@@ -264,9 +318,7 @@ public class GestionLitiges {
                         }
                     }
                 }
-                progress.setVisible(false);
-                progress.setIndeterminate(false);
-                initUI(exercice.getNom() + " - Adhésion");
+                initUI(NOM);
             }
 
             @Override
@@ -285,169 +337,13 @@ public class GestionLitiges {
 
     private void initUI(String nomTab) {
         initParamsEtDonnees();
-        
-        panel = new PanelLitige(couleurBasique, tabOnglet, donneesLitige, parametreLitige);
+
+        panel = new PanelLitige(couleurBasique, tabOnglet, donneesLitige, parametreLitige, progress);
         //Chargement du gestionnaire sur l'onglet
         tabOnglet.addTab(nomTab, panel);
         tabOnglet.setSelectedComponent(panel);
-        
-        
-        /*
-        
-        panel = new PanelInscription(couleurBasique, tabOnglet, donneesInscription, parametreInscription, new EcouteurInscription() {
-            @Override
-            public void onEnregistre(SortiesInscription si) {
-                if (si != null) {
-                    System.out.println("DANGER !!!!!! ADHESION: Enregistrement...");
-                    action_save(si);
-                }
-            }
-
-            @Override
-            public void onDetruitExercice(int idExercice) {
-
-            }
-
-            @Override
-            public void onDetruitElements(int idElement, int index) {
-                System.out.println("DANGER !!!!!! ADHESION: Destruction de " + idElement + ", indice " + index);
-                if (idElement != -1) {
-                    switch (index) {
-                        case 0://ELEVE
-                            fm.fm_supprimer(UtilFees.DOSSIER_ELEVE, idElement);
-                            break;
-                        case 1://AYANT-DROIT
-                            fm.fm_supprimer(UtilFees.DOSSIER_AYANT_DROIT, idElement);
-                            break;
-                        default:
-                    }
-                }
-            }
-        });
-
-        //Chargement du gestionnaire sur l'onglet
-        tabOnglet.addTab(nomTab, panel);
-        tabOnglet.setSelectedComponent(panel);
-        
-        */
-        
-    }
-
-    private void action_save(SortiesInscription se) {
-        if (se != null) {
-            Thread th = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        EcouteurEnregistrement ee = se.getEcouteurEnregistrement();
-                        Utilisateur user = fm.fm_getSession().getUtilisateur();
-                        ee.onUploading("Chargement...");
-
-                        progress.setVisible(true);
-                        progress.setIndeterminate(true);
-
-                        sleep(50);
-
-                        //DEBUT D'ENREGISTREMENT
-                        saveEleves(se, ee, user, exercice);
-
-                        se.getEcouteurEnregistrement().onDone("Enregistré!");
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-            };
-            th.start();
-        }
-    }
-
-    private void saveEleves(SortiesInscription se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
-        Vector<Eleve> listeNewEleves = se.getListeEleves();
-        Vector<Eleve> listeNewElevesTempo = new Vector<>();
-        //On précise qui est en train d'enregistrer cette donnée
-        for (Eleve ia : listeNewEleves) {
-            if (ia.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ia.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
-                ia.setIdExercice(annee.getId());
-                ia.setIdUtilisateur(user.getId());
-                ia.setIdEntreprise(user.getIdEntreprise());
-                ia.setBeta(InterfaceExercice.BETA_EXISTANT);
-                listeNewElevesTempo.add(ia);
-            }
-        }
-        if (!listeNewElevesTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewElevesTempo, UtilFees.DOSSIER_ELEVE, new EcouteurStandard() {
-                @Override
-                public void onDone(String message) {
-                    System.out.println(message);
-                    //Après enregistrement
-                    ee.onDone("Eleves enregistrées !");
-                    //donneesExercice.setAgents(listeNewAgentsTempo);
-                    saveAyantDroits(se, ee, user, exercice);
-                }
-
-                @Override
-                public void onError(String message) {
-                    System.err.println(message);
-                    ee.onError("Erreur !");
-                }
-
-                @Override
-                public void onProcessing(String message) {
-                    System.out.println(message);
-                    ee.onUploading("Enregistrement...");
-                }
-            });
-        } else {
-            saveAyantDroits(se, ee, user, exercice);
-        }
-    }
-
-    private void saveAyantDroits(SortiesInscription se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
-        Vector<Ayantdroit> listeNewAy = se.getListeAyantDroit();
-        Vector<Ayantdroit> listeNewAYTempo = new Vector<>();
-        //On précise qui est en train d'enregistrer cette donnée
-        System.out.println("AYANT DROIT **** ");
-        for (Ayantdroit ia : listeNewAy) {
-            if (ia.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ia.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
-                ia.setIdExercice(annee.getId());
-                ia.setIdUtilisateur(user.getId());
-                ia.setIdEntreprise(user.getIdEntreprise());
-                ia.setBeta(InterfaceExercice.BETA_EXISTANT);
-                listeNewAYTempo.add(ia);
-            }
-        }
-        if (!listeNewAYTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewAYTempo, UtilFees.DOSSIER_AYANT_DROIT, new EcouteurStandard() {
-                @Override
-                public void onDone(String message) {
-                    progress.setVisible(false);
-                    progress.setIndeterminate(false);
-
-                    System.out.println(message);
-                    //Après enregistrement
-                    ee.onDone("Ayant-droits enregistrés !");
-                }
-
-                @Override
-                public void onError(String message) {
-                    progress.setVisible(false);
-                    progress.setIndeterminate(false);
-                    System.err.println(message);
-                    ee.onError("Erreur !");
-                }
-
-                @Override
-                public void onProcessing(String message) {
-                    System.out.println(message);
-                    ee.onUploading("Enregistrement...");
-                }
-            });
-        } else {
-            progress.setVisible(false);
-            progress.setIndeterminate(false);
-        }
+        progress.setVisible(false);
+        progress.setIndeterminate(false);
     }
 
 }

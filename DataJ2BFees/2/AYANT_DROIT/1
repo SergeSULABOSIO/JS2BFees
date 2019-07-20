@@ -7,26 +7,30 @@
   "eleve" : "SULA BOSIO SERGE",
   "listeLiaisons" : [ {
     "signatureEleve" : -1,
+    "signatureFrais" : 0,
     "idFrais" : 10,
     "montant" : 0.0,
     "idMonnaie" : 11,
     "monnaie" : "$"
   }, {
     "signatureEleve" : -1,
+    "signatureFrais" : 0,
     "idFrais" : 11,
     "montant" : 0.0,
     "idMonnaie" : 11,
     "monnaie" : "$"
   }, {
     "signatureEleve" : -1,
+    "signatureFrais" : 0,
     "idFrais" : 22,
     "montant" : 0.0,
     "idMonnaie" : 11,
     "monnaie" : "$"
   }, {
     "signatureEleve" : -1,
+    "signatureFrais" : 0,
     "idFrais" : 9,
-    "montant" : 0.0,
+    "montant" : 20.0,
     "idMonnaie" : 11,
     "monnaie" : "$"
   } ],

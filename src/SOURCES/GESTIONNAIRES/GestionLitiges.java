@@ -338,7 +338,7 @@ public class GestionLitiges {
     private void initUI(String nomTab) {
         initParamsEtDonnees();
 
-        panel = new PanelLitige(couleurBasique, tabOnglet, donneesLitige, parametreLitige);
+        panel = new PanelLitige(couleurBasique, tabOnglet, donneesLitige, parametreLitige, progress);
         //Chargement du gestionnaire sur l'onglet
         tabOnglet.addTab(nomTab, panel);
         tabOnglet.setSelectedComponent(panel);

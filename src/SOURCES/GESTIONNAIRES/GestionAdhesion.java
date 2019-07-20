@@ -32,7 +32,6 @@ import Source.Objet.Monnaie;
 import Source.Objet.Utilisateur;
 import static java.lang.Thread.sleep;
 import java.util.Vector;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 
@@ -42,7 +41,7 @@ import javax.swing.JTabbedPane;
  */
 public class GestionAdhesion {
 
-    public static String NOM = "ADHESION (INSCRIPTION)";
+    public static String NOM = "ADHESION";
     public PanelInscription panel = null;
     public Entreprise entreprise;
     public Utilisateur utilisateur;

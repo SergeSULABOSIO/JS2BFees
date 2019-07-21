@@ -393,14 +393,14 @@ public class Principal extends javax.swing.JFrame {
         });
         btAyantDroit.setForeground(UtilFees.COULEUR_ORANGE);
 
-        btFacture = new Bouton(12, "Facture", "Paiement des frais", true, icones.getFacture_03(), new BoutonListener() {
+        btFacture = new Bouton(12, "Paiement", "Paiement des frais", true, icones.getCaisse_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
 
             }
         });
         btFacture.setForeground(UtilFees.COULEUR_ORANGE);
-
+        
         btInscription = new Bouton(12, "Adhésion", "Inscrire des étudiants", true, icones.getAjouter_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
@@ -414,7 +414,7 @@ public class Principal extends javax.swing.JFrame {
         });
         btInscription.setForeground(UtilFees.COULEUR_ORANGE);
 
-        btPaie = new Bouton(12, "Paie", "Paie des Agents de l'établissement", true, icones.getFacture_03(), new BoutonListener() {
+        btPaie = new Bouton(12, "Salaire", "Paie des Agents de l'établissement", true, icones.getRecette_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
 
@@ -422,7 +422,7 @@ public class Principal extends javax.swing.JFrame {
         });
         btPaie.setForeground(UtilFees.COULEUR_ORANGE);
 
-        btTresorerie = new Bouton(12, "Trésorerie", "La trésorerie (Encaissements & Décaissements)", true, icones.getFacture_03(), new BoutonListener() {
+        btTresorerie = new Bouton(12, "Trésorerie", "La trésorerie (Encaissements & Décaissements)", true, icones.getTableau_de_bord_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
 

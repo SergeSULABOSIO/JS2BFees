@@ -1,0 +1,18 @@
+{
+  "id" : 55,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 31,
+  "signature" : 6256758504376774701,
+  "classe" : "G1",
+  "adresse" : "GOMBE - RDC",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "ILOBO",
+  "postnom" : "TONDAMA",
+  "prenom" : "JEAN",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1563833382459,
+  "beta" : 0
+}

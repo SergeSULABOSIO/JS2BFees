@@ -396,7 +396,7 @@ public class Principal extends javax.swing.JFrame {
         btFacture = new Bouton(12, "Paiement", "Paiement des frais", true, icones.getCaisse_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-
+                
             }
         });
         btFacture.setForeground(UtilFees.COULEUR_ORANGE);
@@ -449,7 +449,7 @@ public class Principal extends javax.swing.JFrame {
         bOutils.AjouterBouton(btAnnee);
         bOutils.AjouterBouton(btInscription);
         bOutils.AjouterBouton(btLitige);
-        bOutils.AjouterBouton(btFacture);
+        //bOutils.AjouterBouton(btFacture);
         bOutils.AjouterBouton(btTresorerie);
         bOutils.AjouterBouton(btPaie);
 

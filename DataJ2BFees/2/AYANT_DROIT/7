@@ -1,0 +1,40 @@
+{
+  "id" : 7,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idEleve" : -1,
+  "eleve" : "ILOBO TONDAMA JEAN",
+  "listeLiaisons" : [ {
+    "signatureEleve" : -1,
+    "signatureFrais" : 0,
+    "idFrais" : 10,
+    "montant" : 250.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  }, {
+    "signatureEleve" : -1,
+    "signatureFrais" : 0,
+    "idFrais" : 11,
+    "montant" : 0.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  }, {
+    "signatureEleve" : -1,
+    "signatureFrais" : 0,
+    "idFrais" : 22,
+    "montant" : 0.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  }, {
+    "signatureEleve" : -1,
+    "signatureFrais" : 0,
+    "idFrais" : 9,
+    "montant" : 0.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  } ],
+  "signature" : 7787469173178967592,
+  "signatureEleve" : 6256758504376774701,
+  "beta" : 0
+}

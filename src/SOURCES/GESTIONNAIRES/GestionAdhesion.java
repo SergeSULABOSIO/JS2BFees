@@ -14,6 +14,7 @@ import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires_Insc.DonneesInscription;
 import SOURCES.Utilitaires_Insc.ParametreInscription;
 import SOURCES.Utilitaires_Insc.SortiesInscription;
+import Source.Callbacks.EcouteurCrossCanal;
 import Source.Callbacks.EcouteurEnregistrement;
 import Source.Interface.InterfaceEleve;
 import Source.Interface.InterfaceExercice;
@@ -58,6 +59,7 @@ public class GestionAdhesion {
     private Vector<Monnaie> monnaies = new Vector<>();
     private Vector<Ayantdroit> ayantDroit = new Vector<>();
     private CouleurBasique couleurBasique;
+    public String selectedAnnee = "";
 
     public GestionAdhesion(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.couleurBasique = couleurBasique;
@@ -75,6 +77,7 @@ public class GestionAdhesion {
 
     public void gi_setDonneesFromFileManager(String selectedAnnee) {
         if (fm != null) {
+            this.selectedAnnee = selectedAnnee;
             boolean mustLoadData = true;
             int nbOnglets = tabOnglet.getComponentCount();
             for (int i = 0; i < nbOnglets; i++) {
@@ -309,6 +312,16 @@ public class GestionAdhesion {
                         default:
                     }
                 }
+            }
+        }, new EcouteurCrossCanal() {
+            @Override
+            public void onOuvrirPaiements(Eleve eleve) {
+                new GestionPaiements(couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee);
+            }
+
+            @Override
+            public void onOuvrirInscription(Eleve eleve) {
+                //on ne fait rien
             }
         });
         

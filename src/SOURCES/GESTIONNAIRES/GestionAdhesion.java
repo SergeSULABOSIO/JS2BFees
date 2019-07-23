@@ -60,6 +60,7 @@ public class GestionAdhesion {
     private Vector<Ayantdroit> ayantDroit = new Vector<>();
     private CouleurBasique couleurBasique;
     public String selectedAnnee = "";
+    public Eleve eleveConcerned = null;
 
     public GestionAdhesion(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.couleurBasique = couleurBasique;
@@ -68,6 +69,17 @@ public class GestionAdhesion {
         this.tabOnglet = tabOnglet;
         this.utilisateur = utilisateur;
         this.entreprise = entreprise;
+        this.eleveConcerned = null;
+    }
+    
+    public GestionAdhesion(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+        this.couleurBasique = couleurBasique;
+        this.fm = fm;
+        this.progress = progress;
+        this.tabOnglet = tabOnglet;
+        this.utilisateur = utilisateur;
+        this.entreprise = entreprise;
+        this.eleveConcerned = eleveConcerned;
     }
 
     private void initParamsEtDonnees() {
@@ -84,7 +96,12 @@ public class GestionAdhesion {
                 //JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
                 String titreOnglet = tabOnglet.getTitleAt(i);
                 System.out.println("Onglet - " + titreOnglet);
-                if (titreOnglet.equals(NOM)) {
+                
+                String Snom = NOM;
+                if(eleveConcerned != null){
+                    Snom = NOM + " - " + eleveConcerned.getNom() + " " + eleveConcerned.getPrenom();
+                }
+                if (titreOnglet.equals(Snom)) {
                     System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
                     tabOnglet.remove(i);
                     mustLoadData = true;
@@ -131,10 +148,16 @@ public class GestionAdhesion {
             public void onDone(String message, Vector data) {
                 System.out.println(message);
                 for (Object o : data) {
-                    Eleve classe = (Eleve) o;
-                    if (classe.getIdExercice() == exercice.getId()) {
-                        eleves.add(classe);
-                        System.out.println(" * " + classe.toString());
+                    Eleve eleve = (Eleve) o;
+                    if (eleve.getIdExercice() == exercice.getId()) {
+                        if(eleveConcerned != null){
+                            if(eleve.getId() == eleveConcerned.getId()){
+                                eleves.add(eleve);
+                            }
+                        }else{
+                            eleves.add(eleve);
+                        }
+                        System.out.println(" * " + eleve.toString());
                     }
                 }
                 loadAyantDroit();
@@ -161,10 +184,16 @@ public class GestionAdhesion {
             public void onDone(String message, Vector data) {
                 System.out.println(message);
                 for (Object o : data) {
-                    Ayantdroit classe = (Ayantdroit) o;
-                    if (classe.getIdExercice() == exercice.getId()) {
-                        ayantDroit.add(classe);
-                        System.out.println(" * " + classe.toString());
+                    Ayantdroit ayantdroit = (Ayantdroit) o;
+                    if (ayantdroit.getIdExercice() == exercice.getId()) {
+                        if(eleveConcerned != null){
+                            if(ayantdroit.getSignatureEleve() == eleveConcerned.getSignature()){
+                                ayantDroit.add(ayantdroit);
+                            }
+                        }else{
+                            ayantDroit.add(ayantdroit);
+                        }
+                        System.out.println(" * " + ayantdroit.toString());
                     }
                 }
                 loadClasses();
@@ -265,7 +294,11 @@ public class GestionAdhesion {
                         }
                     }
                 }
-                initUI(NOM);
+                if(eleveConcerned == null){
+                    initUI(NOM);
+                }else{
+                    initUI(NOM + " - " + eleveConcerned.getNom() + " " + eleveConcerned.getPrenom());
+                }
             }
 
             @Override
@@ -282,55 +315,7 @@ public class GestionAdhesion {
         });
     }
 
-    private void initUI(String nomTab) {
-        initParamsEtDonnees();
-        panel = new PanelInscription(couleurBasique, tabOnglet, donneesInscription, parametreInscription, new EcouteurInscription() {
-            @Override
-            public void onEnregistre(SortiesInscription si) {
-                if (si != null) {
-                    System.out.println("DANGER !!!!!! ADHESION: Enregistrement...");
-                    action_save(si);
-                }
-            }
-
-            @Override
-            public void onDetruitExercice(int idExercice) {
-
-            }
-
-            @Override
-            public void onDetruitElements(int idElement, int index) {
-                System.out.println("DANGER !!!!!! ADHESION: Destruction de " + idElement + ", indice " + index);
-                if (idElement != -1) {
-                    switch (index) {
-                        case 0://ELEVE
-                            fm.fm_supprimer(UtilFees.DOSSIER_ELEVE, idElement);
-                            break;
-                        case 1://AYANT-DROIT
-                            fm.fm_supprimer(UtilFees.DOSSIER_AYANT_DROIT, idElement);
-                            break;
-                        default:
-                    }
-                }
-            }
-        }, new EcouteurCrossCanal() {
-            @Override
-            public void onOuvrirPaiements(Eleve eleve) {
-                new GestionPaiements(couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee);
-            }
-
-            @Override
-            public void onOuvrirInscription(Eleve eleve) {
-                //on ne fait rien
-            }
-        });
-        
-        //Chargement du gestionnaire sur l'onglet
-        tabOnglet.addTab(nomTab, panel);
-        tabOnglet.setSelectedComponent(panel);
-        progress.setVisible(false);
-        progress.setIndeterminate(false);
-    }
+    
 
     private void action_save(SortiesInscription se) {
         if (se != null) {
@@ -447,6 +432,64 @@ public class GestionAdhesion {
             progress.setVisible(false);
             progress.setIndeterminate(false);
         }
+    }
+    
+    
+    private void initUI(String nomTab) {
+        initParamsEtDonnees();
+        panel = new PanelInscription(couleurBasique, tabOnglet, donneesInscription, parametreInscription, new EcouteurInscription() {
+            @Override
+            public void onEnregistre(SortiesInscription si) {
+                if (si != null) {
+                    System.out.println("DANGER !!!!!! ADHESION: Enregistrement...");
+                    action_save(si);
+                }
+            }
+
+            @Override
+            public void onDetruitExercice(int idExercice) {
+
+            }
+
+            @Override
+            public void onDetruitElements(int idElement, int index) {
+                System.out.println("DANGER !!!!!! ADHESION: Destruction de " + idElement + ", indice " + index);
+                if (idElement != -1) {
+                    switch (index) {
+                        case 0://ELEVE
+                            fm.fm_supprimer(UtilFees.DOSSIER_ELEVE, idElement);
+                            break;
+                        case 1://AYANT-DROIT
+                            fm.fm_supprimer(UtilFees.DOSSIER_AYANT_DROIT, idElement);
+                            break;
+                        default:
+                    }
+                }
+            }
+        }, new EcouteurCrossCanal() {
+            @Override
+            public void onOuvrirPaiements(Eleve eleve) {
+                new GestionPaiements(couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee);
+            }
+
+            @Override
+            public void onOuvrirInscription(Eleve eleve) {
+                //on ne fait rien
+            }
+
+            @Override
+            public void onOuvrirLitiges(Eleve eleve) {
+                new GestionLitiges(couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee);
+            }
+            
+            
+        });
+        
+        //Chargement du gestionnaire sur l'onglet
+        tabOnglet.addTab(nomTab, panel);
+        tabOnglet.setSelectedComponent(panel);
+        progress.setVisible(false);
+        progress.setIndeterminate(false);
     }
 
 }

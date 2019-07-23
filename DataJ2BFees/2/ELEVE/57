@@ -1,0 +1,18 @@
+{
+  "id" : 57,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 27,
+  "idClasse" : -1,
+  "signature" : 1136831824894562668,
+  "classe" : "",
+  "adresse" : "",
+  "telephonesParents" : "(+243)",
+  "nom" : "FABRICE",
+  "postnom" : "ZAM",
+  "prenom" : "TIGA",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1563882055253,
+  "beta" : 0
+}

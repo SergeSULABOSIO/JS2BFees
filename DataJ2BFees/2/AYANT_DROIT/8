@@ -1,0 +1,19 @@
+{
+  "id" : 8,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 27,
+  "idEleve" : -1,
+  "eleve" : "JOSE MOBULU CEDRIC",
+  "listeLiaisons" : [ {
+    "signatureEleve" : -1,
+    "signatureFrais" : 8306923080576046575,
+    "idFrais" : 24,
+    "montant" : 0.0,
+    "idMonnaie" : 36,
+    "monnaie" : "$"
+  } ],
+  "signature" : 5973648294970236222,
+  "signatureEleve" : 3890384965933771344,
+  "beta" : 0
+}

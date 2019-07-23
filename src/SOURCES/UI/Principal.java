@@ -9,7 +9,7 @@ import BEAN_BARRE_OUTILS.BarreOutils;
 import BEAN_BARRE_OUTILS.Bouton;
 import BEAN_BARRE_OUTILS.BoutonListener;
 import ICONES.Icones;
-import SOURCES.GESTIONNAIRES.GestionAnnee;
+import SOURCES.GESTIONNAIRES.GestionExercice;
 import SOURCES.CALLBACK.EcouteurGestionExercice;
 import SOURCES.Callback.EcouteurLongin;
 import SOURCES.Callback.EcouteurOuverture;
@@ -55,7 +55,7 @@ public class Principal extends javax.swing.JFrame {
     private CouleurBasique couleurBasique;
 
     //Les GEstionnaires
-    public GestionAnnee gestionAnnee = null;
+    public GestionExercice gestionAnnee = null;
     public GestionAdhesion gestionAdhesion = null;
     public GestionLitiges gestionLitiges = null;
 
@@ -371,13 +371,13 @@ public class Principal extends javax.swing.JFrame {
             public void OnEcouteLeClick() {
                 if (comboListeAnneesScolaires.getSelectedIndex() == 0) {
                     //Nouvelle année scolaire
-                    gestionAnnee = new GestionAnnee(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
+                    gestionAnnee = new GestionExercice(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
                     gestionAnnee.ga_setDonnees(null, new Vector<Agent>(), new Vector<Charge>(), new Vector<Classe>(), new Vector<Cours>(), new Vector<Frais>(), new Vector<Monnaie>(), new Vector<Revenu>(), new Vector<>());
                     gestionAnnee.ga_initUI("Nouvel Exercice");
                 } else {
                     //On ouvre une année scolaire existante
                     System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
-                    gestionAnnee = new GestionAnnee(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
+                    gestionAnnee = new GestionExercice(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
                     gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
                 }
 

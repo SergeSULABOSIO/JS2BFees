@@ -1,0 +1,18 @@
+{
+  "id" : 56,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 27,
+  "idClasse" : 106,
+  "signature" : 3890384965933771344,
+  "classe" : "4e",
+  "adresse" : "",
+  "telephonesParents" : "(+243)",
+  "nom" : "JOSE",
+  "postnom" : "MOBULU",
+  "prenom" : "GOLA",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1563881581282,
+  "beta" : 0
+}

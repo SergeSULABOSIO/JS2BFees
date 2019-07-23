@@ -10,7 +10,6 @@ import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurStandard;
 import SOURCES.Objets.FileManager;
 import SOURCES.UI.PanelFacture;
-import SOURCES.UI.PanelLitige;
 import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires_Facture.DonneesFacture;
 import SOURCES.Utilitaires_Facture.ParametresFacture;

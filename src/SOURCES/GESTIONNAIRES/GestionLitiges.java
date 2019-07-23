@@ -26,7 +26,6 @@ import Source.Objet.Paiement;
 import Source.Objet.Periode;
 import Source.Objet.Utilisateur;
 import java.util.Vector;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 
@@ -56,6 +55,7 @@ public class GestionLitiges {
     public Vector<Paiement> paiements = new Vector<>();
     public CouleurBasique couleurBasique;
     public String selectedAnnee;
+    public Eleve eleveConcerned = null;
     
     public GestionLitiges(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.couleurBasique = couleurBasique;
@@ -64,6 +64,17 @@ public class GestionLitiges {
         this.tabOnglet = tabOnglet;
         this.utilisateur = utilisateur;
         this.entreprise = entreprise;
+        this.eleveConcerned = null;
+    }
+    
+    public GestionLitiges(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+        this.couleurBasique = couleurBasique;
+        this.fm = fm;
+        this.progress = progress;
+        this.tabOnglet = tabOnglet;
+        this.utilisateur = utilisateur;
+        this.entreprise = entreprise;
+        this.eleveConcerned = eleveConcerned;
     }
 
     private void initParamsEtDonnees() {
@@ -77,10 +88,13 @@ public class GestionLitiges {
             boolean mustLoadData = true;
             int nbOnglets = tabOnglet.getComponentCount();
             for (int i = 0; i < nbOnglets; i++) {
-                JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
                 String titreOnglet = tabOnglet.getTitleAt(i);
                 System.out.println("Onglet - " + titreOnglet);
-                if (titreOnglet.equals(NOM)) {
+                String Snom = NOM;
+                if(eleveConcerned != null){
+                    Snom = NOM + " - " + eleveConcerned.getNom() + " " + eleveConcerned.getPrenom();
+                }
+                if (titreOnglet.equals(Snom)) {
                     System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
                     tabOnglet.remove(i);
                     mustLoadData = true;
@@ -127,10 +141,16 @@ public class GestionLitiges {
             public void onDone(String message, Vector data) {
                 System.out.println(message);
                 for (Object o : data) {
-                    Eleve classe = (Eleve) o;
-                    if (classe.getIdExercice() == exercice.getId()) {
-                        eleves.add(classe);
-                        System.out.println(" * " + classe.toString());
+                    Eleve eleve = (Eleve) o;
+                    if (eleve.getIdExercice() == exercice.getId()) {
+                        if(eleveConcerned != null){
+                            if(eleve.getId() == eleveConcerned.getId()){
+                                eleves.add(eleve);
+                            }
+                        }else{
+                            eleves.add(eleve);
+                        }
+                        System.out.println(" * " + eleve.toString());
                     }
                 }
                 loadAyantDroit();
@@ -157,10 +177,16 @@ public class GestionLitiges {
             public void onDone(String message, Vector data) {
                 System.out.println(message);
                 for (Object o : data) {
-                    Ayantdroit classe = (Ayantdroit) o;
-                    if (classe.getIdExercice() == exercice.getId()) {
-                        ayantDroits.add(classe);
-                        System.out.println(" * " + classe.toString());
+                    Ayantdroit ayantdroit = (Ayantdroit) o;
+                    if (ayantdroit.getIdExercice() == exercice.getId()) {
+                        if(eleveConcerned != null){
+                            if(ayantdroit.getSignatureEleve() == eleveConcerned.getSignature()){
+                                ayantDroits.add(ayantdroit);
+                            }
+                        }else{
+                            ayantDroits.add(ayantdroit);
+                        }
+                        System.out.println(" * " + ayantdroit.toString());
                     }
                 }
                 loadClasses();
@@ -189,7 +215,13 @@ public class GestionLitiges {
                 for (Object o : data) {
                     Classe classe = (Classe) o;
                     if (classe.getIdExercice() == exercice.getId()) {
-                        classes.add(classe);
+                        if(eleveConcerned != null){
+                            if(classe.getId() == eleveConcerned.getIdClasse()){
+                                classes.add(classe);
+                            }
+                        }else{
+                            classes.add(classe);
+                        }
                         System.out.println(" * " + classe.toString());
                     }
                 }
@@ -277,10 +309,16 @@ public class GestionLitiges {
             public void onDone(String message, Vector data) {
                 System.out.println(message);
                 for (Object o : data) {
-                    Paiement classe = (Paiement) o;
-                    if (classe.getIdExercice() == exercice.getId()) {
-                        paiements.add(classe);
-                        System.out.println(" * " + classe.toString());
+                    Paiement paiement = (Paiement) o;
+                    if (paiement.getIdExercice() == exercice.getId()) {
+                        if(eleveConcerned != null){
+                            if(paiement.getIdEleve() == eleveConcerned.getId()){
+                                paiements.add(paiement);
+                            }
+                        }else{
+                            paiements.add(paiement);
+                        }
+                        System.out.println(" * " + paiement.toString());
                     }
                 }
                 loadEleves();
@@ -321,7 +359,11 @@ public class GestionLitiges {
                         }
                     }
                 }
-                initUI(NOM);
+                if(eleveConcerned == null){
+                    initUI(NOM);
+                }else{
+                    initUI(NOM + " - " + eleveConcerned.getNom() + " " + eleveConcerned.getPrenom());
+                }
             }
 
             @Override
@@ -349,8 +391,15 @@ public class GestionLitiges {
 
             @Override
             public void onOuvrirInscription(Eleve eleve) {
+                new GestionAdhesion(couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gi_setDonneesFromFileManager(selectedAnnee);
+            }
+
+            @Override
+            public void onOuvrirLitiges(Eleve eleve) {
                 
             }
+            
+            
         });
         
         //Chargement du gestionnaire sur l'onglet

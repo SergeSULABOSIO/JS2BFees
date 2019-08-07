@@ -1,0 +1,16 @@
+{
+  "id" : 25,
+  "idEleve" : 11,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1564097197987",
+  "nomEleve" : "ABEDI",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "ABEDI",
+  "montant" : 2.5,
+  "date" : 1564097197987,
+  "beta" : 0,
+  "referenceTransaction" : "1564097197987"
+}

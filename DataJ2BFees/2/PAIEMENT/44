@@ -1,0 +1,16 @@
+{
+  "id" : 44,
+  "idEleve" : 17,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1564415212899",
+  "nomEleve" : "MVUMU",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MVUMU",
+  "montant" : 125.0,
+  "date" : 1564415212899,
+  "beta" : 0,
+  "referenceTransaction" : "1564415212899"
+}

@@ -1,0 +1,16 @@
+{
+  "id" : 28,
+  "idEleve" : 12,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1564130283673",
+  "nomEleve" : "MOTEMA",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MOTEMA",
+  "montant" : 125.0,
+  "date" : 1564130283673,
+  "beta" : 0,
+  "referenceTransaction" : "1564130283673"
+}

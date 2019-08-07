@@ -1,0 +1,16 @@
+{
+  "id" : 39,
+  "idEleve" : 21,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1564145024869",
+  "nomEleve" : "DEMBO",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "DEMBO",
+  "montant" : 125.0,
+  "date" : 1564145024869,
+  "beta" : 0,
+  "referenceTransaction" : "1564145024869"
+}

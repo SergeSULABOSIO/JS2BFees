@@ -1,0 +1,16 @@
+{
+  "id" : 48,
+  "idEleve" : 19,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1564415271506",
+  "nomEleve" : "LOMBI",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "LOMBI",
+  "montant" : 125.0,
+  "date" : 1564415271506,
+  "beta" : 0,
+  "referenceTransaction" : "1564415271506"
+}

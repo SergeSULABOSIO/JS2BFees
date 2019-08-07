@@ -1,0 +1,16 @@
+{
+  "id" : 49,
+  "idEleve" : 19,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1564415283202",
+  "nomEleve" : "LOMBI",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "LOMBI",
+  "montant" : 2.5,
+  "date" : 1564415283202,
+  "beta" : 0,
+  "referenceTransaction" : "1564415283202"
+}

@@ -32,6 +32,9 @@ public class UtilFees {
     public static String DOSSIER_ELEVE = "ELEVE";
     public static String DOSSIER_AYANT_DROIT = "AYANT_DROIT";
     public static String DOSSIER_PAIEMENT = "PAIEMENT";
+    public static String DOSSIER_ENCAISSEMENT = "ENCAISSEMENT";
+    public static String DOSSIER_DECAISSEMENT = "DECAISSEMENT";
+    public static String DOSSIER_FICHE_DE_PAIE = "FICHE_PAIE";
     
     public static Color COULEUR_BLEU = new Color(26, 45, 77);       //Pour plus d'infos visiter le lien https://www.colorhexa.com/1a2e4d
     public static Color COULEUR_BLEU_CLAIRE_1 = new Color(68,117,192);    //Une variante claire
@@ -77,6 +80,17 @@ public class UtilFees {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,16 @@
+{
+  "id" : 31,
+  "idEleve" : 12,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1564134022556",
+  "nomEleve" : "MOTEMA",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "MOTEMA",
+  "montant" : 2.5,
+  "date" : 1564134022556,
+  "beta" : 0,
+  "referenceTransaction" : "1564134022556"
+}

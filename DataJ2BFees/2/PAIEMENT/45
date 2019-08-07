@@ -1,0 +1,16 @@
+{
+  "id" : 45,
+  "idEleve" : 17,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1564415224036",
+  "nomEleve" : "MVUMU",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "MVUMU",
+  "montant" : 2.5,
+  "date" : 1564415224036,
+  "beta" : 0,
+  "referenceTransaction" : "1564415224036"
+}

@@ -1,0 +1,18 @@
+{
+  "id" : 59,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 32,
+  "signature" : -3359065520898431941,
+  "classe" : "G2",
+  "adresse" : "GOMBE - KINSHASA RDC",
+  "telephonesParents" : "(+243)828727706",
+  "nom" : "MUTEBA",
+  "postnom" : "NKULU",
+  "prenom" : "NICO",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1564936312936,
+  "beta" : 0
+}

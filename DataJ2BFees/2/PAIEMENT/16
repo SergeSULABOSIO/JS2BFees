@@ -1,0 +1,16 @@
+{
+  "id" : 16,
+  "idEleve" : 13,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1563897609652",
+  "nomEleve" : "TOTO",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "TOTO",
+  "montant" : 125.0,
+  "date" : 1563897609652,
+  "beta" : 0,
+  "referenceTransaction" : "1563897609652"
+}

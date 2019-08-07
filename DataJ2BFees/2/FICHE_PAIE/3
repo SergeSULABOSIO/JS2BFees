@@ -1,0 +1,23 @@
+{
+  "id" : 3,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idMonnaie" : 11,
+  "idAgent" : 10,
+  "categorieAgent" : 0,
+  "salaireBase" : 1000.0,
+  "transport" : 100.0,
+  "logement" : 150.0,
+  "autresGains" : 0.0,
+  "retenu_IPR" : 35.0,
+  "retenu_INSS" : 30.0,
+  "retenu_SYNDICAT" : 10.0,
+  "retenu_ABSENCE" : 0.0,
+  "retenu_CAFETARIAT" : 0.0,
+  "retenu_AVANCE_SALAIRE" : 0.0,
+  "retenu_ORDINATEUR" : 0.0,
+  "dateEnregistrement" : 1564393325248,
+  "mois" : "juillet 2019",
+  "beta" : 0
+}

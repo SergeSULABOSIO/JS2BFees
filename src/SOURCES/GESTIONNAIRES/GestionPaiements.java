@@ -5,16 +5,18 @@
  */
 package SOURCES.GESTIONNAIRES;
 
+import SOURCES.CallBackFacture.EcouteurActualisationFacture;
 import SOURCES.CallBackFacture.EcouteurFacture;
 import SOURCES.Callback.EcouteurOuverture;
-import SOURCES.Callback.EcouteurStandard;
 import SOURCES.Objets.FileManager;
 import SOURCES.UI.PanelFacture;
 import SOURCES.UTILITAIRES.UtilFees;
+import SOURCES.Utilitaires_Facture.DataFacture;
 import SOURCES.Utilitaires_Facture.DonneesFacture;
 import SOURCES.Utilitaires_Facture.ParametresFacture;
 import SOURCES.Utilitaires_Facture.SortiesFacture;
 import Source.Callbacks.EcouteurEnregistrement;
+import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceExercice;
 import Source.Interface.InterfaceMonnaie;
 import Source.Interface.InterfaceUtilisateur;
@@ -46,8 +48,10 @@ public class GestionPaiements {
     public Entreprise entreprise;
     public Utilisateur utilisateur;
     public Eleve eleve;
-    public ParametresFacture parametresFacture;
-    public DonneesFacture donneesFacture;
+    //public ParametresFacture parametresFacture;
+    //public DonneesFacture donneesFacture;
+    public DataFacture dataFacture;
+    public boolean deleteCurrentTab = true;
     public JTabbedPane tabOnglet;
     public JProgressBar progress;
 
@@ -60,6 +64,7 @@ public class GestionPaiements {
     private Vector<Periode> periodes = new Vector<>();
     private Vector<Paiement> paiements = new Vector<>();
     private CouleurBasique couleurBasique;
+    public String selectedAnnee;
 
     public GestionPaiements(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleve) {
         this.couleurBasique = couleurBasique;
@@ -71,23 +76,28 @@ public class GestionPaiements {
         this.entreprise = entreprise;
     }
 
-    private void initParamsEtDonnees() {
-        this.parametresFacture = new ParametresFacture(utilisateur, entreprise, exercice, monnaies.firstElement(), monnaies, classes, periodes);
-        this.donneesFacture = new DonneesFacture(eleve, frais, paiements, ayantDroits);
+    private DataFacture getData() {
+        ParametresFacture parametresFacture = new ParametresFacture(utilisateur, entreprise, exercice, monnaies.firstElement(), monnaies, classes, periodes);
+        DonneesFacture donneesFacture = new DonneesFacture(eleve, frais, paiements, ayantDroits);
+        return new DataFacture(donneesFacture, parametresFacture);
     }
 
-    public void gl_setDonneesFromFileManager(String selectedAnnee) {
+    public void gl_setDonneesFromFileManager(String selectedAnnee, boolean deleteCurrentTab) {
+        this.deleteCurrentTab = deleteCurrentTab;
+        this.selectedAnnee = selectedAnnee;
         if (fm != null) {
             boolean mustLoadData = true;
-            int nbOnglets = tabOnglet.getComponentCount();
-            for (int i = 0; i < nbOnglets; i++) {
-                //JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
-                String titreOnglet = tabOnglet.getTitleAt(i);
-                System.out.println("Onglet - " + titreOnglet);
-                if (titreOnglet.equals(NOM + " - " + eleve.getNom() + " " + eleve.getPrenom())) {
-                    System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
-                    tabOnglet.remove(i);
-                    mustLoadData = true;
+            if (deleteCurrentTab == true) {
+                int nbOnglets = tabOnglet.getComponentCount();
+                for (int i = 0; i < nbOnglets; i++) {
+                    //JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
+                    String titreOnglet = tabOnglet.getTitleAt(i);
+                    System.out.println("Onglet - " + titreOnglet);
+                    if (titreOnglet.equals(NOM + " - " + eleve.getNom() + " " + eleve.getPrenom())) {
+                        System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
+                        tabOnglet.remove(i);
+                        mustLoadData = true;
+                    }
                 }
             }
 
@@ -312,40 +322,6 @@ public class GestionPaiements {
         });
     }
 
-    private void initUI(String nomTab) {
-        initParamsEtDonnees();
-        panel = new PanelFacture(couleurBasique, tabOnglet, parametresFacture, donneesFacture, new EcouteurFacture() {
-            @Override
-            public void onEnregistre(SortiesFacture sortiesFacture) {
-                System.out.println("ENREGISTREMENT DES PAIEMENTS DE L'EVELEVE EN COURS.");
-                savePaiements(sortiesFacture, sortiesFacture.getEcouteurEnregistrement(), utilisateur, exercice);
-            }
-
-            @Override
-            public void onDetruitPaiement(int idPaiement) {
-                System.out.println("DESTRUCTION DU PAIEMENT " + idPaiement);
-                if (idPaiement != -1 && fm != null) {
-                    boolean rep = fm.fm_supprimer(UtilFees.DOSSIER_PAIEMENT, idPaiement);
-                    System.out.println("SUPPRESSION = " + rep);
-                    
-                    //On doit actualiser le gestionnaire parent
-                    
-                }
-            }
-
-            @Override
-            public void onDetruitTousLesPaiements(int idEleve, int idExercice) {
-                System.out.println("DESTRUCTION DES PAIEMENTS DE L'ELEVE " + idEleve + ", POUR l'ANNEE SCOLAIRE " + idExercice);
-            }
-        });
-
-        //Chargement du gestionnaire sur l'onglet
-        tabOnglet.addTab(nomTab, panel);
-        tabOnglet.setSelectedComponent(panel);
-        progress.setVisible(false);
-        progress.setIndeterminate(false);
-    }
-
     private void savePaiements(SortiesFacture se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
         Vector<Paiement> listeNewEleves = se.getPaiements();
         Vector<Paiement> listeNewElevesTempo = new Vector<>();
@@ -382,4 +358,51 @@ public class GestionPaiements {
         }
     }
 
+    private void initUI(String nomTab) {
+        panel = new PanelFacture(couleurBasique, progress, tabOnglet, getData(), new EcouteurFacture() {
+            @Override
+            public void onEnregistre(SortiesFacture sortiesFacture) {
+                System.out.println("ENREGISTREMENT DES PAIEMENTS DE L'EVELEVE EN COURS.");
+                savePaiements(sortiesFacture, sortiesFacture.getEcouteurEnregistrement(), utilisateur, exercice);
+            }
+
+            @Override
+            public void onDetruitPaiement(int idPaiement) {
+                System.out.println("DESTRUCTION DU PAIEMENT " + idPaiement);
+                if (idPaiement != -1 && fm != null) {
+                    boolean rep = fm.fm_supprimer(UtilFees.DOSSIER_PAIEMENT, idPaiement);
+                    System.out.println("SUPPRESSION = " + rep);
+
+                    //On doit actualiser le gestionnaire parent
+                }
+            }
+
+            @Override
+            public void onDetruitTousLesPaiements(int idEleve, int idExercice) {
+                System.out.println("DESTRUCTION DES PAIEMENTS DE L'ELEVE " + idEleve + ", POUR l'ANNEE SCOLAIRE " + idExercice);
+            }
+        }, new EcouteurActualisationFacture() {
+            @Override
+            public DataFacture onRechargeDonneesEtParametres() {
+                gl_setDonneesFromFileManager(selectedAnnee, false);
+                return getData();
+            }
+        });
+
+        //Chargement du gestionnaire sur l'onglet
+        if (deleteCurrentTab == true) {
+            tabOnglet.addTab(nomTab, panel);
+            tabOnglet.setSelectedComponent(panel);
+        }
+        progress.setVisible(false);
+        progress.setIndeterminate(false);
+    }
+
 }
+
+
+
+
+
+
+

@@ -7,7 +7,6 @@ package SOURCES.GESTIONNAIRES;
 
 import SOURCES.CALLBACK.EcouteurGestionExercice;
 import SOURCES.Callback.EcouteurOuverture;
-import SOURCES.Callback.EcouteurStandard;
 import SOURCES.Callback_Exercice.EcouteurExerice;
 import SOURCES.Objets.FileManager;
 import SOURCES.UI_Exercice.PanelExercice;
@@ -15,7 +14,9 @@ import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires_Exercice.DonneesExercice;
 import SOURCES.Utilitaires_Exercice.ParametreExercice;
 import SOURCES.Utilitaires_Exercice.SortiesExercice;
+import Source.Callbacks.EcouteurCrossCanalAgent;
 import Source.Callbacks.EcouteurEnregistrement;
+import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceExercice;
 import Source.Interface.InterfaceFrais;
 import Source.Interface.InterfaceMonnaie;
@@ -387,74 +388,6 @@ public class GestionExercice {
                 progress.setIndeterminate(true);
             }
         });
-    }
-
-    public void ga_initUI(String nomTab) {
-        panel = new PanelExercice(couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurExerice() {
-            @Override
-            public void onEnregistre(SortiesExercice se) {
-                if (se != null) {
-                    System.out.println("DANGER !!!!!! EXERCICE: Enregistrement...");
-                    action_save(se);
-                }
-            }
-
-            @Override
-            public void onDetruitExercice(int idExercice) {
-                System.out.println("DANGER !!!!!! EXERCICE: Destruction de l'Exercice " + idExercice);
-                if (idExercice != -1) {
-                    Exercice anneeSupp = (Exercice) fm.fm_ouvrir(Exercice.class, UtilFees.DOSSIER_ANNEE, idExercice);
-                    if (anneeSupp != null) {
-                        fm.fm_supprimer(UtilFees.DOSSIER_ANNEE, idExercice);
-                        detruireChields();
-                        if (ecouteurExercice != null) {
-                            ecouteurExercice.onExerciceDeleteded(anneeSupp.getNom());
-                        }
-                    }
-
-                }
-            }
-
-            @Override
-            public void onDetruitElements(int idElement, int index) {
-                System.out.println("DANGER !!!!!! EXERCICE: Destruction de " + idElement + ", indice " + index);
-                if (idElement != -1) {
-                    switch (index) {
-                        case 0://PERIODE
-                            fm.fm_supprimer(UtilFees.DOSSIER_PERIODE, idElement);
-                            break;
-                        case 1://MONNAIE
-                            fm.fm_supprimer(UtilFees.DOSSIER_MONNAIE, idElement);
-                            break;
-                        case 2://CLASSE
-                            fm.fm_supprimer(UtilFees.DOSSIER_CLASSE, idElement);
-                            break;
-                        case 3://FRAIS
-                            fm.fm_supprimer(UtilFees.DOSSIER_FRAIS, idElement);
-                            break;
-                        case 4://CHARGE
-                            fm.fm_supprimer(UtilFees.DOSSIER_CHARGE, idElement);
-                            break;
-                        case 5://REVENU
-                            fm.fm_supprimer(UtilFees.DOSSIER_REVENU, idElement);
-                            break;
-                        case 6://AGENT
-                            fm.fm_supprimer(UtilFees.DOSSIER_AGENT, idElement);
-                            break;
-                        case 7://COURS
-                            fm.fm_supprimer(UtilFees.DOSSIER_COURS, idElement);
-                            break;
-                        default:
-                    }
-                }
-            }
-
-        });
-        //Chargement du gestionnaire sur l'onglet
-        tabOnglet.addTab(nomTab, panel);
-        tabOnglet.setSelectedComponent(panel);
-        progress.setVisible(false);
-        progress.setIndeterminate(false);
     }
 
     private void detruireChields() {
@@ -997,4 +930,98 @@ public class GestionExercice {
             progress.setIndeterminate(false);
         }
     }
+
+    public void ga_initUI(String nomTab) {
+        panel = new PanelExercice(couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurExerice() {
+            @Override
+            public void onEnregistre(SortiesExercice se) {
+                if (se != null) {
+                    System.out.println("DANGER !!!!!! EXERCICE: Enregistrement...");
+                    action_save(se);
+                }
+            }
+
+            @Override
+            public void onDetruitExercice(int idExercice) {
+                System.out.println("DANGER !!!!!! EXERCICE: Destruction de l'Exercice " + idExercice);
+                if (idExercice != -1) {
+                    Exercice anneeSupp = (Exercice) fm.fm_ouvrir(Exercice.class, UtilFees.DOSSIER_ANNEE, idExercice);
+                    if (anneeSupp != null) {
+                        fm.fm_supprimer(UtilFees.DOSSIER_ANNEE, idExercice);
+                        detruireChields();
+                        if (ecouteurExercice != null) {
+                            ecouteurExercice.onExerciceDeleteded(anneeSupp.getNom());
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onDetruitElements(int idElement, int index) {
+                System.out.println("DANGER !!!!!! EXERCICE: Destruction de " + idElement + ", indice " + index);
+                if (idElement != -1) {
+                    switch (index) {
+                        case 0://PERIODE
+                            fm.fm_supprimer(UtilFees.DOSSIER_PERIODE, idElement);
+                            break;
+                        case 1://MONNAIE
+                            fm.fm_supprimer(UtilFees.DOSSIER_MONNAIE, idElement);
+                            break;
+                        case 2://CLASSE
+                            fm.fm_supprimer(UtilFees.DOSSIER_CLASSE, idElement);
+                            break;
+                        case 3://FRAIS
+                            fm.fm_supprimer(UtilFees.DOSSIER_FRAIS, idElement);
+                            break;
+                        case 4://CHARGE
+                            fm.fm_supprimer(UtilFees.DOSSIER_CHARGE, idElement);
+                            break;
+                        case 5://REVENU
+                            fm.fm_supprimer(UtilFees.DOSSIER_REVENU, idElement);
+                            break;
+                        case 6://AGENT
+                            fm.fm_supprimer(UtilFees.DOSSIER_AGENT, idElement);
+                            break;
+                        case 7://COURS
+                            fm.fm_supprimer(UtilFees.DOSSIER_COURS, idElement);
+                            break;
+                        default:
+                    }
+                }
+            }
+
+        });
+        //Chargement du gestionnaire sur l'onglet
+        
+        panel.setEcouteurCrossCanalAgent(new EcouteurCrossCanalAgent() {
+            @Override
+            public void onOuvrirFicheDePaie(Agent agent) {
+                new Thread() {
+                    public void run() {
+                        //On ouvre les inscriptions
+                        System.out.println("Ouverture des fiches de paie");
+                        GestionSalaire gestionSalaire = new GestionSalaire(couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, agent);
+                        gestionSalaire.gp_setDonneesFromFileManager(newIannee.getNom(), true);
+                    }
+                }.start();
+            }
+        });
+
+        tabOnglet.addTab(nomTab, panel);
+        tabOnglet.setSelectedComponent(panel);
+        progress.setVisible(false);
+        progress.setIndeterminate(false);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+

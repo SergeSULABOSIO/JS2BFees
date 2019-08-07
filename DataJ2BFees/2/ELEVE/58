@@ -1,0 +1,18 @@
+{
+  "id" : 58,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 32,
+  "signature" : 7706325599922609611,
+  "classe" : "G2",
+  "adresse" : "GOMBE - KINSHASA - RDC",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "MUTOMA",
+  "postnom" : "TOMATOMA",
+  "prenom" : "CEDRIC",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1564851412829,
+  "beta" : 0
+}

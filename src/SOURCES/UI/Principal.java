@@ -9,28 +9,20 @@ import BEAN_BARRE_OUTILS.BarreOutils;
 import BEAN_BARRE_OUTILS.Bouton;
 import BEAN_BARRE_OUTILS.BoutonListener;
 import ICONES.Icones;
-import SOURCES.GESTIONNAIRES.GestionExercice;
 import SOURCES.CALLBACK.EcouteurGestionExercice;
 import SOURCES.Callback.EcouteurLongin;
 import SOURCES.Callback.EcouteurOuverture;
-import SOURCES.Callback.EcouteurStandard;
 import SOURCES.GESTIONNAIRES.GestionAdhesion;
 import SOURCES.GESTIONNAIRES.GestionLitiges;
 import SOURCES.Objets.FileManager;
 import SOURCES.Objets.PaiementLicence;
 import SOURCES.Objets.Session;
 import SOURCES.UTILITAIRES.UtilFees;
+import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceUtilisateur;
-import Source.Objet.Agent;
-import Source.Objet.Charge;
-import Source.Objet.Classe;
 import Source.Objet.CouleurBasique;
-import Source.Objet.Cours;
 import Source.Objet.Entreprise;
 import Source.Objet.Exercice;
-import Source.Objet.Frais;
-import Source.Objet.Monnaie;
-import Source.Objet.Revenu;
 import Source.Objet.Utilisateur;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
@@ -46,7 +38,7 @@ import javax.swing.JProgressBar;
 public class Principal extends javax.swing.JFrame {
 
     public BarreOutils bOutils = null;
-    public Bouton btAnnee, btInscription, btFacture, btAyantDroit, btTresorerie, btPaie, btLitige, btLicence, btLogo;
+    public Bouton btAnnee, btInscription, btTresorerie, btPaie, btLitige, btLicence, btLogo, btUtilisateur;
     private Icones icones = null;
     private FileManager fm = null;
     private JFrame moi = null;
@@ -55,9 +47,11 @@ public class Principal extends javax.swing.JFrame {
     private CouleurBasique couleurBasique;
 
     //Les GEstionnaires
-    public GestionExercice gestionAnnee = null;
+    //public GestionExercice gestionAnnee = null;
     public GestionAdhesion gestionAdhesion = null;
     public GestionLitiges gestionLitiges = null;
+    //public GestionTresorerie gestionTresorerie = null;
+    //public GestionSalaire gestionSalaire = null;
 
     /**
      * Creates new form Principal
@@ -89,26 +83,32 @@ public class Principal extends javax.swing.JFrame {
 
     private void updateListeExercice(String selectedExercice) {
         System.out.println("******************* ACTUALISER LISTE ANNEES ************************");
-        fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
+        int nbRow = comboListeAnneesScolaires.getItemCount();
+        for (int i = nbRow - 1; 0 < i; i--) {
+            comboListeAnneesScolaires.removeItemAt(i);
+        }
+
+        fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, 0, 100, new EcouteurOuverture() {
+            
             @Override
-            public void onDone(String message, Vector data) {
+            public boolean isCriteresRespectes(Object object) {
+                return true;
+            }
+            
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                System.out.println(message);
+                Exercice oAnnee = (Exercice) data;
+                System.out.println(" * " + oAnnee.toString());
+                if (!listeExerciceContient(oAnnee.getNom())) {
+                    comboListeAnneesScolaires.addItem(oAnnee.getNom());
+                }
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal) {
                 progressEtat.setVisible(false);
                 progressEtat.setIndeterminate(false);
-                System.out.println(message);
-                System.out.println("LISTE D'ANNEES SCOLAIRES ACTUALISEE:");
-
-                int nbRow = comboListeAnneesScolaires.getItemCount();
-                for (int i = nbRow - 1; 0 < i; i--) {
-                    comboListeAnneesScolaires.removeItemAt(i);
-                }
-
-                for (Object o : data) {
-                    Exercice oAnnee = (Exercice) o;
-                    System.out.println(" * " + oAnnee.toString());
-                    if (!listeExerciceContient(oAnnee.getNom())) {
-                        comboListeAnneesScolaires.addItem(oAnnee.getNom());
-                    }
-                }
                 comboListeAnneesScolaires.setSelectedItem(selectedExercice);
             }
 
@@ -181,19 +181,20 @@ public class Principal extends javax.swing.JFrame {
 
     private void lf_logout() {
         if (fm != null) {
+
             fm.fm_logout(new EcouteurStandard() {
                 @Override
-                public void onDone(String string) {
+                public void onDone(String message) {
                     lf_construirePageLogin();
                 }
 
                 @Override
-                public void onError(String string) {
+                public void onError(String message) {
                     lf_progress(false, "", progressEtat);
                 }
 
                 @Override
-                public void onProcessing(String string) {
+                public void onProcessing(String message) {
                     lf_progress(true, "Déconnexion...", progressEtat);
                 }
             });
@@ -213,6 +214,7 @@ public class Principal extends javax.swing.JFrame {
         icones = new Icones();
         menuDeconnexion.setIcon(icones.getDéconnecté_01());
         menuQuitter.setIcon(icones.getSortie_01());
+        this.setIconImage(icones.getAdresse_03().getImage());
     }
 
     private void lf_construirePageLogin() {
@@ -251,7 +253,7 @@ public class Principal extends javax.swing.JFrame {
         btEtatLicence.setIcon(icones.getAdresse_01());
         btEtatBackup.setIcon(icones.getServeur_01());
         barreEtat.setVisible(true);
-        
+
         lf_construireListeAnneesScolaires();
         lf_construireBoutons();
 
@@ -289,7 +291,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void appliquerDroit() {
-        if (btAnnee != null && btAyantDroit != null && btFacture != null && btInscription != null && btLicence != null && btLitige != null && btPaie != null && btTresorerie != null) {
+        if (btAnnee != null && btInscription != null && btLicence != null && btLitige != null && btPaie != null && btTresorerie != null) {
             if (session != null) {
                 Utilisateur user = session.getUtilisateur();
                 System.out.println("Droit Année: " + UtilFees.getSDroitAccess(user.getDroitExercice()));
@@ -311,10 +313,10 @@ public class Principal extends javax.swing.JFrame {
                         btAnnee.setVisible(true);
                     }
                     btInscription.setVisible(false);
-                    btFacture.setVisible(false);
                     btLitige.setVisible(false);
                     btPaie.setVisible(false);
                     btTresorerie.setVisible(false);
+                    btUtilisateur.setVisible(false);
                 } else {  //tentative de modification ou suppression
                     btAnnee.setText("Exercice", 12, true);
                     btAnnee.setInfosBulle("Ouvrir l'Exercice séléctionné");
@@ -330,11 +332,6 @@ public class Principal extends javax.swing.JFrame {
                     } else {
                         btInscription.setVisible(true);
                     }
-                    if (user.getDroitFacture() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
-                        btFacture.setVisible(false);
-                    } else {
-                        btFacture.setVisible(true);
-                    }
                     if (user.getDroitLitige() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btLitige.setVisible(false);
                     } else {
@@ -349,6 +346,11 @@ public class Principal extends javax.swing.JFrame {
                         btTresorerie.setVisible(false);
                     } else {
                         btTresorerie.setVisible(true);
+                    }
+                    if (user.getDroitUtilisateur() == InterfaceUtilisateur.DROIT_CONTROLER) {
+                        btUtilisateur.setVisible(true);
+                    } else {
+                        btUtilisateur.setVisible(false);
                     }
                 }
             }
@@ -369,46 +371,50 @@ public class Principal extends javax.swing.JFrame {
         btAnnee = new Bouton(12, "Démarrer", "Créer une voulle année scolaire", true, icones.getDémarrer_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
+                /*
+                
                 if (comboListeAnneesScolaires.getSelectedIndex() == 0) {
-                    //Nouvelle année scolaire
-                    gestionAnnee = new GestionExercice(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
-                    gestionAnnee.ga_setDonnees(null, new Vector<Agent>(), new Vector<Charge>(), new Vector<Classe>(), new Vector<Cours>(), new Vector<Frais>(), new Vector<Monnaie>(), new Vector<Revenu>(), new Vector<>());
-                    gestionAnnee.ga_initUI("Nouvel Exercice");
+                    new Thread() {
+                        public void run() {
+                            //Nouvelle année scolaire
+                            gestionAnnee = new GestionExercice(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
+                            gestionAnnee.ga_setDonnees(null, new Vector<Agent>(), new Vector<Charge>(), new Vector<Classe>(), new Vector<Cours>(), new Vector<Frais>(), new Vector<Monnaie>(), new Vector<Revenu>(), new Vector<>());
+                            gestionAnnee.ga_initUI("Nouvel Exercice");
+                        }
+                    }.start();
                 } else {
-                    //On ouvre une année scolaire existante
-                    System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
-                    gestionAnnee = new GestionExercice(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
-                    gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
+                    new Thread() {
+                        public void run() {
+                            //On ouvre une année scolaire existante
+                            System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
+                            gestionAnnee = new GestionExercice(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
+                            gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
+                        }
+                    }.start();
                 }
-
+                
+                
+                */
+                
+                
+                
+                
             }
         });
         btAnnee.setForeground(UtilFees.COULEUR_ORANGE);
 
-        btAyantDroit = new Bouton(12, "Ayant D.", "Les Ayant-droits", true, icones.getUtilisateur_03(), new BoutonListener() {
-            @Override
-            public void OnEcouteLeClick() {
-
-            }
-        });
-        btAyantDroit.setForeground(UtilFees.COULEUR_ORANGE);
-
-        btFacture = new Bouton(12, "Paiement", "Paiement des frais", true, icones.getCaisse_03(), new BoutonListener() {
-            @Override
-            public void OnEcouteLeClick() {
-                
-            }
-        });
-        btFacture.setForeground(UtilFees.COULEUR_ORANGE);
-        
         btInscription = new Bouton(12, "Adhésion", "Inscrire des étudiants", true, icones.getAjouter_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
                 if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
-                    //On ouvre les inscriptions
-                    System.out.println("Ouverture des adhésions");
-                    gestionAdhesion = new GestionAdhesion(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
-                    gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
+                    new Thread() {
+                        public void run() {
+                            //On ouvre les inscriptions
+                            System.out.println("Ouverture des adhésions");
+                            gestionAdhesion = new GestionAdhesion(moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                            gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                        }
+                    }.start();
                 }
             }
         });
@@ -417,7 +423,23 @@ public class Principal extends javax.swing.JFrame {
         btPaie = new Bouton(12, "Salaire", "Paie des Agents de l'établissement", true, icones.getRecette_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-
+                /*
+                
+                if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
+                    new Thread() {
+                        public void run() {
+                            //On ouvre les inscriptions
+                            System.out.println("Ouverture des fiches de paie");
+                            gestionSalaire = new GestionSalaire(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                            gestionSalaire.gp_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                        }
+                    }.start();
+                }
+                
+                */
+                
+                
+                
             }
         });
         btPaie.setForeground(UtilFees.COULEUR_ORANGE);
@@ -425,7 +447,21 @@ public class Principal extends javax.swing.JFrame {
         btTresorerie = new Bouton(12, "Trésorerie", "La trésorerie (Encaissements & Décaissements)", true, icones.getTableau_de_bord_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-
+                /*
+                
+                new Thread() {
+                    public void run() {
+                        //On ouvre les inscriptions
+                        System.out.println("Ouverture de la trésorerie");
+                        gestionTresorerie = new GestionTresorerie(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                        gestionTresorerie.gt_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                    }
+                }.start();
+                
+                */
+                
+                
+                
             }
         });
         btTresorerie.setForeground(UtilFees.COULEUR_ORANGE);
@@ -433,15 +469,29 @@ public class Principal extends javax.swing.JFrame {
         btLitige = new Bouton(12, "Litiges", "Litiges et reglèment des dettes", true, icones.getFournisseur_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
+                /**/
                 if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
-                    //On ouvre les inscriptions
-                    System.out.println("Ouverture des litiges");
-                    gestionLitiges = new GestionLitiges(couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
-                    gestionLitiges.gl_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
+                    new Thread() {
+                        public void run() {
+                            //On ouvre les inscriptions
+                            System.out.println("Ouverture des litiges");
+                            gestionLitiges = new GestionLitiges(moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                            gestionLitiges.gl_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                        }
+                    }.start();
                 }
+                
             }
         });
         btLitige.setForeground(UtilFees.COULEUR_ORANGE);
+
+        btUtilisateur = new Bouton(12, "Utilisateurs", "Gérer les utilisateurs ainsi que leurs droits d'accès.", true, icones.getUtilisateur_03(), new BoutonListener() {
+            @Override
+            public void OnEcouteLeClick() {
+                UtilFees.lancerPageWebAdmin();
+            }
+        });
+        btUtilisateur.setForeground(UtilFees.COULEUR_ORANGE);
 
         bOutils.AjouterBouton(btLogo);
         bOutils.AjouterBouton(btLicence);
@@ -449,9 +499,9 @@ public class Principal extends javax.swing.JFrame {
         bOutils.AjouterBouton(btAnnee);
         bOutils.AjouterBouton(btInscription);
         bOutils.AjouterBouton(btLitige);
-        //bOutils.AjouterBouton(btFacture);
         bOutils.AjouterBouton(btTresorerie);
         bOutils.AjouterBouton(btPaie);
+        bOutils.AjouterBouton(btUtilisateur);
 
         panOutils.setVisible(true);
         barreOutils.setVisible(true);
@@ -474,28 +524,37 @@ public class Principal extends javax.swing.JFrame {
         //on enlèves les autres elements du combo, sauf le premier element
         comboListeAnneesScolaires.removeAllItems();
         comboListeAnneesScolaires.addItem("-- Liste d'Années --");
+        
+        Vector<Exercice> listeExercTempo = new Vector<>();
 
-        System.out.println("Liste d'années: Construction");
-
-        fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, 1, 100, new EcouteurOuverture() {
+            
             @Override
-            public void onDone(String message, Vector data) {
-                lf_progress(false, "", progressEtat);
-                System.out.println("GESTION ANNEE: " + message);
-                for (Object oRetrieved : data) {
-                    Exercice annee = (Exercice) oRetrieved;
+            public boolean isCriteresRespectes(Object object) {
+                return true;
+            }
+            
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Exercice annee = (Exercice) data;
+                if (!listeExercTempo.contains(annee)) {
                     comboListeAnneesScolaires.addItem(annee.getNom());
+                    listeExercTempo.add(annee);
                 }
-                System.out.println("Liste d'années: Fin");
             }
 
             @Override
-            public void onError(String string) {
+            public void onDone(String message, int resultatTotal) {
                 lf_progress(false, "", progressEtat);
             }
 
             @Override
-            public void onProcessing(String string) {
+            public void onError(String message) {
+                lf_progress(false, "", progressEtat);
+            }
+
+            @Override
+            public void onProcessing(String message) {
                 lf_progress(true, "Pateintez...", progressEtat);
             }
         });

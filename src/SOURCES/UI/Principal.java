@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package SOURCES.UI;
 
 import BEAN_BARRE_OUTILS.BarreOutils;

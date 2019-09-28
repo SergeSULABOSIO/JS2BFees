@@ -1,0 +1,16 @@
+{
+  "id" : 244,
+  "idEleve" : 61,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566461843810",
+  "nomEleve" : "ELEVETES BOSIO Jean-pierre",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "ELEVETES BOSIO Jean-pierre",
+  "montant" : 50.0,
+  "date" : 1566461843810,
+  "beta" : 0,
+  "referenceTransaction" : "1566461843810"
+}

@@ -5,16 +5,18 @@
  */
 package SOURCES.GESTIONNAIRES;
 
+import ICONES.Icones;
 import SOURCES.CALLBACK.EcouteurGestionExercice;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback_Exercice.EcouteurExerice;
 import SOURCES.Objets.FileManager;
 import SOURCES.UI_Exercice.PanelExercice;
-import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires_Exercice.DonneesExercice;
 import SOURCES.Utilitaires_Exercice.ParametreExercice;
 import SOURCES.Utilitaires_Exercice.SortiesExercice;
 import Source.Callbacks.EcouteurCrossCanalAgent;
+import Source.Callbacks.EcouteurCrossCanalCharge;
+import Source.Callbacks.EcouteurCrossCanalRevenu;
 import Source.Callbacks.EcouteurEnregistrement;
 import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceExercice;
@@ -33,8 +35,10 @@ import Source.Objet.LiaisonFraisPeriode;
 import Source.Objet.Monnaie;
 import Source.Objet.Periode;
 import Source.Objet.Revenu;
+import Source.Objet.UtilObjet;
 import Source.Objet.Utilisateur;
 import java.util.Vector;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
@@ -67,10 +71,14 @@ public class GestionExercice {
     private Vector<Revenu> revenus = new Vector<>();
     private EcouteurGestionExercice ecouteurExercice;
     private CouleurBasique couleurBasique;
+    public JFrame fenetre;
+    public Icones icones;
 
-    public GestionExercice(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output, EcouteurGestionExercice ecouteurExercice) {
+    public GestionExercice(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output, EcouteurGestionExercice ecouteurExercice) {
         this.couleurBasique = couleurBasique;
         this.fm = fm;
+        this.fenetre = fenetre;
+        this.icones = icones;
         this.ecouteurExercice = ecouteurExercice;
         this.progress = progress;
         this.tabOnglet = tabOnglet;
@@ -81,7 +89,7 @@ public class GestionExercice {
     }
 
     private void initParams() {
-        this.parametreExercice = new ParametreExercice(entreprise, utilisateur.getNom() + " " + utilisateur.getPrenom(), utilisateur.getId(), monnaie_output);
+        this.parametreExercice = new ParametreExercice(entreprise, utilisateur, monnaie_output);
     }
 
     public void ga_setDonnees(Exercice anneeExistant, Vector<Agent> agents, Vector<Charge> charges, Vector<Classe> classes, Vector<Cours> cours, Vector<Frais> frais, Vector<Monnaie> monnaies, Vector<Revenu> revenus, Vector<Periode> periodes) {
@@ -107,19 +115,25 @@ public class GestionExercice {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
                     @Override
-                    public void onDone(String message, Vector data) {
-                        System.out.println("CHARGEMENT ANNEE: " + message);
-                        for (Object Oannee : data) {
-                            Exercice annee = (Exercice) Oannee;
-                            if (annee.getNom().equals(selectedAnnee)) {
-                                System.out.println(" * " + annee.getNom());
-                                newIannee = annee;
-                                break;
-                            }
-
+                    public boolean isCriteresRespectes(Object object) {
+                        Exercice annee = (Exercice) object;
+                        if (annee.getNom().equals(selectedAnnee)) {
+                            return true;
+                        } else {
+                            return false;
                         }
+                    }
+
+                    @Override
+                    public void onElementLoaded(String message, Object data) {
+                        Exercice annee = (Exercice) data;
+                        newIannee = annee;
+                    }
+
+                    @Override
+                    public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                         loadAgents();
                     }
 
@@ -141,20 +155,26 @@ public class GestionExercice {
 
     private void loadAgents() {
         agents.removeAllElements();
-        fm.fm_ouvrirTout(0, Agent.class, UtilFees.DOSSIER_AGENT, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Agent.class, UtilObjet.DOSSIER_AGENT, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                if (newIannee != null) {
-                    System.out.println(message);
-                    for (Object o : data) {
-                        Agent agent = (Agent) o;
-                        if (agent.getIdExercice() == newIannee.getId()) {
-                            agents.add(agent);
-                            System.out.println(" * " + agent.toString());
-                        }
-                    }
-                    loadCharges();
+            public boolean isCriteresRespectes(Object object) {
+                Agent agent = (Agent) object;
+                if (agent.getIdExercice() == newIannee.getId()) {
+                    return true;
+                } else {
+                    return false;
                 }
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Agent agent = (Agent) data;
+                agents.add(agent);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                loadCharges();
             }
 
             @Override
@@ -173,17 +193,21 @@ public class GestionExercice {
 
     private void loadCharges() {
         charges.removeAllElements();
-        fm.fm_ouvrirTout(0, Charge.class, UtilFees.DOSSIER_CHARGE, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Charge.class, UtilObjet.DOSSIER_CHARGE, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Charge charge = (Charge) o;
-                    if (charge.getIdExercice() == newIannee.getId()) {
-                        charges.add(charge);
-                        System.out.println(" * " + charge.toString());
-                    }
-                }
+            public boolean isCriteresRespectes(Object object) {
+                Charge charge = (Charge) object;
+                return charge.getIdExercice() == newIannee.getId();
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Charge charge = (Charge) data;
+                charges.add(charge);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadClasses();
             }
 
@@ -203,17 +227,21 @@ public class GestionExercice {
 
     private void loadClasses() {
         classes.removeAllElements();
-        fm.fm_ouvrirTout(0, Classe.class, UtilFees.DOSSIER_CLASSE, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Classe.class, UtilObjet.DOSSIER_CLASSE, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Classe classe = (Classe) o;
-                    if (classe.getIdExercice() == newIannee.getId()) {
-                        classes.add(classe);
-                        System.out.println(" * " + classe.toString());
-                    }
-                }
+            public boolean isCriteresRespectes(Object object) {
+                Classe classe = (Classe) object;
+                return (classe.getIdExercice() == newIannee.getId());
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Classe classe = (Classe) data;
+                classes.add(classe);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadCours();
             }
 
@@ -233,17 +261,21 @@ public class GestionExercice {
 
     private void loadCours() {
         cours.removeAllElements();
-        fm.fm_ouvrirTout(0, Cours.class, UtilFees.DOSSIER_COURS, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Cours.class, UtilObjet.DOSSIER_COURS, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Cours Ocours = (Cours) o;
-                    if (Ocours.getIdExercice() == newIannee.getId()) {
-                        cours.add(Ocours);
-                        System.out.println(" * " + Ocours.toString());
-                    }
-                }
+            public boolean isCriteresRespectes(Object object) {
+                Cours Ocours = (Cours) object;
+                return (Ocours.getIdExercice() == newIannee.getId());
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Cours Ocours = (Cours) data;
+                cours.add(Ocours);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadFrais();
             }
 
@@ -263,25 +295,21 @@ public class GestionExercice {
 
     private void loadFrais() {
         fraises.removeAllElements();
-        fm.fm_ouvrirTout(0, Frais.class, UtilFees.DOSSIER_FRAIS, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Frais.class, UtilObjet.DOSSIER_FRAIS, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Frais frais = (Frais) o;
-                    if (frais.getIdExercice() == newIannee.getId()) {
-                        fraises.add(frais);
-                        System.out.println(" * " + frais.getNom());
-                        System.out.println("Liaison classe:");
-                        for (LiaisonFraisClasse lc : frais.getLiaisonsClasses()) {
-                            System.out.println(" ** " + lc.toString());
-                        }
-                        System.out.println("Liaison période:");
-                        for (LiaisonFraisPeriode lp : frais.getLiaisonsPeriodes()) {
-                            System.out.println(" ** " + lp.toString());
-                        }
-                    }
-                }
+            public boolean isCriteresRespectes(Object object) {
+                Frais frais = (Frais) object;
+                return (frais.getIdExercice() == newIannee.getId());
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Frais frais = (Frais) data;
+                fraises.add(frais);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadMonnaie();
             }
 
@@ -301,17 +329,21 @@ public class GestionExercice {
 
     private void loadMonnaie() {
         monnaies.removeAllElements();
-        fm.fm_ouvrirTout(0, Monnaie.class, UtilFees.DOSSIER_MONNAIE, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Monnaie.class, UtilObjet.DOSSIER_MONNAIE, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Monnaie monnaie = (Monnaie) o;
-                    if (monnaie.getIdExercice() == newIannee.getId()) {
-                        monnaies.add(monnaie);
-                        System.out.println(" * " + monnaie.toString());
-                    }
-                }
+            public boolean isCriteresRespectes(Object object) {
+                Monnaie monnaie = (Monnaie) object;
+                return (monnaie.getIdExercice() == newIannee.getId());
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Monnaie monnaie = (Monnaie) data;
+                monnaies.add(monnaie);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadPeriode();
             }
 
@@ -331,17 +363,21 @@ public class GestionExercice {
 
     private void loadPeriode() {
         periodes.removeAllElements();
-        fm.fm_ouvrirTout(0, Periode.class, UtilFees.DOSSIER_PERIODE, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Periode.class, UtilObjet.DOSSIER_PERIODE, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Periode periode = (Periode) o;
-                    if (periode.getIdExercice() == newIannee.getId()) {
-                        periodes.add(periode);
-                        System.out.println(" * " + periode.toString());
-                    }
-                }
+            public boolean isCriteresRespectes(Object object) {
+                Periode periode = (Periode) object;
+                return (periode.getIdExercice() == newIannee.getId());
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Periode periode = (Periode) data;
+                periodes.add(periode);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadRevenu();
             }
 
@@ -361,17 +397,21 @@ public class GestionExercice {
 
     private void loadRevenu() {
         revenus.removeAllElements();
-        fm.fm_ouvrirTout(0, Revenu.class, UtilFees.DOSSIER_REVENU, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Revenu.class, UtilObjet.DOSSIER_REVENU, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Revenu revenu = (Revenu) o;
-                    if (revenu.getIdExercice() == newIannee.getId()) {
-                        revenus.add(revenu);
-                        System.out.println(" * " + revenu.toString());
-                    }
-                }
+            public boolean isCriteresRespectes(Object object) {
+                Revenu revenu = (Revenu) object;
+                return (revenu.getIdExercice() == newIannee.getId());
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Revenu revenu = (Revenu) data;
+                revenus.add(revenu);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 donneesExercice = new DonneesExercice(newIannee, agents, charges, classes, cours, fraises, monnaies, revenus, periodes);
                 ga_initUI(newIannee.getNom());
             }
@@ -393,35 +433,35 @@ public class GestionExercice {
     private void detruireChields() {
         //Destruction des AGENTS
         donneesExercice.getAgents().forEach((iAgent) -> {
-            fm.fm_supprimer(UtilFees.DOSSIER_AGENT, iAgent.getId());
+            fm.fm_supprimer(UtilObjet.DOSSIER_AGENT, iAgent.getId(), iAgent.getSignature());
         });
         //Destruction des AGENTS
         donneesExercice.getCharges().forEach((iCharge) -> {
-            fm.fm_supprimer(UtilFees.DOSSIER_CHARGE, iCharge.getId());
+            fm.fm_supprimer(UtilObjet.DOSSIER_CHARGE, iCharge.getId(), iCharge.getSignature());
         });
         //Destruction des CLASSES
         donneesExercice.getClasses().forEach((iClasses) -> {
-            fm.fm_supprimer(UtilFees.DOSSIER_CLASSE, iClasses.getId());
+            fm.fm_supprimer(UtilObjet.DOSSIER_CLASSE, iClasses.getId(), iClasses.getSignature());
         });
         //Destruction des COURS
         donneesExercice.getCours().forEach((iCours) -> {
-            fm.fm_supprimer(UtilFees.DOSSIER_COURS, iCours.getId());
+            fm.fm_supprimer(UtilObjet.DOSSIER_COURS, iCours.getId(), iCours.getSignature());
         });
         //Destruction des FRAIS
         donneesExercice.getFrais().forEach((iFrais) -> {
-            fm.fm_supprimer(UtilFees.DOSSIER_FRAIS, iFrais.getId());
+            fm.fm_supprimer(UtilObjet.DOSSIER_FRAIS, iFrais.getId(), iFrais.getSignature());
         });
         //Destruction des MONNAIES
         donneesExercice.getMonnaies().forEach((iMonnaie) -> {
-            fm.fm_supprimer(UtilFees.DOSSIER_MONNAIE, iMonnaie.getId());
+            fm.fm_supprimer(UtilObjet.DOSSIER_MONNAIE, iMonnaie.getId(), iMonnaie.getSignature());
         });
         //Destruction des PERIODES
         donneesExercice.getPeriodes().forEach((iPeriode) -> {
-            fm.fm_supprimer(UtilFees.DOSSIER_PERIODE, iPeriode.getId());
+            fm.fm_supprimer(UtilObjet.DOSSIER_PERIODE, iPeriode.getId(), iPeriode.getSignature());
         });
         //Destruction des REVENUS
         donneesExercice.getRevenus().forEach((iRevenu) -> {
-            fm.fm_supprimer(UtilFees.DOSSIER_REVENU, iRevenu.getId());
+            fm.fm_supprimer(UtilObjet.DOSSIER_REVENU, iRevenu.getId(), iRevenu.getSignature());
         });
     }
 
@@ -473,7 +513,7 @@ public class GestionExercice {
         newIa.setIdEntreprise(user.getIdEntreprise());
         newIa.setBeta(InterfaceExercice.BETA_EXISTANT);
         newIannee = newIa;
-        fm.fm_enregistrer(newIannee, UtilFees.DOSSIER_ANNEE, new EcouteurStandard() {
+        fm.fm_enregistrer(newIannee, UtilObjet.DOSSIER_ANNEE, new EcouteurStandard() {
             @Override
             public void onDone(String message) {
                 int index = tabOnglet.getSelectedIndex();
@@ -523,7 +563,7 @@ public class GestionExercice {
             }
         }
         if (!listeNewMonnaieTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewMonnaieTempo, UtilFees.DOSSIER_MONNAIE, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewMonnaieTempo, UtilObjet.DOSSIER_MONNAIE, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     System.out.println(message);
@@ -564,7 +604,7 @@ public class GestionExercice {
             }
         }
         if (!listeNewClassesTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewClassesTempo, UtilFees.DOSSIER_CLASSE, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewClassesTempo, UtilObjet.DOSSIER_CLASSE, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     System.out.println(message);
@@ -605,7 +645,7 @@ public class GestionExercice {
             }
         }
         if (!listeNewPeriodesTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewPeriodesTempo, UtilFees.DOSSIER_PERIODE, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewPeriodesTempo, UtilObjet.DOSSIER_PERIODE, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     System.out.println(message);
@@ -646,7 +686,7 @@ public class GestionExercice {
             }
         }
         if (!listeNewAgentsTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewAgentsTempo, UtilFees.DOSSIER_AGENT, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewAgentsTempo, UtilObjet.DOSSIER_AGENT, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     System.out.println(message);
@@ -755,7 +795,7 @@ public class GestionExercice {
             }
         }
         if (!listeNewCoursTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewCoursTempo, UtilFees.DOSSIER_COURS, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewCoursTempo, UtilObjet.DOSSIER_COURS, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     System.out.println(message);
@@ -797,7 +837,7 @@ public class GestionExercice {
             }
         }
         if (!listeNewRevenusTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewRevenusTempo, UtilFees.DOSSIER_REVENU, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewRevenusTempo, UtilObjet.DOSSIER_REVENU, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     System.out.println(message);
@@ -839,7 +879,7 @@ public class GestionExercice {
             }
         }
         if (!listeNewChargesTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewChargesTempo, UtilFees.DOSSIER_CHARGE, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewChargesTempo, UtilObjet.DOSSIER_CHARGE, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     System.out.println(message);
@@ -899,7 +939,7 @@ public class GestionExercice {
             }
         }
         if (!listeNewFraisTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewFraisTempo, UtilFees.DOSSIER_FRAIS, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewFraisTempo, UtilObjet.DOSSIER_FRAIS, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     System.out.println(message);
@@ -945,46 +985,45 @@ public class GestionExercice {
             public void onDetruitExercice(int idExercice) {
                 System.out.println("DANGER !!!!!! EXERCICE: Destruction de l'Exercice " + idExercice);
                 if (idExercice != -1) {
-                    Exercice anneeSupp = (Exercice) fm.fm_ouvrir(Exercice.class, UtilFees.DOSSIER_ANNEE, idExercice);
+                    Exercice anneeSupp = (Exercice) fm.fm_ouvrir(Exercice.class, UtilObjet.DOSSIER_ANNEE, idExercice);
                     if (anneeSupp != null) {
-                        fm.fm_supprimer(UtilFees.DOSSIER_ANNEE, idExercice);
+                        fm.fm_supprimer(UtilObjet.DOSSIER_ANNEE, idExercice, anneeSupp.getSignature());
                         detruireChields();
                         if (ecouteurExercice != null) {
                             ecouteurExercice.onExerciceDeleteded(anneeSupp.getNom());
                         }
                     }
-
                 }
             }
 
             @Override
-            public void onDetruitElements(int idElement, int index) {
+            public void onDetruitElements(int idElement, int index, long signature) {
                 System.out.println("DANGER !!!!!! EXERCICE: Destruction de " + idElement + ", indice " + index);
                 if (idElement != -1) {
                     switch (index) {
                         case 0://PERIODE
-                            fm.fm_supprimer(UtilFees.DOSSIER_PERIODE, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_PERIODE, idElement, signature);
                             break;
                         case 1://MONNAIE
-                            fm.fm_supprimer(UtilFees.DOSSIER_MONNAIE, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_MONNAIE, idElement, signature);
                             break;
                         case 2://CLASSE
-                            fm.fm_supprimer(UtilFees.DOSSIER_CLASSE, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_CLASSE, idElement, signature);
                             break;
                         case 3://FRAIS
-                            fm.fm_supprimer(UtilFees.DOSSIER_FRAIS, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_FRAIS, idElement, signature);
                             break;
                         case 4://CHARGE
-                            fm.fm_supprimer(UtilFees.DOSSIER_CHARGE, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_CHARGE, idElement, signature);
                             break;
                         case 5://REVENU
-                            fm.fm_supprimer(UtilFees.DOSSIER_REVENU, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_REVENU, idElement, signature);
                             break;
                         case 6://AGENT
-                            fm.fm_supprimer(UtilFees.DOSSIER_AGENT, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_AGENT, idElement, signature);
                             break;
                         case 7://COURS
-                            fm.fm_supprimer(UtilFees.DOSSIER_COURS, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_COURS, idElement, signature);
                             break;
                         default:
                     }
@@ -999,10 +1038,37 @@ public class GestionExercice {
             public void onOuvrirFicheDePaie(Agent agent) {
                 new Thread() {
                     public void run() {
-                        //On ouvre les inscriptions
-                        System.out.println("Ouverture des fiches de paie");
-                        GestionSalaire gestionSalaire = new GestionSalaire(couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, agent);
+                        //On ouvre les fiches de paie de l'agent séléctioné
+                        //System.out.println("");
+                        //System.out.println("Agent : " + agent);
+                        GestionSalaire gestionSalaire = new GestionSalaire(fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, agent);
                         gestionSalaire.gp_setDonneesFromFileManager(newIannee.getNom(), true);
+                    }
+                }.start();
+            }
+        });
+        
+        
+        panel.setEcouteurCrossCanalRevenu(new EcouteurCrossCanalRevenu() {
+            @Override
+            public void onOuvrirRevenu(Revenu revenu) {
+                new Thread() {
+                    public void run() {
+                        GestionTresorerie gestionTresorerie = new GestionTresorerie(fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, revenu);
+                        gestionTresorerie.gt_setDonneesFromFileManager(newIannee.getNom(), true);
+                    }
+                }.start();
+            }
+        });
+        
+        
+        panel.setEcouteurCrossCanalCharge(new EcouteurCrossCanalCharge() {
+            @Override
+            public void onOuvrirCharge(Charge charge) {
+                new Thread() {
+                    public void run() {
+                        GestionTresorerie gestionTresorerie = new GestionTresorerie(fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, charge);
+                        gestionTresorerie.gt_setDonneesFromFileManager(newIannee.getNom(), true);
                     }
                 }.start();
             }
@@ -1014,6 +1080,52 @@ public class GestionExercice {
         progress.setIndeterminate(false);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

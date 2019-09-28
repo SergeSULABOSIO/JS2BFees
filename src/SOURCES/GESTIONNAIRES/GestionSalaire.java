@@ -5,18 +5,21 @@
  */
 package SOURCES.GESTIONNAIRES;
 
-import SOURCES.CallBack_Paie.EcouteurActualisationPaie;
+import ICONES.Icones;
 import SOURCES.CallBack_Paie.EcouteurPaie;
+import SOURCES.Callback.CritereSuppression;
 import SOURCES.Callback.EcouteurOuverture;
-import SOURCES.Callback.EcouteurStandard;
 import SOURCES.Objets.FileManager;
 import SOURCES.UI_Paie.PanelPaie;
-import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires_Paie.DataPaie;
-import SOURCES.Utilitaires_Paie.DonneesFicheDePaie;
 import SOURCES.Utilitaires_Paie.ParametreFichesDePaie;
 import SOURCES.Utilitaires_Paie.SortiesFichesDePaies;
+import SOURCES.Utilitaires_Paie.UtilPaie;
+import SOURCES.Utilitaires_Tresorerie.UtilTresorerie;
+import Source.Callbacks.ConstructeurCriteres;
 import Source.Callbacks.EcouteurEnregistrement;
+import Source.Callbacks.EcouteurNavigateurPages;
+import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceExercice;
 import Source.Interface.InterfaceMonnaie;
 import Source.Objet.Agent;
@@ -25,8 +28,15 @@ import Source.Objet.Entreprise;
 import Source.Objet.Exercice;
 import Source.Objet.Fiche;
 import Source.Objet.Monnaie;
+import Source.Objet.UtilObjet;
 import Source.Objet.Utilisateur;
+import Source.UI.NavigateurPages;
+import Sources.CHAMP_LOCAL;
+import Sources.PROPRIETE;
+import Sources.UI.JS2BPanelPropriete;
+import java.util.Date;
 import java.util.Vector;
+import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 
@@ -43,19 +53,25 @@ public class GestionSalaire {
     public JTabbedPane tabOnglet;
     public JProgressBar progress;
 
-    public Exercice exercice = null;
     public FileManager fm;
+
+    public Exercice exercice = null;
     public Vector<Monnaie> monnaies = new Vector<>();
     public Vector<Agent> agents = new Vector<>();
-    public Vector<Fiche> fiches = new Vector<>();
+    //public Vector<Fiche> fiches = new Vector<>();
     public CouleurBasique couleurBasique;
     public String selectedAnnee;
     public Agent agentConcerned = null;
     public boolean deleteCurrentTab = true;
+    public JFrame fenetre;
+    public Icones icones;
+    public boolean canBeSaved = false;
 
-    public GestionSalaire(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionSalaire(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.couleurBasique = couleurBasique;
         this.fm = fm;
+        this.fenetre = fenetre;
+        this.icones = icones;
         this.progress = progress;
         this.tabOnglet = tabOnglet;
         this.utilisateur = utilisateur;
@@ -63,9 +79,11 @@ public class GestionSalaire {
         this.agentConcerned = null;
     }
 
-    public GestionSalaire(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Agent agentConcerned) {
+    public GestionSalaire(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Agent agentConcerned) {
         this.couleurBasique = couleurBasique;
         this.fm = fm;
+        this.fenetre = fenetre;
+        this.icones = icones;
         this.progress = progress;
         this.tabOnglet = tabOnglet;
         this.utilisateur = utilisateur;
@@ -75,9 +93,7 @@ public class GestionSalaire {
 
     private DataPaie getData() {
         ParametreFichesDePaie parametreFichesDePaie = new ParametreFichesDePaie(utilisateur, entreprise, exercice, agents, monnaies);
-        DonneesFicheDePaie donneesFicheDePaie = new DonneesFicheDePaie(fiches);
-        System.out.println("getData!");
-        return new DataPaie(parametreFichesDePaie, donneesFicheDePaie);
+        return new DataPaie(parametreFichesDePaie);
     }
 
     public void gp_setDonneesFromFileManager(String selectedAnnee, boolean deleteCurrentTab) {
@@ -89,13 +105,13 @@ public class GestionSalaire {
                 int nbOnglets = tabOnglet.getComponentCount();
                 for (int i = 0; i < nbOnglets; i++) {
                     String titreOnglet = tabOnglet.getTitleAt(i);
-                    System.out.println("Onglet - " + titreOnglet);
+                    //System.out.println("Onglet - " + titreOnglet);
                     String Snom = NOM;
                     if (agentConcerned != null) {
                         Snom = NOM + " - " + agentConcerned.getNom() + " " + agentConcerned.getPrenom();
                     }
                     if (titreOnglet.equals(Snom)) {
-                        System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
+                        //System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
                         tabOnglet.remove(i);
                         mustLoadData = true;
                     }
@@ -103,19 +119,21 @@ public class GestionSalaire {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
                     @Override
-                    public void onDone(String message, Vector data) {
-                        System.out.println("CHARGEMENT ANNEE: " + message);
-                        for (Object Oannee : data) {
-                            Exercice annee = (Exercice) Oannee;
-                            if (annee.getNom().equals(selectedAnnee)) {
-                                System.out.println(" * " + annee.getNom());
-                                exercice = annee;
-                                break;
-                            }
+                    public boolean isCriteresRespectes(Object object) {
+                        Exercice annee = (Exercice) object;
+                        return (annee.getNom().equals(selectedAnnee));
+                    }
 
-                        }
+                    @Override
+                    public void onElementLoaded(String message, Object data) {
+                        Exercice annee = (Exercice) data;
+                        exercice = annee;
+                    }
+
+                    @Override
+                    public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                         loadMonnaies();
                     }
 
@@ -137,17 +155,21 @@ public class GestionSalaire {
 
     private void loadMonnaies() {
         monnaies.removeAllElements();
-        fm.fm_ouvrirTout(0, Monnaie.class, UtilFees.DOSSIER_MONNAIE, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Monnaie.class, UtilObjet.DOSSIER_MONNAIE, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Monnaie classe = (Monnaie) o;
-                    if (classe.getIdExercice() == exercice.getId()) {
-                        monnaies.add(classe);
-                        System.out.println(" * " + classe.toString());
-                    }
-                }
+            public boolean isCriteresRespectes(Object object) {
+                Monnaie monnaie = (Monnaie) object;
+                return (monnaie.getIdExercice() == exercice.getId());
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Monnaie monnaie = (Monnaie) data;
+                monnaies.add(monnaie);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadAgents();
             }
 
@@ -167,18 +189,26 @@ public class GestionSalaire {
 
     private void loadAgents() {
         agents.removeAllElements();
-        fm.fm_ouvrirTout(0, Agent.class, UtilFees.DOSSIER_AGENT, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Agent.class, UtilObjet.DOSSIER_AGENT, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Agent agent = (Agent) o;
-                    if (agent.getIdExercice() == exercice.getId()) {
-                        agents.add(agent);
-                        System.out.println(" * " + agent.toString());
-                    }
+            public boolean isCriteresRespectes(Object object) {
+                Agent ff = (Agent) object;
+                return (ff.getIdExercice() == exercice.getId());
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Agent ff = (Agent) data;
+                agents.add(ff);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                if (agentConcerned == null) {
+                    initUI(NOM);
+                } else {
+                    initUI(NOM + " - " + agentConcerned.getNom() + " " + agentConcerned.getPrenom());
                 }
-                loadFiches();
             }
 
             @Override
@@ -195,37 +225,97 @@ public class GestionSalaire {
         });
     }
 
-    private void loadFiches() {
-        fiches.removeAllElements();
-        fm.fm_ouvrirTout(0, Fiche.class, UtilFees.DOSSIER_FICHE_DE_PAIE, new EcouteurOuverture() {
-            @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Fiche ficheDePaie = (Fiche) o;
-                    if (ficheDePaie.getIdExercice() == exercice.getId()) {
-                        if (agentConcerned != null) {
-                            if (ficheDePaie.getIdAgent() == agentConcerned.getId()) {
-                                fiches.add(ficheDePaie);
-                            }
-                        } else {
-                            fiches.add(ficheDePaie);
-                        }
-                        System.out.println(" * " + ficheDePaie.toString());
-                    }
-                }
+    public boolean checkCriteresPaie(String motCle, Object data, JS2BPanelPropriete jsbpp) {
+        Fiche paie = (Fiche) data;
 
-                if (agentConcerned == null) {
-                    initUI(NOM);
-                } else {
-                    initUI(NOM + " - " + agentConcerned.getNom() + " " + agentConcerned.getPrenom());
+        if (paie.getIdExercice() != exercice.getId()) {
+            return false;
+        }
+
+        boolean repCategorie = false;
+        boolean repMois = false;
+        boolean repPeriode = false;
+        boolean repMotCle = false;
+
+        PROPRIETE propDateA = null;
+        PROPRIETE propDateB = null;
+        PROPRIETE propCategorie = null;
+        PROPRIETE propMois = null;
+
+        if(agentConcerned != null){
+            if(agentConcerned.getId() != paie.getIdAgent()){
+                return false;
+            }
+        }
+        
+        repMotCle = panel.search_verifier_motcle(paie, motCle);
+        if (repMotCle == false) {
+            return false;
+        }
+        if (jsbpp != null) {
+            propDateA = jsbpp.getPropriete("A partir du");
+            propDateB = jsbpp.getPropriete("Jusqu'au");
+            repPeriode = panel.search_verifier_periode(paie, (Date) propDateA.getValeurSelectionne(), (Date) propDateB.getValeurSelectionne());
+            if (repPeriode == false) {
+                return false;
+            }
+
+            if (agentConcerned == null) {
+                propCategorie = jsbpp.getPropriete("Catégorie d'agents");
+                repCategorie = panel.search_verifier_categorie(paie, panel.getCategorie(propCategorie.getValeurSelectionne() + ""));
+            } else {
+                repCategorie = true;
+            }
+
+            propMois = jsbpp.getPropriete("Paie du mois de");
+            repMois = panel.search_verifier_mois(paie, propMois.getValeurSelectionne() + "");
+
+            //System.out.println("Categorie:" + idCategorie+", Mois:" + repMois+", Periode:" + repPeriode);
+        } else {
+            repCategorie = true;
+            repMois = true;
+            repPeriode = true;
+        }
+
+        if (repMotCle == true && repCategorie == true && repMois == true && repPeriode == true) {
+            //panel.setDonneesFichePaie(paie);
+            return true;
+        } else {
+            //panel.setDonneesFichePaie(null);
+            return false;
+        }
+    }
+
+    private void loadFiches(String motCle, int pageActuelle, int taillePage, JS2BPanelPropriete criteresAvances, NavigateurPages navigateurPages) {
+        fm.fm_ouvrirTout(0, Fiche.class, UtilObjet.DOSSIER_FICHE_DE_PAIE, pageActuelle, taillePage, new EcouteurOuverture() {
+            @Override
+            public boolean isCriteresRespectes(Object object) {
+                return checkCriteresPaie(motCle, object, criteresAvances);
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                panel.setDonneesFichePaie((Fiche) data);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                if (navigateurPages != null) {
+                    navigateurPages.setInfos(resultatTotal, panel.getTailleResultatFiches());
+                    navigateurPages.patienter(false, "Prêt.");
                 }
+                progress.setVisible(false);
+                progress.setIndeterminate(false);
             }
 
             @Override
             public void onError(String string) {
                 progress.setVisible(false);
                 progress.setIndeterminate(false);
+                if (navigateurPages != null) {
+                    navigateurPages.setInfos(0, 0);
+                    navigateurPages.patienter(false, "Prêt.");
+                }
             }
 
             @Override
@@ -250,12 +340,12 @@ public class GestionSalaire {
             }
         }
         if (!listeNewFichesTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewFichesTempo, UtilFees.DOSSIER_FICHE_DE_PAIE, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewFichesTempo, UtilObjet.DOSSIER_FICHE_DE_PAIE, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     progress.setVisible(false);
                     progress.setIndeterminate(false);
-                    System.out.println(message);
+                    //System.out.println(message);
                     ee.onDone("Eleves enregistrées !");
                 }
 
@@ -267,7 +357,7 @@ public class GestionSalaire {
 
                 @Override
                 public void onProcessing(String message) {
-                    System.out.println(message);
+                    //System.out.println(message);
                     ee.onUploading("Enregistrement...");
                 }
             });
@@ -307,12 +397,16 @@ public class GestionSalaire {
         }
     }
 
+    private void chercherFiches(String motCle, int pageActuelle, int taillePage, JS2BPanelPropriete criteresAvances, NavigateurPages navigateurPages) {
+        loadFiches(motCle, pageActuelle, taillePage, criteresAvances, navigateurPages);
+    }
+
     private void initUI(String nomTab) {
         panel = new PanelPaie(couleurBasique, progress, tabOnglet, getData(), new EcouteurPaie() {
             @Override
             public void onEnregistre(SortiesFichesDePaies si) {
                 if (si != null) {
-                    System.out.println("DANGER !!!!!! ADHESION: Enregistrement...");
+                    //System.out.println("DANGER !!!!!! ADHESION: Enregistrement...");
                     action_save(si);
                 }
             }
@@ -320,29 +414,71 @@ public class GestionSalaire {
             @Override
             public void onDetruitTout(int idExercice) {
                 System.out.println("Destruction des fiches de paie pour l'exercice " + idExercice);
-                for (Fiche Ofiche : fiches) {
-                    if (Ofiche.getIdExercice() == idExercice) {
-                        fm.fm_supprimer(UtilFees.DOSSIER_FICHE_DE_PAIE, Ofiche.getId());
+                fm.fm_supprimerTout(Fiche.class, UtilObjet.DOSSIER_FICHE_DE_PAIE, null, new CritereSuppression() {
+                    @Override
+                    public boolean canBeDeleted(Object objToDelete) {
+                        return ((Fiche) objToDelete).getIdExercice() == exercice.getId();
                     }
-                }
+                });
             }
 
             @Override
             public void onDetruitElement(int idElement) {
-                System.out.println("Suppression de la fiche " + idElement);
+                //System.out.println("Suppression de la fiche " + idElement);
                 if (idElement != -1) {
-                    fm.fm_supprimer(UtilFees.DOSSIER_FICHE_DE_PAIE, idElement);
+                    fm.fm_supprimer(UtilObjet.DOSSIER_FICHE_DE_PAIE, idElement);
                 }
             }
         });
 
-        panel.setEcouteurActualisationPaie(new EcouteurActualisationPaie() {
+        NavigateurPages navigateurPages = panel.getNavigateurPagesFichePaie();
+        navigateurPages.initialiser(fenetre, new EcouteurNavigateurPages() {
             @Override
-            public DataPaie onRechargeDonneesEtParametres() {
-                gp_setDonneesFromFileManager(selectedAnnee, false);
-                return getData();
+            public void onRecharge(String motCle, int pageActuelle, int taillePage, JS2BPanelPropriete criteresAvances) {
+                new Thread() {
+                    public void run() {
+                        navigateurPages.setInfos(0, panel.getTailleResultatFiches());
+                        navigateurPages.patienter(true, "Chargement...");
+                        panel.reiniliserFichePaie();
+                        chercherFiches(motCle, pageActuelle, taillePage, criteresAvances, navigateurPages);
+                    }
+                }.start();
+            }
+        }, new ConstructeurCriteres() {
+            @Override
+            public JS2BPanelPropriete onInitialise() {
+                JS2BPanelPropriete panProp = new JS2BPanelPropriete(icones.getFiltrer_01(), "Critères avancés", true);
+                panProp.viderListe();
+
+                Date defaultDateA = (agentConcerned == null) ? UtilTresorerie.getDate_CeMatin(new Date()) : UtilTresorerie.getDate_AjouterAnnee(new Date(), -10);
+                panProp.AjouterPropriete(new CHAMP_LOCAL(icones.getCalendrier_01(), "A partir du", "du", null, defaultDateA, PROPRIETE.TYPE_CHOIX_DATE), 0);
+                panProp.AjouterPropriete(new CHAMP_LOCAL(icones.getCalendrier_01(), "Jusqu'au", "Au", null, UtilPaie.getDate_ZeroHeure(new Date()), PROPRIETE.TYPE_CHOIX_DATE), 0);
+
+                //Critres Monnaie
+                Vector listeCategories = new Vector();
+                listeCategories.add("TOUTES");
+                listeCategories.add("ADMINISTRATION_1");
+                listeCategories.add("ADMINISTRATION_2");
+                listeCategories.add("MATERNELLE");
+                listeCategories.add("PARTIEL");
+                listeCategories.add("PRIMAIRE");
+                listeCategories.add("PRIME");
+                listeCategories.add("SECONDAIRE");
+                listeCategories.add("SURVEILLANT");
+                panProp.AjouterPropriete(new CHAMP_LOCAL(icones.getTaxes_01(), "Catégorie d'agents", "Monnaie", listeCategories, "", PROPRIETE.TYPE_CHOIX_LISTE), 0);
+
+                //Critres Revenu
+                Vector listeMois = new Vector();
+                listeMois.add("TOUS");
+                for (String Omois : UtilPaie.getListeMois(exercice.getDebut(), exercice.getFin())) {
+                    listeMois.add(Omois);
+                }
+                panProp.AjouterPropriete(new CHAMP_LOCAL(icones.getCalendrier_01(), "Paie du mois de", "mois", listeMois, "", PROPRIETE.TYPE_CHOIX_LISTE), 0);
+
+                return panProp;
             }
         });
+
         //Chargement du gestionnaire sur l'onglet
         if (deleteCurrentTab == true) {
             tabOnglet.addTab(nomTab, panel);
@@ -350,9 +486,14 @@ public class GestionSalaire {
         }
         progress.setVisible(false);
         progress.setIndeterminate(false);
+
+        navigateurPages.setInfos(0, panel.getTailleResultatFiches());
+        navigateurPages.criteresActuels_activer();
     }
 
 }
+
+
 
 
 

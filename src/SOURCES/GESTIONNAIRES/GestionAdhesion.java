@@ -6,11 +6,11 @@
 package SOURCES.GESTIONNAIRES;
 
 import ICONES.Icones;
+import SOURCES.Callback.EcouteurContains;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback_Insc.EcouteurInscription;
 import SOURCES.Objets.FileManager;
 import SOURCES.UI_Insc.PanelInscription;
-import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires_Insc.DataInscription;
 import SOURCES.Utilitaires_Insc.ParametreInscription;
 import SOURCES.Utilitaires_Insc.SortiesInscription;
@@ -31,6 +31,7 @@ import Source.Objet.Entreprise;
 import Source.Objet.Exercice;
 import Source.Objet.Frais;
 import Source.Objet.Monnaie;
+import Source.Objet.UtilObjet;
 import Source.Objet.Utilisateur;
 import Source.UI.NavigateurPages;
 import Sources.CHAMP_LOCAL;
@@ -39,6 +40,7 @@ import Sources.UI.JS2BPanelPropriete;
 import static java.lang.Thread.sleep;
 import java.util.Vector;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 
@@ -72,6 +74,7 @@ public class GestionAdhesion {
     boolean deleteCurrentTab = true;
     public JFrame fenetre = null;
     public Icones icones = null;
+    public boolean canBeSaved;
 
     public GestionAdhesion(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.fenetre = fenetre;
@@ -85,7 +88,9 @@ public class GestionAdhesion {
         this.eleveConcerned = null;
     }
 
-    public GestionAdhesion(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+    public GestionAdhesion(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+        this.fenetre = fenetre;
+        this.icones = icones;
         this.couleurBasique = couleurBasique;
         this.fm = fm;
         this.progress = progress;
@@ -96,7 +101,7 @@ public class GestionAdhesion {
     }
 
     private DataInscription getData() {
-        ParametreInscription parametreInscription = new ParametreInscription(monnaies, classes, frais, entreprise, exercice, utilisateur.getId(), utilisateur.getNom() + " " + utilisateur.getPrenom());
+        ParametreInscription parametreInscription = new ParametreInscription(monnaies, classes, frais, entreprise, exercice, utilisateur);
         return new DataInscription(parametreInscription);
     }
 
@@ -108,9 +113,7 @@ public class GestionAdhesion {
             if (deleteCurrentTab == true) {
                 int nbOnglets = tabOnglet.getComponentCount();
                 for (int i = 0; i < nbOnglets; i++) {
-                    //JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
                     String titreOnglet = tabOnglet.getTitleAt(i);
-
                     String Snom = NOM;
                     if (eleveConcerned != null) {
                         Snom = NOM + " - " + eleveConcerned.getNom() + " " + eleveConcerned.getPrenom();
@@ -123,7 +126,7 @@ public class GestionAdhesion {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, 1, 100, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 100, new EcouteurOuverture() {
 
                     @Override
                     public boolean isCriteresRespectes(Object object) {
@@ -139,7 +142,7 @@ public class GestionAdhesion {
                     }
 
                     @Override
-                    public void onDone(String message, int resultatTotal) {
+                    public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                         loadMonnaies();
                     }
 
@@ -162,7 +165,7 @@ public class GestionAdhesion {
     private void chercherEleves(String motCle, int pageActuelle, int taillePage, JS2BPanelPropriete criteresAvances, NavigateurPages navigateurPages) {
         loadEleves(motCle, pageActuelle, taillePage, criteresAvances, navigateurPages);
     }
-    
+
     private boolean verifierNomEleve(String motCle, Eleve Ieleve) {
         boolean reponse = false;
         if (motCle.trim().length() == 0) {
@@ -241,8 +244,8 @@ public class GestionAdhesion {
 
     private void loadEleves(String motCle, int pageActuelle, int taillePage, JS2BPanelPropriete jsbpp, NavigateurPages nav) {
         /**/
-        eleves.removeAllElements();
-        fm.fm_ouvrirTout(0, Eleve.class, UtilFees.DOSSIER_ELEVE, pageActuelle, taillePage, new EcouteurOuverture() {
+        //eleves.removeAllElements();
+        fm.fm_ouvrirTout(0, Eleve.class, UtilObjet.DOSSIER_ELEVE, pageActuelle, taillePage, new EcouteurOuverture() {
 
             @Override
             public boolean isCriteresRespectes(Object object) {
@@ -254,18 +257,20 @@ public class GestionAdhesion {
             public void onElementLoaded(String message, Object data) {
                 Eleve eleveLoaded = (Eleve) data;
                 if (eleveLoaded != null) {
-                    eleves.add(eleveLoaded);
+                    //eleves.add(eleveLoaded);
                     panel.setDonneesEleves(eleveLoaded);
                     loadAyantDroit(eleveLoaded.getSignature());
                 }
             }
 
             @Override
-            public void onDone(String message, int resultatTotal) {
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 progress.setVisible(false);
                 progress.setIndeterminate(false);
-                nav.setInfos(resultatTotal, eleves.size());
+                
+                nav.setInfos(resultatTotal, panel.getTailleResultatEleves());
                 nav.patienter(false, "Prêt.");
+                
             }
 
             @Override
@@ -285,7 +290,7 @@ public class GestionAdhesion {
 
     private void loadAyantDroit(long signatureEleve) {
         /* */
-        fm.fm_ouvrirTout(0, Ayantdroit.class, UtilFees.DOSSIER_AYANT_DROIT, 1, 100, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Ayantdroit.class, UtilObjet.DOSSIER_AYANT_DROIT, 1, 100, new EcouteurOuverture() {
 
             @Override
             public boolean isCriteresRespectes(Object object) {
@@ -313,7 +318,7 @@ public class GestionAdhesion {
             }
 
             @Override
-            public void onDone(String message, int resultatTotal) {
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
 
             }
 
@@ -334,7 +339,7 @@ public class GestionAdhesion {
 
     private void loadClasses() {
         classes.removeAllElements();
-        fm.fm_ouvrirTout(0, Classe.class, UtilFees.DOSSIER_CLASSE, 1, 100, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Classe.class, UtilObjet.DOSSIER_CLASSE, 1, 100, new EcouteurOuverture() {
 
             @Override
             public boolean isCriteresRespectes(Object object) {
@@ -352,7 +357,7 @@ public class GestionAdhesion {
             }
 
             @Override
-            public void onDone(String message, int resultatTotal) {
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 if (eleveConcerned == null) {
                     initUI(NOM);
                 } else {
@@ -376,7 +381,7 @@ public class GestionAdhesion {
 
     private void loadMonnaies() {
         monnaies.removeAllElements();
-        fm.fm_ouvrirTout(0, Monnaie.class, UtilFees.DOSSIER_MONNAIE, 1, 100, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Monnaie.class, UtilObjet.DOSSIER_MONNAIE, 1, 100, new EcouteurOuverture() {
             @Override
             public boolean isCriteresRespectes(Object object) {
                 return true;
@@ -393,7 +398,7 @@ public class GestionAdhesion {
             }
 
             @Override
-            public void onDone(String message, int resultatTotal) {
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadFrais();
             }
 
@@ -413,7 +418,7 @@ public class GestionAdhesion {
 
     private void loadFrais() {
         frais.removeAllElements();
-        fm.fm_ouvrirTout(0, Frais.class, UtilFees.DOSSIER_FRAIS, 1, 100, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Frais.class, UtilObjet.DOSSIER_FRAIS, 1, 100, new EcouteurOuverture() {
             @Override
             public boolean isCriteresRespectes(Object object) {
                 return true;
@@ -432,7 +437,7 @@ public class GestionAdhesion {
             }
 
             @Override
-            public void onDone(String message, int resultatTotal) {
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadClasses();
             }
 
@@ -486,15 +491,61 @@ public class GestionAdhesion {
         //On précise qui est en train d'enregistrer cette donnée
         for (Eleve ia : listeNewEleves) {
             if (ia.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ia.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
-                ia.setIdExercice(annee.getId());
-                ia.setIdUtilisateur(user.getId());
-                ia.setIdEntreprise(user.getIdEntreprise());
-                ia.setBeta(InterfaceExercice.BETA_EXISTANT);
-                listeNewElevesTempo.add(ia);
+                canBeSaved = true;
+                String infosEleve = ia.getNom() + " " + ia.getPostnom() + " " + ia.getPrenom();
+
+                //Pour id étrangère incomplètes
+                if (ia.getIdClasse() == -1) {
+                    canBeSaved = false;
+                    JOptionPane.showMessageDialog(panel, infosEleve + " n'est pas enregistré car vous n'avez pas défini sa classe!\nVeuillez préciser sa classe puis enregistrer de nouveau.", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
+                    panel.setBtEnregistrerNouveau();
+                }
+
+                //Controle pour éviter de doublon
+                fm.fm_contains(Eleve.class, UtilObjet.DOSSIER_ELEVE, new EcouteurContains() {
+                    @Override
+                    public boolean isOk(Object objectToCheck) {
+                        Eleve eChecking = (Eleve) objectToCheck;
+                        String elA = ia.getNom().trim() + "" + ia.getPostnom().trim() + "" + ia.getPrenom().trim() + "" + ia.getIdClasse();
+                        String elB = eChecking.getNom().trim() + "" + eChecking.getPostnom().trim() + "" + eChecking.getPrenom().trim() + "" + eChecking.getIdClasse();
+                        return (elA.trim().toLowerCase()).equals((elB.trim().toLowerCase())) && ia.getBeta() == InterfaceEleve.BETA_NOUVEAU;
+                    }
+
+                    @Override
+                    public void onSuccess(String message, boolean reponse, Vector TabObjsFound) {
+                        if (reponse == true) {
+                            canBeSaved = false;
+                            for (Object oo : TabObjsFound) {
+                                Eleve eFound = (Eleve) oo;
+                                String infoEF = eFound.getNom() + " " + eFound.getPostnom() + " " + eFound.getPrenom();
+                                JOptionPane.showMessageDialog(panel, infoEF + " est déjà enregistré(e)!", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
+                                panel.setBtEnregistrerNouveau();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        System.err.println(message);
+                    }
+
+                    @Override
+                    public void onProcessing(String message) {
+
+                    }
+                });
+
+                if (canBeSaved == true) {
+                    ia.setIdExercice(annee.getId());
+                    ia.setIdUtilisateur(user.getId());
+                    ia.setIdEntreprise(user.getIdEntreprise());
+                    ia.setBeta(InterfaceExercice.BETA_EXISTANT);
+                    listeNewElevesTempo.add(ia);
+                }
             }
         }
         if (!listeNewElevesTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewElevesTempo, UtilFees.DOSSIER_ELEVE, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewElevesTempo, UtilObjet.DOSSIER_ELEVE, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     System.out.println(message);
@@ -525,24 +576,35 @@ public class GestionAdhesion {
         Vector<Ayantdroit> listeNewAy = se.getListeAyantDroit();
         Vector<Ayantdroit> listeNewAYTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        System.out.println("AYANT DROIT **** ");
+        //System.out.println("AYANT DROIT **** ");
         for (Ayantdroit ia : listeNewAy) {
             if (ia.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ia.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
-                ia.setIdExercice(annee.getId());
-                ia.setIdUtilisateur(user.getId());
-                ia.setIdEntreprise(user.getIdEntreprise());
-                ia.setBeta(InterfaceExercice.BETA_EXISTANT);
-                listeNewAYTempo.add(ia);
+                canBeSaved = true;
+
+                //Pour id étrangère incomplètes
+                if (ia.getSignatureEleve() == -1) {
+                    canBeSaved = false;
+                    JOptionPane.showMessageDialog(panel, "Désolé, veuillez préciser l'élève à considérer comme Ayant droit!", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
+                    panel.setBtEnregistrerNouveau();
+                }
+                
+                if (canBeSaved == true) {
+                    ia.setIdExercice(annee.getId());
+                    ia.setIdUtilisateur(user.getId());
+                    ia.setIdEntreprise(user.getIdEntreprise());
+                    ia.setBeta(InterfaceExercice.BETA_EXISTANT);
+                    listeNewAYTempo.add(ia);
+                }
             }
         }
         if (!listeNewAYTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewAYTempo, UtilFees.DOSSIER_AYANT_DROIT, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewAYTempo, UtilObjet.DOSSIER_AYANT_DROIT, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
                     progress.setVisible(false);
                     progress.setIndeterminate(false);
 
-                    System.out.println(message);
+                    //System.out.println(message);
                     //Après enregistrement
                     ee.onDone("Ayant-droits enregistrés !");
                 }
@@ -551,13 +613,13 @@ public class GestionAdhesion {
                 public void onError(String message) {
                     progress.setVisible(false);
                     progress.setIndeterminate(false);
-                    System.err.println(message);
+                    //System.err.println(message);
                     ee.onError("Erreur !");
                 }
 
                 @Override
                 public void onProcessing(String message) {
-                    System.out.println(message);
+                    //System.out.println(message);
                     ee.onUploading("Enregistrement...");
                 }
             });
@@ -582,14 +644,14 @@ public class GestionAdhesion {
             }
 
             @Override
-            public void onDetruitElements(int idElement, int index) {
+            public void onDetruitElements(int idElement, int index, long signature) {
                 if (idElement != -1) {
                     switch (index) {
                         case 0://ELEVE
-                            fm.fm_supprimer(UtilFees.DOSSIER_ELEVE, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_ELEVE, idElement, signature);
                             break;
                         case 1://AYANT-DROIT
-                            fm.fm_supprimer(UtilFees.DOSSIER_AYANT_DROIT, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_AYANT_DROIT, idElement, signature);
                             break;
                         default:
                     }
@@ -600,7 +662,7 @@ public class GestionAdhesion {
             public void onOuvrirPaiements(Eleve eleve) {
                 new Thread() {
                     public void run() {
-                        new GestionPaiements(couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
+                        new GestionPaiements(icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();
             }
@@ -614,7 +676,8 @@ public class GestionAdhesion {
             public void onOuvrirLitiges(Eleve eleve) {
                 new Thread() {
                     public void run() {
-                        new GestionLitiges(couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
+                        System.out.println("Ouverture des litiges de " + eleve.getNom());
+                        new GestionLitiges(fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();
             }
@@ -672,6 +735,27 @@ public class GestionAdhesion {
         }
         progress.setVisible(false);
         progress.setIndeterminate(false);
-        naviNavigateurPages.reload();
+
+        naviNavigateurPages.criteresActuels_activer();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

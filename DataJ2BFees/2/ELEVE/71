@@ -1,0 +1,18 @@
+{
+  "id" : 71,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 32,
+  "signature" : 6771372757684838685,
+  "classe" : "G2",
+  "adresse" : "Kinshasa - RDC",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "VAN",
+  "postnom" : "ERPS",
+  "prenom" : "Anthony",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1566472973773,
+  "beta" : 0
+}

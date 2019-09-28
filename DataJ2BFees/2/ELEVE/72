@@ -1,0 +1,18 @@
+{
+  "id" : 72,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 32,
+  "signature" : 6645042580614933075,
+  "classe" : "G2",
+  "adresse" : "Kisangani - RDC",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "MUTA",
+  "postnom" : "KANKU",
+  "prenom" : "TOBA",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1566473007605,
+  "beta" : 0
+}

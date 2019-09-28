@@ -1,0 +1,16 @@
+{
+  "id" : 186,
+  "idEleve" : 37,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1566208907860",
+  "nomEleve" : "TONGO NANUYA JOELLE",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "TONGO NANUYA JOELLE",
+  "montant" : 125.0,
+  "date" : 1566208907860,
+  "beta" : 0,
+  "referenceTransaction" : "1566208907860"
+}

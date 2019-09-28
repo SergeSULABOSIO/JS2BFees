@@ -1,0 +1,16 @@
+{
+  "id" : 2,
+  "destination" : 0,
+  "reference" : "0ENC1",
+  "date" : 1565864974899,
+  "montant" : 150.0,
+  "idMonnaie" : 11,
+  "monnaie" : "$",
+  "effectuePar" : "Alain",
+  "motif" : "RAS - TEST SIMPLE",
+  "idRevenu" : 12,
+  "revenu" : "",
+  "idExercice" : 10,
+  "idUtilisateur" : 12,
+  "beta" : 0
+}

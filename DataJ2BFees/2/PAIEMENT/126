@@ -1,0 +1,16 @@
+{
+  "id" : 126,
+  "idEleve" : 36,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565987317746",
+  "nomEleve" : "SAKINA KIBILA JOSE",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "SAKINA KIBILA JOSE",
+  "montant" : 125.0,
+  "date" : 1565987317746,
+  "beta" : 0,
+  "referenceTransaction" : "1565987317746"
+}

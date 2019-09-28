@@ -1,0 +1,16 @@
+{
+  "id" : 131,
+  "idEleve" : 53,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566050573155",
+  "nomEleve" : "SULA KOMBOZI TOTO",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "SULA KOMBOZI TOTO",
+  "montant" : 50.0,
+  "date" : 1566050573155,
+  "beta" : 0,
+  "referenceTransaction" : "1566050573155"
+}

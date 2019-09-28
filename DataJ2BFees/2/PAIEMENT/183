@@ -1,0 +1,16 @@
+{
+  "id" : 183,
+  "idEleve" : 45,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566208854581",
+  "nomEleve" : "ELEMBO ENDJINGA TOTO",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "ELEMBO ENDJINGA TOTO",
+  "montant" : 50.0,
+  "date" : 1566208854581,
+  "beta" : 0,
+  "referenceTransaction" : "1566208854581"
+}

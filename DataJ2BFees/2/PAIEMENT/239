@@ -1,0 +1,16 @@
+{
+  "id" : 239,
+  "idEleve" : 18,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1566388273134",
+  "nomEleve" : "TARUYO ARAKAYO ANTHONY",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "TARUYO ARAKAYO ANTHONY",
+  "montant" : 2.5,
+  "date" : 1566388273134,
+  "beta" : 0,
+  "referenceTransaction" : "1566388273134"
+}

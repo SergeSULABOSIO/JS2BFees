@@ -1,0 +1,16 @@
+{
+  "id" : 95,
+  "idEleve" : 62,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565542714841",
+  "nomEleve" : "KAPINGA",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "KAPINGA",
+  "montant" : 125.0,
+  "date" : 1565542714841,
+  "beta" : 0,
+  "referenceTransaction" : "1565542714841"
+}

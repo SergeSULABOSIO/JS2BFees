@@ -1,0 +1,16 @@
+{
+  "id" : 189,
+  "idEleve" : 37,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566208938573",
+  "nomEleve" : "TONGO NANUYA JOELLE",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "TONGO NANUYA JOELLE",
+  "montant" : 2.5,
+  "date" : 1566208938573,
+  "beta" : 0,
+  "referenceTransaction" : "1566208938573"
+}

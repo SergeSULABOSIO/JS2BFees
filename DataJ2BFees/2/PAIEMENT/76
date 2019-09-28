@@ -1,0 +1,16 @@
+{
+  "id" : 76,
+  "idEleve" : 47,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565457618805",
+  "nomEleve" : "EBENGO",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "EBENGO",
+  "montant" : 125.0,
+  "date" : 1565457618805,
+  "beta" : 0,
+  "referenceTransaction" : "1565457618805"
+}

@@ -1,0 +1,16 @@
+{
+  "id" : 156,
+  "idEleve" : 15,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566207479389",
+  "nomEleve" : "MUTOMBO KALONGO JEAN",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "MUTOMBO KALONGO JEAN",
+  "montant" : 50.0,
+  "date" : 1566207479389,
+  "beta" : 0,
+  "referenceTransaction" : "1566207479389"
+}

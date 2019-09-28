@@ -1,0 +1,16 @@
+{
+  "id" : 99,
+  "idEleve" : 14,
+  "idExercice" : 10,
+  "idFrais" : 9,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565942942417",
+  "nomEleve" : "MATATA PONYO MAPON",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "MATATA PONYO MAPON",
+  "montant" : 20.0,
+  "date" : 1565942942417,
+  "beta" : 0,
+  "referenceTransaction" : "1565942942417"
+}

@@ -1,0 +1,16 @@
+{
+  "id" : 152,
+  "idEleve" : 38,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566207401308",
+  "nomEleve" : "NIKITA MBALE JEANNINE",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "NIKITA MBALE JEANNINE",
+  "montant" : 50.0,
+  "date" : 1566207401308,
+  "beta" : 0,
+  "referenceTransaction" : "1566207401308"
+}

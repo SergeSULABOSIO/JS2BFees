@@ -1,0 +1,16 @@
+{
+  "id" : 136,
+  "idEleve" : 70,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566070189762",
+  "nomEleve" : "YIMBI SELENGE JERRY",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "YIMBI SELENGE JERRY",
+  "montant" : 125.0,
+  "date" : 1566070189762,
+  "beta" : 0,
+  "referenceTransaction" : "1566070189762"
+}

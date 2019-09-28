@@ -1,0 +1,18 @@
+{
+  "id" : 74,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 31,
+  "signature" : 5306193067526852931,
+  "classe" : "G1",
+  "adresse" : "KINSHASA - RDC",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "MUKALAYI",
+  "postnom" : "BANZA",
+  "prenom" : "JEAN",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1566473575737,
+  "beta" : 0
+}

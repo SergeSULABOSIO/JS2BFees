@@ -1,0 +1,16 @@
+{
+  "id" : 144,
+  "idEleve" : 42,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1566072580871",
+  "nomEleve" : "OPOTHA LOFUNGULA EMMA",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "OPOTHA LOFUNGULA EMMA",
+  "montant" : 125.0,
+  "date" : 1566072580871,
+  "beta" : 0,
+  "referenceTransaction" : "1566072580871"
+}

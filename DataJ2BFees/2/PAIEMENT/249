@@ -1,0 +1,16 @@
+{
+  "id" : 249,
+  "idEleve" : 26,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1566659986514",
+  "nomEleve" : "MUSWAMBA BABANGONDI CECILE",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MUSWAMBA BABANGONDI CECILE",
+  "montant" : 125.0,
+  "date" : 1566659986514,
+  "beta" : 0,
+  "referenceTransaction" : "1566659986514"
+}

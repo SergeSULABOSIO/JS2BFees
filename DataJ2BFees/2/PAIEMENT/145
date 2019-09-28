@@ -1,0 +1,16 @@
+{
+  "id" : 145,
+  "idEleve" : 27,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566206533027",
+  "nomEleve" : "MBEMBE TABU LEONTINE",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MBEMBE TABU LEONTINE",
+  "montant" : 125.0,
+  "date" : 1566206533027,
+  "beta" : 0,
+  "referenceTransaction" : "1566206533027"
+}

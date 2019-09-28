@@ -1,0 +1,16 @@
+{
+  "id" : 241,
+  "idEleve" : 55,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1566388356718",
+  "nomEleve" : "ILOBO TONDAMA JEAN",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "ILOBO TONDAMA JEAN",
+  "montant" : 125.0,
+  "date" : 1566388356718,
+  "beta" : 0,
+  "referenceTransaction" : "1566388356718"
+}

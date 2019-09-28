@@ -1,0 +1,16 @@
+{
+  "id" : 191,
+  "idEleve" : 41,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1566209008452",
+  "nomEleve" : "SULA LIKUNDE CELESTIN",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "SULA LIKUNDE CELESTIN",
+  "montant" : 2.5,
+  "date" : 1566209008452,
+  "beta" : 0,
+  "referenceTransaction" : "1566209008452"
+}

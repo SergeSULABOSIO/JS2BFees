@@ -1,0 +1,16 @@
+{
+  "id" : 71,
+  "idEleve" : 52,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565457455084",
+  "nomEleve" : "SULA",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "SULA",
+  "montant" : 50.0,
+  "date" : 1565457455084,
+  "beta" : 0,
+  "referenceTransaction" : "1565457455084"
+}

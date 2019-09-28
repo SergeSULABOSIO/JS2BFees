@@ -1,0 +1,16 @@
+{
+  "id" : 171,
+  "idEleve" : 43,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566207907455",
+  "nomEleve" : "MUTANDA NZOLA FISTON",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MUTANDA NZOLA FISTON",
+  "montant" : 125.0,
+  "date" : 1566207907455,
+  "beta" : 0,
+  "referenceTransaction" : "1566207907455"
+}

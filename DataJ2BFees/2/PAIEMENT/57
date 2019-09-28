@@ -1,0 +1,16 @@
+{
+  "id" : 57,
+  "idEleve" : 24,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1565363920842",
+  "nomEleve" : "TONGO",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "TONGO",
+  "montant" : 2.5,
+  "date" : 1565363920842,
+  "beta" : 0,
+  "referenceTransaction" : "1565363920842"
+}

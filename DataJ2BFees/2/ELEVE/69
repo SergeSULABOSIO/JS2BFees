@@ -1,0 +1,18 @@
+{
+  "id" : 69,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 31,
+  "signature" : 2843311691413461260,
+  "classe" : "G1",
+  "adresse" : "KISANGANI - RDC",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "LITANDA",
+  "postnom" : "LIKWEKWE",
+  "prenom" : "JUNIORE",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1566069841171,
+  "beta" : 0
+}

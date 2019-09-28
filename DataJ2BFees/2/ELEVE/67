@@ -1,0 +1,18 @@
+{
+  "id" : 67,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 31,
+  "signature" : 8840433905701063122,
+  "classe" : "G1",
+  "adresse" : "kinshasa",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "makanda",
+  "postnom" : "batubenga",
+  "prenom" : "didier",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1565987954066,
+  "beta" : 0
+}

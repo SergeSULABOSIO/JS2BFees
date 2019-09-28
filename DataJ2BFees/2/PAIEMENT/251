@@ -1,0 +1,16 @@
+{
+  "id" : 251,
+  "idEleve" : 26,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566659996408",
+  "nomEleve" : "MUSWAMBA BABANGONDI CECILE",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "MUSWAMBA BABANGONDI CECILE",
+  "montant" : 2.5,
+  "date" : 1566659996408,
+  "beta" : 0,
+  "referenceTransaction" : "1566659996408"
+}

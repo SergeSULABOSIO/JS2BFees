@@ -1,0 +1,16 @@
+{
+  "id" : 6,
+  "destination" : 0,
+  "reference" : "0ENC11",
+  "date" : 1565989815538,
+  "montant" : 150.0,
+  "idMonnaie" : 11,
+  "monnaie" : "$",
+  "effectuePar" : "Serge SIKU",
+  "motif" : "Loyer Pharmacie",
+  "idRevenu" : 12,
+  "revenu" : "",
+  "idExercice" : 10,
+  "idUtilisateur" : 12,
+  "beta" : 0
+}

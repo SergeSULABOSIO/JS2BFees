@@ -1,0 +1,16 @@
+{
+  "id" : 94,
+  "idEleve" : 62,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565542711212",
+  "nomEleve" : "KAPINGA",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "KAPINGA",
+  "montant" : 50.0,
+  "date" : 1565542711212,
+  "beta" : 0,
+  "referenceTransaction" : "1565542711212"
+}

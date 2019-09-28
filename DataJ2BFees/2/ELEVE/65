@@ -1,0 +1,18 @@
+{
+  "id" : 65,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 32,
+  "signature" : 3956098895933517983,
+  "classe" : "G2",
+  "adresse" : "KINSHASA - RDC",
+  "telephonesParents" : "(+243)828727706",
+  "nom" : "LUSUMA",
+  "postnom" : "NGOBO",
+  "prenom" : "RICHARD",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1565948622699,
+  "beta" : 0
+}

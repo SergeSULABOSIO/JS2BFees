@@ -1,0 +1,16 @@
+{
+  "id" : 60,
+  "idEleve" : 3,
+  "idExercice" : 10,
+  "idFrais" : 9,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565364132440",
+  "nomEleve" : "MAKULA",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "MAKULA",
+  "montant" : 20.0,
+  "date" : 1565364132440,
+  "beta" : 0,
+  "referenceTransaction" : "1565364132440"
+}

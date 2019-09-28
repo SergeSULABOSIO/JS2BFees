@@ -1,0 +1,16 @@
+{
+  "id" : 141,
+  "idEleve" : 42,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566072546227",
+  "nomEleve" : "OPOTHA LOFUNGULA EMMA",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "OPOTHA LOFUNGULA EMMA",
+  "montant" : 2.5,
+  "date" : 1566072546227,
+  "beta" : 0,
+  "referenceTransaction" : "1566072546227"
+}

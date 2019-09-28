@@ -1,0 +1,16 @@
+{
+  "id" : 118,
+  "idEleve" : 30,
+  "idExercice" : 10,
+  "idFrais" : 9,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565987145247",
+  "nomEleve" : "MOBILA TANTINATANTINE TATANYA",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "MOBILA TANTINATANTINE TATANYA",
+  "montant" : 20.0,
+  "date" : 1565987145247,
+  "beta" : 0,
+  "referenceTransaction" : "1565987145247"
+}

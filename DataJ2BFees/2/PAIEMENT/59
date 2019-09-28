@@ -1,0 +1,16 @@
+{
+  "id" : 59,
+  "idEleve" : 29,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565364089560",
+  "nomEleve" : "KUKALANGA",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "KUKALANGA",
+  "montant" : 125.0,
+  "date" : 1565364089560,
+  "beta" : 0,
+  "referenceTransaction" : "1565364089560"
+}

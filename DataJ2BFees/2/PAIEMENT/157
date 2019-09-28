@@ -1,0 +1,16 @@
+{
+  "id" : 157,
+  "idEleve" : 17,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1566207531364",
+  "nomEleve" : "MVUMU MPUKUTA JULIEN",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "MVUMU MPUKUTA JULIEN",
+  "montant" : 2.5,
+  "date" : 1566207531364,
+  "beta" : 0,
+  "referenceTransaction" : "1566207531364"
+}

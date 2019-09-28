@@ -1,0 +1,16 @@
+{
+  "id" : 197,
+  "idEleve" : 49,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1566209080955",
+  "nomEleve" : "MUNDEKE TONGOLA ETHIENNE",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MUNDEKE TONGOLA ETHIENNE",
+  "montant" : 125.0,
+  "date" : 1566209080955,
+  "beta" : 0,
+  "referenceTransaction" : "1566209080955"
+}

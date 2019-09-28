@@ -1,0 +1,16 @@
+{
+  "id" : 255,
+  "idEleve" : 22,
+  "idExercice" : 10,
+  "idFrais" : 9,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566660421336",
+  "nomEleve" : "AKAKATSHI TOTO JEAN",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "AKAKATSHI TOTO JEAN",
+  "montant" : 20.0,
+  "date" : 1566660421336,
+  "beta" : 0,
+  "referenceTransaction" : "1566660421336"
+}

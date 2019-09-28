@@ -1,0 +1,16 @@
+{
+  "id" : 108,
+  "idEleve" : 34,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1565946110706",
+  "nomEleve" : "MUTOMBO KEKA LUMIERE",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "MUTOMBO KEKA LUMIERE",
+  "montant" : 2.5,
+  "date" : 1565946110706,
+  "beta" : 0,
+  "referenceTransaction" : "1565946110706"
+}

@@ -1,0 +1,16 @@
+{
+  "id" : 63,
+  "idEleve" : 41,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565457347055",
+  "nomEleve" : "SULA",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "SULA",
+  "montant" : 2.5,
+  "date" : 1565457347055,
+  "beta" : 0,
+  "referenceTransaction" : "1565457347055"
+}

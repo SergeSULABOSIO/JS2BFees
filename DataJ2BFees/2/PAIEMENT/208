@@ -1,0 +1,16 @@
+{
+  "id" : 208,
+  "idEleve" : 67,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566209816572",
+  "nomEleve" : "makanda batubenga didier",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "makanda batubenga didier",
+  "montant" : 50.0,
+  "date" : 1566209816572,
+  "beta" : 0,
+  "referenceTransaction" : "1566209816572"
+}

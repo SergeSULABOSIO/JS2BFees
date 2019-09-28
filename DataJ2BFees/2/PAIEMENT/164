@@ -1,0 +1,16 @@
+{
+  "id" : 164,
+  "idEleve" : 2,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566207663650",
+  "nomEleve" : "BONDEKWE AMA RUFFIN",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "BONDEKWE AMA RUFFIN",
+  "montant" : 50.0,
+  "date" : 1566207663650,
+  "beta" : 0,
+  "referenceTransaction" : "1566207663650"
+}

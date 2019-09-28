@@ -1,0 +1,16 @@
+{
+  "id" : 234,
+  "idEleve" : 70,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1566210754637",
+  "nomEleve" : "YIMBI SELENGE JERRY",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "YIMBI SELENGE JERRY",
+  "montant" : 2.5,
+  "date" : 1566210754637,
+  "beta" : 0,
+  "referenceTransaction" : "1566210754637"
+}

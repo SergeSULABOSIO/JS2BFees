@@ -1,0 +1,16 @@
+{
+  "id" : 202,
+  "idEleve" : 5,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566209746597",
+  "nomEleve" : "MUTA KANKUNGWALA CHRISTIAN",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "MUTA KANKUNGWALA CHRISTIAN",
+  "montant" : 50.0,
+  "date" : 1566209746597,
+  "beta" : 0,
+  "referenceTransaction" : "1566209746597"
+}

@@ -1,0 +1,18 @@
+{
+  "id" : 75,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idClasse" : 33,
+  "signature" : -3512912676673843015,
+  "classe" : "G3",
+  "adresse" : "Lemba - Kinhasa - RDC",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "MATONDO",
+  "postnom" : "BATANTU",
+  "prenom" : "ARNOLD",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1566661039598,
+  "beta" : 0
+}

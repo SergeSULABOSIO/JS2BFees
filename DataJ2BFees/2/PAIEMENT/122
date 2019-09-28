@@ -1,0 +1,16 @@
+{
+  "id" : 122,
+  "idEleve" : 32,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565987238956",
+  "nomEleve" : "BOTOLOME GEOLI FISTON",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "BOTOLOME GEOLI FISTON",
+  "montant" : 125.0,
+  "date" : 1565987238956,
+  "beta" : 0,
+  "referenceTransaction" : "1565987238956"
+}

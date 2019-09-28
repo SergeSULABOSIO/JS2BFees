@@ -1,0 +1,16 @@
+{
+  "id" : 215,
+  "idEleve" : 8,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566209919701",
+  "nomEleve" : "MUKENGE NZIK FIDEL",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MUKENGE NZIK FIDEL",
+  "montant" : 125.0,
+  "date" : 1566209919701,
+  "beta" : 0,
+  "referenceTransaction" : "1566209919701"
+}

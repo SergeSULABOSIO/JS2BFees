@@ -1,0 +1,16 @@
+{
+  "id" : 192,
+  "idEleve" : 41,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566209010596",
+  "nomEleve" : "SULA LIKUNDE CELESTIN",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "SULA LIKUNDE CELESTIN",
+  "montant" : 50.0,
+  "date" : 1566209010596,
+  "beta" : 0,
+  "referenceTransaction" : "1566209010596"
+}

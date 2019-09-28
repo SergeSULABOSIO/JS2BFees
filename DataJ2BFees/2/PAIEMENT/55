@@ -1,0 +1,16 @@
+{
+  "id" : 55,
+  "idEleve" : 23,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1565363602259",
+  "nomEleve" : "MAKANDA",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MAKANDA",
+  "montant" : 125.0,
+  "date" : 1565363602259,
+  "beta" : 0,
+  "referenceTransaction" : "1565363602259"
+}

@@ -1,0 +1,16 @@
+{
+  "id" : 195,
+  "idEleve" : 49,
+  "idExercice" : 10,
+  "idFrais" : 11,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566209049916",
+  "nomEleve" : "MUNDEKE TONGOLA ETHIENNE",
+  "nomFrais" : "BIBLIOTHEQUE",
+  "nomDepositaire" : "MUNDEKE TONGOLA ETHIENNE",
+  "montant" : 2.5,
+  "date" : 1566209049916,
+  "beta" : 0,
+  "referenceTransaction" : "1566209049916"
+}

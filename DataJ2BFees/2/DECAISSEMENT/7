@@ -1,0 +1,16 @@
+{
+  "id" : 7,
+  "source" : 0,
+  "reference" : "0DEC1",
+  "date" : 1566388433446,
+  "montant" : 100.0,
+  "idMonnaie" : 11,
+  "monnaie" : "$",
+  "beneficiaire" : "Tatu dibondo",
+  "motif" : "Loyer du mois d'aout 2019",
+  "idCharge" : 39,
+  "charge" : "",
+  "idExercice" : 10,
+  "idUtilisateur" : 12,
+  "beta" : 0
+}

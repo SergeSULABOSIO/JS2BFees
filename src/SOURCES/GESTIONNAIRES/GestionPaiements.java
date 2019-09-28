@@ -5,12 +5,12 @@
  */
 package SOURCES.GESTIONNAIRES;
 
+import ICONES.Icones;
 import SOURCES.CallBackFacture.EcouteurActualisationFacture;
 import SOURCES.CallBackFacture.EcouteurFacture;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Objets.FileManager;
 import SOURCES.UI.PanelFacture;
-import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires_Facture.DataFacture;
 import SOURCES.Utilitaires_Facture.DonneesFacture;
 import SOURCES.Utilitaires_Facture.ParametresFacture;
@@ -27,13 +27,13 @@ import Source.Objet.Eleve;
 import Source.Objet.Entreprise;
 import Source.Objet.Exercice;
 import Source.Objet.Frais;
-import Source.Objet.LiaisonFraisClasse;
-import Source.Objet.LiaisonFraisPeriode;
 import Source.Objet.Monnaie;
 import Source.Objet.Paiement;
 import Source.Objet.Periode;
+import Source.Objet.UtilObjet;
 import Source.Objet.Utilisateur;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 
@@ -65,9 +65,12 @@ public class GestionPaiements {
     private Vector<Paiement> paiements = new Vector<>();
     private CouleurBasique couleurBasique;
     public String selectedAnnee;
+    public boolean canBeSaved = false;
+    public Icones icones = null;
 
-    public GestionPaiements(CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleve) {
+    public GestionPaiements(Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleve) {
         this.couleurBasique = couleurBasique;
+        this.icones = icones;
         this.fm = fm;
         this.eleve = eleve;
         this.progress = progress;
@@ -92,9 +95,9 @@ public class GestionPaiements {
                 for (int i = 0; i < nbOnglets; i++) {
                     //JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
                     String titreOnglet = tabOnglet.getTitleAt(i);
-                    System.out.println("Onglet - " + titreOnglet);
+                    //System.out.println("Onglet - " + titreOnglet);
                     if (titreOnglet.equals(NOM + " - " + eleve.getNom() + " " + eleve.getPrenom())) {
-                        System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
+                        //System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
                         tabOnglet.remove(i);
                         mustLoadData = true;
                     }
@@ -102,19 +105,24 @@ public class GestionPaiements {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(0, Exercice.class, UtilFees.DOSSIER_ANNEE, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
                     @Override
-                    public void onDone(String message, Vector data) {
-                        System.out.println("CHARGEMENT ANNEE: " + message);
-                        for (Object Oannee : data) {
-                            Exercice annee = (Exercice) Oannee;
-                            if (annee.getNom().equals(selectedAnnee)) {
-                                System.out.println(" * " + annee.getNom());
-                                exercice = annee;
-                                break;
-                            }
-
+                    public boolean isCriteresRespectes(Object object) {
+                        Exercice annee = (Exercice) object;
+                        if (annee.getNom().equals(selectedAnnee)) {
+                            return true;
+                        } else {
+                            return false;
                         }
+                    }
+
+                    @Override
+                    public void onElementLoaded(String message, Object data) {
+                        exercice = (Exercice) data;
+                    }
+
+                    @Override
+                    public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                         loadMonnaies();
                     }
 
@@ -136,18 +144,28 @@ public class GestionPaiements {
 
     private void loadAyantDroit() {
         ayantDroits.removeAllElements();
-        fm.fm_ouvrirTout(0, Ayantdroit.class, UtilFees.DOSSIER_AYANT_DROIT, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Ayantdroit.class, UtilObjet.DOSSIER_AYANT_DROIT, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Ayantdroit classe = (Ayantdroit) o;
-                    if (classe.getIdExercice() == exercice.getId()) {
-                        ayantDroits.add(classe);
-                        System.out.println(" * " + classe.toString());
-                    }
+            public boolean isCriteresRespectes(Object object) {
+                Ayantdroit ayantdroit = (Ayantdroit) object;
+                if (ayantdroit.getIdExercice() == exercice.getId() && eleve.getSignature() == ayantdroit.getSignatureEleve()) {
+                    return true;
+                } else {
+                    return false;
                 }
-                initUI(NOM + " - " + eleve.getNom() + " " + eleve.getPrenom());
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Ayantdroit ayantdroit = (Ayantdroit) data;
+                ayantDroits.add(ayantdroit);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                if (eleve != null) {
+                    initUI(NOM + " - " + eleve.getNom() + " " + eleve.getPrenom());
+                }
             }
 
             @Override
@@ -166,17 +184,25 @@ public class GestionPaiements {
 
     private void loadClasses() {
         classes.removeAllElements();
-        fm.fm_ouvrirTout(0, Classe.class, UtilFees.DOSSIER_CLASSE, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Classe.class, UtilObjet.DOSSIER_CLASSE, 1, 100, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Classe classe = (Classe) o;
-                    if (classe.getIdExercice() == exercice.getId()) {
-                        classes.add(classe);
-                        System.out.println(" * " + classe.toString());
-                    }
+            public boolean isCriteresRespectes(Object object) {
+                Classe classe = (Classe) object;
+                if (classe.getIdExercice() == exercice.getId() && eleve.getIdClasse() == classe.getId()) {
+                    return true;
+                } else {
+                    return false;
                 }
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Classe classe = (Classe) data;
+                classes.add(classe);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadAyantDroit();
             }
 
@@ -196,17 +222,25 @@ public class GestionPaiements {
 
     private void loadMonnaies() {
         monnaies.removeAllElements();
-        fm.fm_ouvrirTout(0, Monnaie.class, UtilFees.DOSSIER_MONNAIE, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Monnaie.class, UtilObjet.DOSSIER_MONNAIE, 1, 100, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Monnaie classe = (Monnaie) o;
-                    if (classe.getIdExercice() == exercice.getId()) {
-                        monnaies.add(classe);
-                        System.out.println(" * " + classe.toString());
-                    }
+            public boolean isCriteresRespectes(Object object) {
+                Monnaie monnaie = (Monnaie) object;
+                if (monnaie.getIdExercice() == exercice.getId()) {
+                    return true;
+                } else {
+                    return false;
                 }
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Monnaie monnaie = (Monnaie) data;
+                monnaies.add(monnaie);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadPeriodes();
             }
 
@@ -226,17 +260,26 @@ public class GestionPaiements {
 
     private void loadPeriodes() {
         periodes.removeAllElements();
-        fm.fm_ouvrirTout(0, Periode.class, UtilFees.DOSSIER_PERIODE, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Periode.class, UtilObjet.DOSSIER_PERIODE, 1, 1000, new EcouteurOuverture() {
+
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Periode classe = (Periode) o;
-                    if (classe.getIdExercice() == exercice.getId()) {
-                        periodes.add(classe);
-                        System.out.println(" * " + classe.toString());
-                    }
+            public boolean isCriteresRespectes(Object object) {
+                Periode periode = (Periode) object;
+                if (periode.getIdExercice() == exercice.getId()) {
+                    return true;
+                } else {
+                    return false;
                 }
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Periode periode = (Periode) data;
+                periodes.add(periode);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadPaiements();
             }
 
@@ -256,17 +299,25 @@ public class GestionPaiements {
 
     private void loadPaiements() {
         paiements.removeAllElements();
-        fm.fm_ouvrirTout(0, Paiement.class, UtilFees.DOSSIER_PAIEMENT, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Paiement.class, UtilObjet.DOSSIER_PAIEMENT, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Paiement paiement = (Paiement) o;
-                    if (paiement.getIdExercice() == exercice.getId() && paiement.getIdEleve() == eleve.getId()) {
-                        paiements.add(paiement);
-                        System.out.println(" * " + paiement.toString());
-                    }
+            public boolean isCriteresRespectes(Object object) {
+                Paiement paiement = (Paiement) object;
+                if (paiement.getIdExercice() == exercice.getId() && paiement.getIdEleve() == eleve.getId()) {
+                    return true;
+                } else {
+                    return false;
                 }
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Paiement paiement = (Paiement) data;
+                paiements.add(paiement);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadFrais();
             }
 
@@ -286,25 +337,25 @@ public class GestionPaiements {
 
     private void loadFrais() {
         frais.removeAllElements();
-        fm.fm_ouvrirTout(0, Frais.class, UtilFees.DOSSIER_FRAIS, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Frais.class, UtilObjet.DOSSIER_FRAIS, 1, 1000, new EcouteurOuverture() {
             @Override
-            public void onDone(String message, Vector data) {
-                System.out.println(message);
-                for (Object o : data) {
-                    Frais oFrais = (Frais) o;
-                    if (oFrais.getIdExercice() == exercice.getId()) {
-                        frais.add(oFrais);
-                        System.out.println(" * " + oFrais.getNom());
-                        System.out.println("Liaison classe:");
-                        for (LiaisonFraisClasse lc : oFrais.getLiaisonsClasses()) {
-                            System.out.println(" ** " + lc.toString());
-                        }
-                        System.out.println("Liaison période:");
-                        for (LiaisonFraisPeriode lp : oFrais.getLiaisonsPeriodes()) {
-                            System.out.println(" ** " + lp.toString());
-                        }
-                    }
+            public boolean isCriteresRespectes(Object object) {
+                Frais oFrais = (Frais) object;
+                if (oFrais.getIdExercice() == exercice.getId()) {
+                    return true;
+                } else {
+                    return false;
                 }
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Frais oFrais = (Frais) data;
+                frais.add(oFrais);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 loadClasses();
             }
 
@@ -328,30 +379,51 @@ public class GestionPaiements {
         //On précise qui est en train d'enregistrer cette donnée
         for (Paiement ia : listeNewEleves) {
             if (ia.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ia.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
-                ia.setIdExercice(annee.getId());
-                ia.setIdEleve(eleve.getId());
-                ia.setBeta(InterfaceExercice.BETA_EXISTANT);
-                listeNewElevesTempo.add(ia);
+                canBeSaved = true;
+                
+                //Pour id étrangère incomplètes
+                if (ia.getIdFrais() == -1) {
+                    canBeSaved = false;
+                    JOptionPane.showMessageDialog(panel, "Désolé,\nVeuillez préciser le frais que " + eleve.getNom()+" est en train de payer!", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
+                    panel.setBtEnregistrerNouveau();
+                }
+                if (ia.getIdPeriode() == -1) {
+                    canBeSaved = false;
+                    JOptionPane.showMessageDialog(panel, "Désolé,\nVeuillez préciser la période pour laquelle " + eleve.getNom()+" est en train de payer!", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
+                    panel.setBtEnregistrerNouveau();
+                }
+                if (ia.getMontant() == 0) {
+                    canBeSaved = false;
+                    JOptionPane.showMessageDialog(panel, "Désolé,\nLe montant ne peut pas être égale à Zéro (0)!", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
+                    panel.setBtEnregistrerNouveau();
+                }
+
+                if (canBeSaved == true) {
+                    ia.setIdExercice(annee.getId());
+                    ia.setIdEleve(eleve.getId());
+                    ia.setBeta(InterfaceExercice.BETA_EXISTANT);
+                    listeNewElevesTempo.add(ia);
+                }
             }
         }
         if (!listeNewElevesTempo.isEmpty()) {
-            fm.fm_enregistrer(0, listeNewElevesTempo, UtilFees.DOSSIER_PAIEMENT, new EcouteurStandard() {
+            fm.fm_enregistrer(0, listeNewElevesTempo, UtilObjet.DOSSIER_PAIEMENT, new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {
-                    System.out.println(message);
+                    //System.out.println(message);
                     //Après enregistrement
                     ee.onDone("Paiements enregistrés !");
                 }
 
                 @Override
                 public void onError(String message) {
-                    System.err.println(message);
+                    //System.err.println(message);
                     ee.onError("Erreur !");
                 }
 
                 @Override
                 public void onProcessing(String message) {
-                    System.out.println(message);
+                    //System.out.println(message);
                     ee.onUploading("Enregistrement...");
                 }
             });
@@ -362,24 +434,19 @@ public class GestionPaiements {
         panel = new PanelFacture(couleurBasique, progress, tabOnglet, getData(), new EcouteurFacture() {
             @Override
             public void onEnregistre(SortiesFacture sortiesFacture) {
-                System.out.println("ENREGISTREMENT DES PAIEMENTS DE L'EVELEVE EN COURS.");
                 savePaiements(sortiesFacture, sortiesFacture.getEcouteurEnregistrement(), utilisateur, exercice);
             }
 
             @Override
             public void onDetruitPaiement(int idPaiement) {
-                System.out.println("DESTRUCTION DU PAIEMENT " + idPaiement);
                 if (idPaiement != -1 && fm != null) {
-                    boolean rep = fm.fm_supprimer(UtilFees.DOSSIER_PAIEMENT, idPaiement);
-                    System.out.println("SUPPRESSION = " + rep);
-
-                    //On doit actualiser le gestionnaire parent
+                    boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_PAIEMENT, idPaiement);
                 }
             }
 
             @Override
             public void onDetruitTousLesPaiements(int idEleve, int idExercice) {
-                System.out.println("DESTRUCTION DES PAIEMENTS DE L'ELEVE " + idEleve + ", POUR l'ANNEE SCOLAIRE " + idExercice);
+                //System.out.println("DESTRUCTION DES PAIEMENTS DE L'ELEVE " + idEleve + ", POUR l'ANNEE SCOLAIRE " + idExercice);
             }
         }, new EcouteurActualisationFacture() {
             @Override
@@ -399,6 +466,25 @@ public class GestionPaiements {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

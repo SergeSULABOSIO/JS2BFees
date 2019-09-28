@@ -1,0 +1,16 @@
+{
+  "id" : 110,
+  "idEleve" : 15,
+  "idExercice" : 10,
+  "idFrais" : 10,
+  "idPeriode" : 17,
+  "mode" : 0,
+  "reference" : "1565948776244",
+  "nomEleve" : "MUTOMBO KALONGO JEAN",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MUTOMBO KALONGO JEAN",
+  "montant" : 125.0,
+  "date" : 1565948776244,
+  "beta" : 0,
+  "referenceTransaction" : "1565948776244"
+}

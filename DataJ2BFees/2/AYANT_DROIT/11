@@ -1,0 +1,40 @@
+{
+  "id" : 11,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 10,
+  "idEleve" : -1,
+  "eleve" : "MUKALAYI BANZA JEAN",
+  "listeLiaisons" : [ {
+    "signatureEleve" : -1,
+    "signatureFrais" : 0,
+    "idFrais" : 10,
+    "montant" : 0.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  }, {
+    "signatureEleve" : -1,
+    "signatureFrais" : 0,
+    "idFrais" : 11,
+    "montant" : 0.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  }, {
+    "signatureEleve" : -1,
+    "signatureFrais" : 0,
+    "idFrais" : 22,
+    "montant" : 0.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  }, {
+    "signatureEleve" : -1,
+    "signatureFrais" : 0,
+    "idFrais" : 9,
+    "montant" : 0.0,
+    "idMonnaie" : 11,
+    "monnaie" : "$"
+  } ],
+  "signature" : -7195430949647296309,
+  "signatureEleve" : 5306193067526852931,
+  "beta" : 0
+}

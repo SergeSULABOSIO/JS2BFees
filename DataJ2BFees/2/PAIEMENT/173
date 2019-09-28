@@ -1,0 +1,16 @@
+{
+  "id" : 173,
+  "idEleve" : 43,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566207913336",
+  "nomEleve" : "MUTANDA NZOLA FISTON",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "MUTANDA NZOLA FISTON",
+  "montant" : 50.0,
+  "date" : 1566207913336,
+  "beta" : 0,
+  "referenceTransaction" : "1566207913336"
+}

@@ -1,0 +1,16 @@
+{
+  "id" : 233,
+  "idEleve" : 70,
+  "idExercice" : 10,
+  "idFrais" : 22,
+  "idPeriode" : 16,
+  "mode" : 0,
+  "reference" : "1566210733158",
+  "nomEleve" : "YIMBI SELENGE JERRY",
+  "nomFrais" : "LABORATOIRE",
+  "nomDepositaire" : "YIMBI SELENGE JERRY",
+  "montant" : 50.0,
+  "date" : 1566210733158,
+  "beta" : 0,
+  "referenceTransaction" : "1566210733158"
+}

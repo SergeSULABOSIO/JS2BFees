@@ -102,7 +102,7 @@ public class Principal extends javax.swing.JFrame {
             comboListeAnneesScolaires.removeItemAt(i);
         }
 
-        fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 0, 100, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 100, new EcouteurOuverture() {
 
             @Override
             public boolean isCriteresRespectes(Object object) {
@@ -553,8 +553,8 @@ public class Principal extends javax.swing.JFrame {
         //on enlèves les autres elements du combo, sauf le premier element
         comboListeAnneesScolaires.removeAllItems();
         comboListeAnneesScolaires.addItem("-- Liste d'Années --");
-        
-        fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 100, new EcouteurOuverture() {
+        System.out.println("CHARGEMENT DES ANNEES SCOLAIRES....");
+        fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
 
             @Override
             public boolean isCriteresRespectes(Object object) {
@@ -564,6 +564,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onElementLoaded(String message, Object data) {
                 Exercice annee = (Exercice) data;
+                System.out.println("\t - " + annee.toString());
                 if (!listeExercTempo.contains(annee)) {
                     comboListeAnneesScolaires.addItem(annee.getNom());
                     listeExercTempo.add(annee);

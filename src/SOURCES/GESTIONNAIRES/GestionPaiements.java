@@ -438,9 +438,9 @@ public class GestionPaiements {
             }
 
             @Override
-            public void onDetruitPaiement(int idPaiement) {
+            public void onDetruitPaiement(int idPaiement, long signature) {
                 if (idPaiement != -1 && fm != null) {
-                    boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_PAIEMENT, idPaiement);
+                    boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_PAIEMENT, idPaiement, signature);
                 }
             }
 

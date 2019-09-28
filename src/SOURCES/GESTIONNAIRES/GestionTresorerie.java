@@ -780,14 +780,14 @@ public class GestionTresorerie {
             }
 
             @Override
-            public void onDetruitElements(int idElement, int index) {
+            public void onDetruitElement(int idElement, int index, long signature) {
                 if (idElement != -1 && idElement != -100) {
                     switch (index) {
                         case 0://ENCAISSEMENT
-                            fm.fm_supprimer(UtilObjet.DOSSIER_ENCAISSEMENT, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_ENCAISSEMENT, idElement, signature);
                             break;
                         case 1://DECAISSEMENT
-                            fm.fm_supprimer(UtilObjet.DOSSIER_DECAISSEMENT, idElement);
+                            fm.fm_supprimer(UtilObjet.DOSSIER_DECAISSEMENT, idElement, signature);
                             break;
                         default:
                     }

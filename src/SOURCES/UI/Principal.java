@@ -88,7 +88,7 @@ public class Principal extends javax.swing.JFrame {
         fm.fm_setEcouteurFenetre(moi);  // On écoute désormais les mouvements de la fenetre
         lf_initEcouteurExercice();
         lf_construirePageLogin();
-        loadUserSession();
+        loadUserSession();//
     }
 
     private void lf_initCouleurs() {

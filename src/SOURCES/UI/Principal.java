@@ -101,7 +101,7 @@ public class Principal extends javax.swing.JFrame {
         for (int i = nbRow - 1; 0 < i; i--) {
             comboListeAnneesScolaires.removeItemAt(i);
         }
-
+        
         fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 10000, new EcouteurOuverture() {
 
             @Override

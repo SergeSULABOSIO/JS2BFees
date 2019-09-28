@@ -102,7 +102,7 @@ public class Principal extends javax.swing.JFrame {
             comboListeAnneesScolaires.removeItemAt(i);
         }
 
-        fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 100, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 10000, new EcouteurOuverture() {
 
             @Override
             public boolean isCriteresRespectes(Object object) {

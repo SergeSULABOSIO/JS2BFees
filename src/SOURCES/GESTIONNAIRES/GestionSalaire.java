@@ -423,10 +423,10 @@ public class GestionSalaire {
             }
 
             @Override
-            public void onDetruitElement(int idElement) {
+            public void onDetruitElement(int idElement, long signature) {
                 //System.out.println("Suppression de la fiche " + idElement);
                 if (idElement != -1) {
-                    fm.fm_supprimer(UtilObjet.DOSSIER_FICHE_DE_PAIE, idElement);
+                    fm.fm_supprimer(UtilObjet.DOSSIER_FICHE_DE_PAIE, idElement, signature);
                 }
             }
         });

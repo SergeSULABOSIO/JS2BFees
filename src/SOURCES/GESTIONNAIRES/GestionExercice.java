@@ -982,7 +982,7 @@ public class GestionExercice {
             }
 
             @Override
-            public void onDetruitExercice(int idExercice) {
+            public void onDetruitExercice(int idExercice, long signature) {
                 System.out.println("DANGER !!!!!! EXERCICE: Destruction de l'Exercice " + idExercice);
                 if (idExercice != -1) {
                     Exercice anneeSupp = (Exercice) fm.fm_ouvrir(Exercice.class, UtilObjet.DOSSIER_ANNEE, idExercice);

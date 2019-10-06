@@ -1,0 +1,13 @@
+{
+  "id" : 3,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "nom" : "CONSOMMABLES DU BUREAU",
+  "limiteAnnuelle" : 500.0,
+  "idMonnaie" : 1,
+  "signatureMonnaie" : -5332460641512966368,
+  "monnaie" : "$",
+  "signature" : -7257958639035001110,
+  "beta" : 0
+}

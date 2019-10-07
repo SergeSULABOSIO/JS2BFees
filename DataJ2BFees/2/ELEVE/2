@@ -1,0 +1,18 @@
+{
+  "id" : 2,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 1,
+  "signature" : 1023034014727016824,
+  "classe" : "1e",
+  "adresse" : "iTAGA",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "EKUMBO",
+  "postnom" : "DODO",
+  "prenom" : "MARLONE",
+  "status" : 0,
+  "sexe" : 1,
+  "dateNaissance" : 1570482454028,
+  "beta" : 0
+}

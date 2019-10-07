@@ -1,0 +1,18 @@
+{
+  "id" : 1,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 2,
+  "signature" : -6376015424605507519,
+  "classe" : "2e",
+  "adresse" : "ITAGA",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "SULA",
+  "postnom" : "BOSIO",
+  "prenom" : "SERGE",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1570482399330,
+  "beta" : 0
+}

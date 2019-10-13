@@ -13,7 +13,7 @@
     "idClasse" : 1,
     "nomClasse" : "1e",
     "signatureClasse" : -8369733836492610566,
-    "montant" : 50.0
+    "montant" : 30.0
   }, {
     "idClasse" : 2,
     "nomClasse" : "2e",
@@ -44,17 +44,17 @@
     "idPeriode" : 1,
     "nomPeriode" : "1er Trimestre",
     "signaturePeriode" : -144385757858868075,
-    "pourcentage" : 33.0
+    "pourcentage" : 100.0
   }, {
     "idPeriode" : 2,
     "nomPeriode" : "2ème Trimestre",
     "signaturePeriode" : -8447245539924243144,
-    "pourcentage" : 33.0
+    "pourcentage" : 0.0
   }, {
     "idPeriode" : 3,
     "nomPeriode" : "3ème Trimestre",
     "signaturePeriode" : -8638031160854517409,
-    "pourcentage" : 33.0
+    "pourcentage" : 0.0
   } ],
   "beta" : 0
 }

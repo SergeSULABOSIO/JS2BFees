@@ -66,6 +66,7 @@ public class Principal extends javax.swing.JFrame {
     public GestionTresorerie gestionTresorerie = null;
     public GestionSalaire gestionSalaire = null;
     public Vector<Exercice> listeExercTempo = new Vector<>();
+    public int idExerciceSelected;
 
     /**
      * Creates new form Principal
@@ -207,14 +208,14 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
             
-            int idExerciceSelected = -1;
-            if (exerciceConnected != null) {
-                idExerciceSelected = exerciceConnected.getId();
-            }
-
+            idExerciceSelected = (exerciceConnected != null) ? idExerciceSelected = exerciceConnected.getId(): -1;
+            
             fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
                 @Override
                 public void onSuccess(String message) {
+                    if(idExerciceSelected == -1){
+                        lf_construireListeAnneesScolaires();
+                    }
                     lf_progress(false, message, progressEtat, 0);
                 }
 

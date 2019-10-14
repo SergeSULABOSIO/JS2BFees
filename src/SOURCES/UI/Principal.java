@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package SOURCES.UI;
 
 import BEAN_BARRE_OUTILS.BarreOutils;
@@ -101,7 +100,7 @@ public class Principal extends javax.swing.JFrame {
         for (int i = nbRow - 1; 0 < i; i--) {
             comboListeAnneesScolaires.removeItemAt(i);
         }
-        
+
         fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 10000, new EcouteurOuverture() {
 
             @Override
@@ -198,35 +197,37 @@ public class Principal extends javax.swing.JFrame {
             lf_construirePageLogin();
         }
     }
-    
-    private void lf_synchroniser(){
-        if(fm != null){
+
+    private void lf_synchroniser() {
+        if (fm != null) {
             Exercice exerciceConnected = null;
-            for(Exercice ex: listeExercTempo){
-                if((comboListeAnneesScolaires.getSelectedItem()+"").equals(ex.getNom())){
+            for (Exercice ex : listeExercTempo) {
+                if ((comboListeAnneesScolaires.getSelectedItem() + "").equals(ex.getNom())) {
                     exerciceConnected = ex;
                 }
             }
-            if(exerciceConnected != null){
-                fm.fm_synchroniser(session.getUtilisateur(), exerciceConnected.getId(), new EcouteurSynchronisation() {
-                    @Override
-                    public void onSuccess(String message) {
-                        lf_progress(false, message, progressEtat, 0);
-                    }
-
-                    @Override
-                    public void onEchec(String message) {
-                        lf_progress(false, message, progressEtat, 0);
-                    }
-
-                    @Override
-                    public void onProcessing(String message, int pourcentage) {
-                        lf_progress(true, message, progressEtat, pourcentage);
-                    }
-                });
-            }else{
-                JOptionPane.showMessageDialog(moi, "Synchronisation", "Exercice non reconnu", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
+            
+            int idExerciceSelected = -1;
+            if (exerciceConnected != null) {
+                idExerciceSelected = exerciceConnected.getId();
             }
+
+            fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
+                @Override
+                public void onSuccess(String message) {
+                    lf_progress(false, message, progressEtat, 0);
+                }
+
+                @Override
+                public void onEchec(String message) {
+                    lf_progress(false, message, progressEtat, 0);
+                }
+
+                @Override
+                public void onProcessing(String message, int pourcentage) {
+                    lf_progress(true, message, progressEtat, pourcentage);
+                }
+            });
         }
     }
 
@@ -255,9 +256,9 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void lf_progress(boolean afficher, String message, JProgressBar progressBar, int pourcentage) {
-        if(pourcentage == -1){
+        if (pourcentage == -1) {
             progressBar.setIndeterminate(afficher);
-        }else{
+        } else {
             progressBar.setValue(pourcentage);
         }
         progressBar.setVisible(afficher);
@@ -309,10 +310,10 @@ public class Principal extends javax.swing.JFrame {
         btEtatLicence.setIcon(icones.getAdresse_01());
         btEtatBackup.setIcon(icones.getServeur_01());
         barreEtat.setVisible(true);
-        
+
         lf_construireListeAnneesScolaires();
         lf_construireBoutons();
-        
+
         Utilisateur user = session.getUtilisateur();
         String texteTitre = "";
         if (user != null) {
@@ -322,7 +323,7 @@ public class Principal extends javax.swing.JFrame {
         } else {
             btEtatUser.setVisible(false);
         }
-        
+
         Entreprise ese = session.getEntreprise();
         if (ese != null) {
             btEtatEntreprise.setText(ese.getNom());
@@ -350,7 +351,7 @@ public class Principal extends javax.swing.JFrame {
         if (btAnnee != null && btInscription != null && btLicence != null && btLitige != null && btPaie != null && btTresorerie != null) {
             if (session != null) {
                 Utilisateur user = session.getUtilisateur();
-                
+
                 if (comboListeAnneesScolaires.getSelectedIndex() == 0) {    //tentative de création
                     btAnnee.setText("Démarrer", 12, true);
                     btAnnee.setInfosBulle("Commencer par créer un Exercice (Année scolaire ou Année académique)");
@@ -1051,7 +1052,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void btEtatBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatBackupActionPerformed
         // TODO add your handling code here:
-        UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_MODIFIER_ARCHIVES);
+        lf_synchroniser();
     }//GEN-LAST:event_btEtatBackupActionPerformed
 
     private void btEtatUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatUserActionPerformed

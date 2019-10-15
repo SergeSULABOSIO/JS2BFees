@@ -1,0 +1,17 @@
+{
+  "id" : 2,
+  "idEleve" : 1,
+  "idExercice" : 1,
+  "idFrais" : 2,
+  "idPeriode" : 1,
+  "mode" : 0,
+  "reference" : "1571144827944",
+  "nomEleve" : "SULA BOSIO SERGE",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "SULA BOSIO SERGE",
+  "montant" : 33.0,
+  "date" : 1571144827944,
+  "signature" : 4217615986551674637,
+  "beta" : 0,
+  "referenceTransaction" : "1571144827944"
+}

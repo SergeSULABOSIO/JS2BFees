@@ -1,0 +1,17 @@
+{
+  "id" : 4,
+  "idEleve" : 2,
+  "idExercice" : 1,
+  "idFrais" : 2,
+  "idPeriode" : 2,
+  "mode" : 0,
+  "reference" : "1571144917509",
+  "nomEleve" : "EKUMBO DODO MARLONE",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "EKUMBO DODO MARLONE",
+  "montant" : 16.5,
+  "date" : 1571144917509,
+  "signature" : -2255036434900290787,
+  "beta" : 0,
+  "referenceTransaction" : "1571144917509"
+}

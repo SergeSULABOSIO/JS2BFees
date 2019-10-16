@@ -1,0 +1,15 @@
+{
+  "id" : 4,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 2,
+  "nom" : "Mathématique",
+  "enseignant" : "Serge SULA",
+  "signatureEnseignant" : 6854922473652895762,
+  "idEnseignant" : 2,
+  "classe" : "1e",
+  "signatureClasse" : 2335035952975382551,
+  "idClasse" : 7,
+  "signature" : 2154846715572720974,
+  "beta" : 0
+}

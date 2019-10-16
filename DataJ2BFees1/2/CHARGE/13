@@ -1,0 +1,13 @@
+{
+  "id" : 13,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 2,
+  "nom" : "TRANSPORT",
+  "limiteAnnuelle" : 1000.0,
+  "idMonnaie" : 3,
+  "signatureMonnaie" : -4296982597515608307,
+  "monnaie" : "$",
+  "signature" : -1803518190480707578,
+  "beta" : 0
+}

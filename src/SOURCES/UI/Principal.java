@@ -208,7 +208,11 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
             
-            idExerciceSelected = (exerciceConnected != null) ? idExerciceSelected = exerciceConnected.getId(): -1;
+            if((exerciceConnected != null)){
+                idExerciceSelected =  exerciceConnected.getId();
+            }else{
+                idExerciceSelected = -1;
+            }
             
             fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
                 @Override
@@ -341,7 +345,7 @@ public class Principal extends javax.swing.JFrame {
         } else {
             btEtatLicence.setVisible(false);
         }
-        btEtatBackup.setText("<Pas disponible>");
+        btEtatBackup.setText("Synchroniser");
 
         moi.setTitle(texteTitre);
 

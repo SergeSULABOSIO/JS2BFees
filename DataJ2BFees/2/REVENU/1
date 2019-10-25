@@ -4,10 +4,10 @@
   "idUtilisateur" : 12,
   "idExercice" : 1,
   "idMonnaie" : 1,
-  "signatureMonnaie" : 602412493961078028,
+  "signatureMonnaie" : -6260773919042109085,
   "nom" : "FRAIS SCOLAIRES",
   "monnaie" : "$",
   "volumeAnnuel" : 100000.0,
-  "signature" : 1728713259536338535,
+  "signature" : -4672462282082279375,
   "beta" : 0
 }

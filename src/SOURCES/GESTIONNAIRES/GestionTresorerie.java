@@ -28,7 +28,7 @@ import Source.Objet.CouleurBasique;
 import Source.Objet.Decaissement;
 import Source.Objet.Encaissement;
 import Source.Objet.Entreprise;
-import Source.Objet.Exercice;
+import Source.Objet.Annee;
 import Source.Objet.Frais;
 import Source.Objet.Monnaie;
 import Source.Objet.Revenu;
@@ -58,7 +58,7 @@ public class GestionTresorerie {
     public JTabbedPane tabOnglet;
     public JProgressBar progress;
 
-    public Exercice exercice = null;
+    public Annee exercice = null;
     public FileManager fm;
 
     //les paramètres
@@ -144,16 +144,16 @@ public class GestionTresorerie {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Annee.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
                     @Override
                     public boolean isCriteresRespectes(Object object) {
-                        Exercice annee = (Exercice) object;
+                        Annee annee = (Annee) object;
                         return (annee.getNom().equals(selectedAnnee));
                     }
 
                     @Override
                     public void onElementLoaded(String message, Object data) {
-                        Exercice annee = (Exercice) data;
+                        Annee annee = (Annee) data;
                         exercice = annee;
                     }
 
@@ -628,7 +628,7 @@ public class GestionTresorerie {
         }
     }
 
-    private void saveEncaissements(SortiesTresorerie se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveEncaissements(SortiesTresorerie se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Encaissement> listeNewEncaissements = se.getListeEncaissements();
         Vector<Encaissement> listeNewEncaissementsTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -686,7 +686,7 @@ public class GestionTresorerie {
         }
     }
 
-    private void saveDecaissements(SortiesTresorerie se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveDecaissements(SortiesTresorerie se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Decaissement> listeNewDecaissements = se.getListeDecaissements();
         Vector<Decaissement> listeNewDecaissementsTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée

@@ -6,8 +6,8 @@
   "nom" : "TRANSPORT",
   "limiteAnnuelle" : 1000.0,
   "idMonnaie" : 1,
-  "signatureMonnaie" : 602412493961078028,
+  "signatureMonnaie" : -6260773919042109085,
   "monnaie" : "$",
-  "signature" : -3445871067837153032,
+  "signature" : 2334953028414103578,
   "beta" : 0
 }

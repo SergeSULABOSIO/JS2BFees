@@ -22,7 +22,7 @@ import Source.Objet.CouleurBasique;
 import Source.Objet.Echeance;
 import Source.Objet.Eleve;
 import Source.Objet.Entreprise;
-import Source.Objet.Exercice;
+import Source.Objet.Annee;
 import Source.Objet.Frais;
 import Source.Objet.Litige;
 import Source.Objet.Monnaie;
@@ -52,7 +52,7 @@ public class GestionLitiges {
     public JTabbedPane tabOnglet;
     public JProgressBar progress;
 
-    public Exercice exercice = null;
+    public Annee exercice = null;
     public FileManager fm;
 
     //Parametres
@@ -133,16 +133,16 @@ public class GestionLitiges {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 100, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Annee.class, UtilObjet.DOSSIER_ANNEE, 1, 100, new EcouteurOuverture() {
                     @Override
                     public boolean isCriteresRespectes(Object object) {
-                        Exercice annee = (Exercice) object;
+                        Annee annee = (Annee) object;
                         return (annee.getNom().equals(selectedAnnee));
                     }
 
                     @Override
                     public void onElementLoaded(String message, Object data) {
-                        Exercice annee = (Exercice) data;
+                        Annee annee = (Annee) data;
                         exercice = annee;
                     }
 

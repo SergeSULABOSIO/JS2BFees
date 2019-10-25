@@ -19,7 +19,6 @@ import Source.Callbacks.EcouteurCrossCanalCharge;
 import Source.Callbacks.EcouteurCrossCanalRevenu;
 import Source.Callbacks.EcouteurEnregistrement;
 import Source.Callbacks.EcouteurStandard;
-import Source.Interface.InterfaceExercice;
 import Source.Interface.InterfaceFrais;
 import Source.Interface.InterfaceMonnaie;
 import Source.Objet.Agent;
@@ -28,7 +27,7 @@ import Source.Objet.Classe;
 import Source.Objet.CouleurBasique;
 import Source.Objet.Cours;
 import Source.Objet.Entreprise;
-import Source.Objet.Exercice;
+import Source.Objet.Annee;
 import Source.Objet.Frais;
 import Source.Objet.LiaisonFraisClasse;
 import Source.Objet.LiaisonFraisPeriode;
@@ -42,6 +41,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
+import Source.Interface.InterfaceAnnee;
 
 /**
  *
@@ -59,7 +59,7 @@ public class GestionExercice {
     public JProgressBar progress;
     //private SortiesExercice sortiesExercice = null;
 
-    private Exercice newIannee = null;
+    private Annee newIannee = null;
     private FileManager fm;
     private Vector<Agent> agents = new Vector<>();
     private Vector<Charge> charges = new Vector<>();
@@ -92,7 +92,7 @@ public class GestionExercice {
         this.parametreExercice = new ParametreExercice(entreprise, utilisateur, monnaie_output);
     }
 
-    public void ga_setDonnees(Exercice anneeExistant, Vector<Agent> agents, Vector<Charge> charges, Vector<Classe> classes, Vector<Cours> cours, Vector<Frais> frais, Vector<Monnaie> monnaies, Vector<Revenu> revenus, Vector<Periode> periodes) {
+    public void ga_setDonnees(Annee anneeExistant, Vector<Agent> agents, Vector<Charge> charges, Vector<Classe> classes, Vector<Cours> cours, Vector<Frais> frais, Vector<Monnaie> monnaies, Vector<Revenu> revenus, Vector<Periode> periodes) {
         if (anneeExistant != null) {
             newIannee = anneeExistant;
         }
@@ -115,10 +115,10 @@ public class GestionExercice {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Annee.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
                     @Override
                     public boolean isCriteresRespectes(Object object) {
-                        Exercice annee = (Exercice) object;
+                        Annee annee = (Annee) object;
                         if (annee.getNom().equals(selectedAnnee)) {
                             return true;
                         } else {
@@ -128,7 +128,7 @@ public class GestionExercice {
 
                     @Override
                     public void onElementLoaded(String message, Object data) {
-                        Exercice annee = (Exercice) data;
+                        Annee annee = (Annee) data;
                         newIannee = annee;
                     }
 
@@ -483,7 +483,7 @@ public class GestionExercice {
                         //DEBUT D'ENREGISTREMENT
                         newIannee = se.getExercice();
                         System.out.println(" =>EXERCICE EXISTANT: " + newIannee.toString());
-                        if (newIannee.getBeta() == InterfaceExercice.BETA_MODIFIE || newIannee.getBeta() == InterfaceExercice.BETA_NOUVEAU) {
+                        if (newIannee.getBeta() == InterfaceAnnee.BETA_MODIFIE || newIannee.getBeta() == InterfaceAnnee.BETA_NOUVEAU) {
                             saveExercice(se, ee, newIannee, user);
                         } else {
                             //On enregistre les éventuelles éléments dépendant de l'année scolaire
@@ -502,16 +502,16 @@ public class GestionExercice {
         }
     }
 
-    private void saveChildes(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice newIannee) {
+    private void saveChildes(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Annee newIannee) {
         saveMonnaies(se, ee, user, newIannee);
     }
 
-    private void saveExercice(SortiesExercice se, EcouteurEnregistrement ee, Exercice newIa, Utilisateur user) {
+    private void saveExercice(SortiesExercice se, EcouteurEnregistrement ee, Annee newIa, Utilisateur user) {
         System.out.println(" * EXERCICE: " + newIannee.toString());
         //On précise qui est en train d'enregistrer cette donnée
         newIa.setIdUtilisateur(user.getId());
         newIa.setIdEntreprise(user.getIdEntreprise());
-        newIa.setBeta(InterfaceExercice.BETA_EXISTANT);
+        newIa.setBeta(InterfaceAnnee.BETA_EXISTANT);
         newIannee = newIa;
         fm.fm_enregistrer(newIannee, UtilObjet.DOSSIER_ANNEE, new EcouteurStandard() {
             @Override
@@ -549,7 +549,7 @@ public class GestionExercice {
         });
     }
 
-    private void saveMonnaies(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveMonnaies(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Monnaie> listeNewMonnaie = se.getListeMonnaies();
         Vector<Monnaie> listeNewMonnaieTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -558,7 +558,7 @@ public class GestionExercice {
                 im.setIdExercice(annee.getId());
                 im.setIdUtilisateur(user.getId());
                 im.setIdEntreprise(user.getIdEntreprise());
-                im.setBeta(InterfaceExercice.BETA_EXISTANT);
+                im.setBeta(InterfaceAnnee.BETA_EXISTANT);
                 listeNewMonnaieTempo.add(im);
             }
         }
@@ -590,7 +590,7 @@ public class GestionExercice {
         }
     }
 
-    private void saveClasses(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveClasses(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Classe> listeNewClasses = se.getListeClasse();
         Vector<Classe> listeNewClassesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -599,7 +599,7 @@ public class GestionExercice {
                 ic.setIdExercice(annee.getId());
                 ic.setIdUtilisateur(user.getId());
                 ic.setIdEntreprise(user.getIdEntreprise());
-                ic.setBeta(InterfaceExercice.BETA_EXISTANT);
+                ic.setBeta(InterfaceAnnee.BETA_EXISTANT);
                 listeNewClassesTempo.add(ic);
             }
         }
@@ -631,7 +631,7 @@ public class GestionExercice {
         }
     }
 
-    private void savePeriodes(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void savePeriodes(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Periode> listeNewPeriodes = se.getListePeriodes();
         Vector<Periode> listeNewPeriodesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -640,7 +640,7 @@ public class GestionExercice {
                 ip.setIdExercice(annee.getId());
                 ip.setIdUtilisateur(user.getId());
                 ip.setIdEntreprise(user.getIdEntreprise());
-                ip.setBeta(InterfaceExercice.BETA_EXISTANT);
+                ip.setBeta(InterfaceAnnee.BETA_EXISTANT);
                 listeNewPeriodesTempo.add(ip);
             }
         }
@@ -672,7 +672,7 @@ public class GestionExercice {
         }
     }
 
-    private void saveAgents(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveAgents(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Agent> listeNewAgents = se.getListeAgents();
         Vector<Agent> listeNewAgentsTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -681,7 +681,7 @@ public class GestionExercice {
                 ia.setIdExercice(annee.getId());
                 ia.setIdUtilisateur(user.getId());
                 ia.setIdEntreprise(user.getIdEntreprise());
-                ia.setBeta(InterfaceExercice.BETA_EXISTANT);
+                ia.setBeta(InterfaceAnnee.BETA_EXISTANT);
                 listeNewAgentsTempo.add(ia);
             }
         }
@@ -779,7 +779,7 @@ public class GestionExercice {
         return -1;
     }
 
-    private void saveCours(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveCours(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Cours> listeNewCours = se.getListeCours();
         Vector<Cours> listeNewCoursTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -790,7 +790,7 @@ public class GestionExercice {
                 ic.setIdExercice(annee.getId());
                 ic.setIdUtilisateur(user.getId());
                 ic.setIdEntreprise(user.getIdEntreprise());
-                ic.setBeta(InterfaceExercice.BETA_EXISTANT);
+                ic.setBeta(InterfaceAnnee.BETA_EXISTANT);
                 listeNewCoursTempo.add(ic);
             }
         }
@@ -822,7 +822,7 @@ public class GestionExercice {
         }
     }
 
-    private void saveRevenus(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveRevenus(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Revenu> listeNewRevenus = se.getListeRevenus();
         Vector<Revenu> listeNewRevenusTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -832,7 +832,7 @@ public class GestionExercice {
                 ir.setIdExercice(annee.getId());
                 ir.setIdUtilisateur(user.getId());
                 ir.setIdEntreprise(user.getIdEntreprise());
-                ir.setBeta(InterfaceExercice.BETA_EXISTANT);
+                ir.setBeta(InterfaceAnnee.BETA_EXISTANT);
                 listeNewRevenusTempo.add(ir);
             }
         }
@@ -864,7 +864,7 @@ public class GestionExercice {
         }
     }
 
-    private void saveCharges(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveCharges(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Charge> listeNewCharges = se.getListeCharges();
         Vector<Charge> listeNewChargesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -874,7 +874,7 @@ public class GestionExercice {
                 ic.setIdExercice(annee.getId());
                 ic.setIdUtilisateur(user.getId());
                 ic.setIdEntreprise(user.getIdEntreprise());
-                ic.setBeta(InterfaceExercice.BETA_EXISTANT);
+                ic.setBeta(InterfaceAnnee.BETA_EXISTANT);
                 listeNewChargesTempo.add(ic);
             }
         }
@@ -906,7 +906,7 @@ public class GestionExercice {
         }
     }
 
-    private void saveFrais(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveFrais(SortiesExercice se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Frais> listeNewFrais = se.getListeFrais();
         Vector<Frais> listeNewFraisTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -934,7 +934,7 @@ public class GestionExercice {
                 }
 
                 System.out.println("-----");
-                frais.setBeta(InterfaceExercice.BETA_EXISTANT);
+                frais.setBeta(InterfaceAnnee.BETA_EXISTANT);
                 listeNewFraisTempo.add(frais);
             }
         }
@@ -985,7 +985,7 @@ public class GestionExercice {
             public void onDetruitExercice(int idExercice, long signature) {
                 System.out.println("DANGER !!!!!! EXERCICE: Destruction de l'Exercice " + idExercice);
                 if (idExercice != -1) {
-                    Exercice anneeSupp = (Exercice) fm.fm_ouvrir(Exercice.class, UtilObjet.DOSSIER_ANNEE, idExercice);
+                    Annee anneeSupp = (Annee) fm.fm_ouvrir(Annee.class, UtilObjet.DOSSIER_ANNEE, idExercice);
                     if (anneeSupp != null) {
                         fm.fm_supprimer(UtilObjet.DOSSIER_ANNEE, idExercice, anneeSupp.getSignature());
                         detruireChields();

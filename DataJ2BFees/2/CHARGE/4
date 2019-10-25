@@ -6,8 +6,8 @@
   "nom" : "LOYER",
   "limiteAnnuelle" : 1000.0,
   "idMonnaie" : 1,
-  "signatureMonnaie" : 602412493961078028,
+  "signatureMonnaie" : -6260773919042109085,
   "monnaie" : "$",
-  "signature" : 877028140288818775,
+  "signature" : 5197109546792724559,
   "beta" : 0
 }

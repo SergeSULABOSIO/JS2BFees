@@ -17,7 +17,6 @@ import SOURCES.Utilitaires_Facture.ParametresFacture;
 import SOURCES.Utilitaires_Facture.SortiesFacture;
 import Source.Callbacks.EcouteurEnregistrement;
 import Source.Callbacks.EcouteurStandard;
-import Source.Interface.InterfaceExercice;
 import Source.Interface.InterfaceMonnaie;
 import Source.Interface.InterfaceUtilisateur;
 import Source.Objet.Ayantdroit;
@@ -25,7 +24,7 @@ import Source.Objet.Classe;
 import Source.Objet.CouleurBasique;
 import Source.Objet.Eleve;
 import Source.Objet.Entreprise;
-import Source.Objet.Exercice;
+import Source.Objet.Annee;
 import Source.Objet.Frais;
 import Source.Objet.Monnaie;
 import Source.Objet.Paiement;
@@ -36,6 +35,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
+import Source.Interface.InterfaceAnnee;
 
 /**
  *
@@ -55,7 +55,7 @@ public class GestionPaiements {
     public JTabbedPane tabOnglet;
     public JProgressBar progress;
 
-    private Exercice exercice = null;
+    private Annee exercice = null;
     private FileManager fm;
     private Vector<Classe> classes = new Vector<>();
     private Vector<Frais> frais = new Vector<>();
@@ -105,10 +105,10 @@ public class GestionPaiements {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Annee.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
                     @Override
                     public boolean isCriteresRespectes(Object object) {
-                        Exercice annee = (Exercice) object;
+                        Annee annee = (Annee) object;
                         if (annee.getNom().equals(selectedAnnee)) {
                             return true;
                         } else {
@@ -118,7 +118,7 @@ public class GestionPaiements {
 
                     @Override
                     public void onElementLoaded(String message, Object data) {
-                        exercice = (Exercice) data;
+                        exercice = (Annee) data;
                     }
 
                     @Override
@@ -373,7 +373,7 @@ public class GestionPaiements {
         });
     }
 
-    private void savePaiements(SortiesFacture se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceExercice annee) {
+    private void savePaiements(SortiesFacture se, EcouteurEnregistrement ee, InterfaceUtilisateur user, InterfaceAnnee annee) {
         Vector<Paiement> listeNewEleves = se.getPaiements();
         Vector<Paiement> listeNewElevesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -401,7 +401,7 @@ public class GestionPaiements {
                 if (canBeSaved == true) {
                     ia.setIdExercice(annee.getId());
                     ia.setIdEleve(eleve.getId());
-                    ia.setBeta(InterfaceExercice.BETA_EXISTANT);
+                    ia.setBeta(InterfaceAnnee.BETA_EXISTANT);
                     listeNewElevesTempo.add(ia);
                 }
             }

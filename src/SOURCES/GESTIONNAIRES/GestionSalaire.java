@@ -20,12 +20,11 @@ import Source.Callbacks.ConstructeurCriteres;
 import Source.Callbacks.EcouteurEnregistrement;
 import Source.Callbacks.EcouteurNavigateurPages;
 import Source.Callbacks.EcouteurStandard;
-import Source.Interface.InterfaceExercice;
 import Source.Interface.InterfaceMonnaie;
 import Source.Objet.Agent;
 import Source.Objet.CouleurBasique;
 import Source.Objet.Entreprise;
-import Source.Objet.Exercice;
+import Source.Objet.Annee;
 import Source.Objet.Fiche;
 import Source.Objet.Monnaie;
 import Source.Objet.UtilObjet;
@@ -39,6 +38,7 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
+import Source.Interface.InterfaceAnnee;
 
 /**
  *
@@ -55,7 +55,7 @@ public class GestionSalaire {
 
     public FileManager fm;
 
-    public Exercice exercice = null;
+    public Annee exercice = null;
     public Vector<Monnaie> monnaies = new Vector<>();
     public Vector<Agent> agents = new Vector<>();
     //public Vector<Fiche> fiches = new Vector<>();
@@ -119,16 +119,16 @@ public class GestionSalaire {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Annee.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
                     @Override
                     public boolean isCriteresRespectes(Object object) {
-                        Exercice annee = (Exercice) object;
+                        Annee annee = (Annee) object;
                         return (annee.getNom().equals(selectedAnnee));
                     }
 
                     @Override
                     public void onElementLoaded(String message, Object data) {
-                        Exercice annee = (Exercice) data;
+                        Annee annee = (Annee) data;
                         exercice = annee;
                     }
 
@@ -326,7 +326,7 @@ public class GestionSalaire {
         });
     }
 
-    private void saveFiches(SortiesFichesDePaies se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveFiches(SortiesFichesDePaies se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Fiche> listeNewFiches = se.getListeFichesDePaie();
         Vector<Fiche> listeNewFichesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -335,7 +335,7 @@ public class GestionSalaire {
                 ia.setIdExercice(annee.getId());
                 ia.setIdUtilisateur(user.getId());
                 ia.setIdEntreprise(user.getIdEntreprise());
-                ia.setBeta(InterfaceExercice.BETA_EXISTANT);
+                ia.setBeta(InterfaceAnnee.BETA_EXISTANT);
                 listeNewFichesTempo.add(ia);
             }
         }

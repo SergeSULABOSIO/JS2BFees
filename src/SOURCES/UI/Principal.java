@@ -30,7 +30,7 @@ import Source.Objet.Classe;
 import Source.Objet.CouleurBasique;
 import Source.Objet.Cours;
 import Source.Objet.Entreprise;
-import Source.Objet.Exercice;
+import Source.Objet.Annee;
 import Source.Objet.Frais;
 import Source.Objet.Monnaie;
 import Source.Objet.Revenu;
@@ -65,7 +65,7 @@ public class Principal extends javax.swing.JFrame {
     public GestionLitiges gestionLitiges = null;
     public GestionTresorerie gestionTresorerie = null;
     public GestionSalaire gestionSalaire = null;
-    public Vector<Exercice> listeExercTempo = new Vector<>();
+    public Vector<Annee> listeExercTempo = new Vector<>();
     public int idExerciceSelected;
 
     /**
@@ -102,7 +102,7 @@ public class Principal extends javax.swing.JFrame {
             comboListeAnneesScolaires.removeItemAt(i);
         }
 
-        fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 10000, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Annee.class, UtilObjet.DOSSIER_ANNEE, 1, 10000, new EcouteurOuverture() {
 
             @Override
             public boolean isCriteresRespectes(Object object) {
@@ -112,7 +112,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onElementLoaded(String message, Object data) {
                 //System.out.println(message);
-                Exercice oAnnee = (Exercice) data;
+                Annee oAnnee = (Annee) data;
                 //System.out.println(" * " + oAnnee.toString());
                 if (!listeExerciceContient(oAnnee.getNom())) {
                     comboListeAnneesScolaires.addItem(oAnnee.getNom());
@@ -201,8 +201,8 @@ public class Principal extends javax.swing.JFrame {
 
     private void lf_synchroniser() {
         if (fm != null) {
-            Exercice exerciceConnected = null;
-            for (Exercice ex : listeExercTempo) {
+            Annee exerciceConnected = null;
+            for (Annee ex : listeExercTempo) {
                 if ((comboListeAnneesScolaires.getSelectedItem() + "").equals(ex.getNom())) {
                     exerciceConnected = ex;
                 }
@@ -560,7 +560,7 @@ public class Principal extends javax.swing.JFrame {
         comboListeAnneesScolaires.removeAllItems();
         comboListeAnneesScolaires.addItem("-- Liste d'Années --");
         System.out.println("CHARGEMENT DES ANNEES SCOLAIRES....");
-        fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Annee.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
 
             @Override
             public boolean isCriteresRespectes(Object object) {
@@ -569,7 +569,7 @@ public class Principal extends javax.swing.JFrame {
 
             @Override
             public void onElementLoaded(String message, Object data) {
-                Exercice annee = (Exercice) data;
+                Annee annee = (Annee) data;
                 System.out.println("\t - " + annee.toString());
                 if (!listeExercTempo.contains(annee)) {
                     comboListeAnneesScolaires.addItem(annee.getNom());

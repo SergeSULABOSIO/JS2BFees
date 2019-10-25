@@ -21,14 +21,13 @@ import Source.Callbacks.EcouteurEnregistrement;
 import Source.Callbacks.EcouteurNavigateurPages;
 import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceEleve;
-import Source.Interface.InterfaceExercice;
 import Source.Interface.InterfaceMonnaie;
 import Source.Objet.Ayantdroit;
 import Source.Objet.Classe;
 import Source.Objet.CouleurBasique;
 import Source.Objet.Eleve;
 import Source.Objet.Entreprise;
-import Source.Objet.Exercice;
+import Source.Objet.Annee;
 import Source.Objet.Frais;
 import Source.Objet.Monnaie;
 import Source.Objet.UtilObjet;
@@ -43,6 +42,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
+import Source.Interface.InterfaceAnnee;
 
 /**
  *
@@ -57,7 +57,7 @@ public class GestionAdhesion {
     public JTabbedPane tabOnglet;
     public JProgressBar progress;
 
-    private Exercice exercice = null;
+    private Annee exercice = null;
     private FileManager fm;
 
     //Paramètres
@@ -126,7 +126,7 @@ public class GestionAdhesion {
             }
 
             if (mustLoadData == true) {
-                fm.fm_ouvrirTout(0, Exercice.class, UtilObjet.DOSSIER_ANNEE, 1, 100, new EcouteurOuverture() {
+                fm.fm_ouvrirTout(0, Annee.class, UtilObjet.DOSSIER_ANNEE, 1, 100, new EcouteurOuverture() {
 
                     @Override
                     public boolean isCriteresRespectes(Object object) {
@@ -135,7 +135,7 @@ public class GestionAdhesion {
 
                     @Override
                     public void onElementLoaded(String message, Object data) {
-                        Exercice annee = (Exercice) data;
+                        Annee annee = (Annee) data;
                         if (annee.getNom().equals(selectedAnnee)) {
                             exercice = annee;
                         }
@@ -485,7 +485,7 @@ public class GestionAdhesion {
         }
     }
 
-    private void saveEleves(SortiesInscription se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveEleves(SortiesInscription se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Eleve> listeNewEleves = se.getListeEleves();
         Vector<Eleve> listeNewElevesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -539,7 +539,7 @@ public class GestionAdhesion {
                     ia.setIdExercice(annee.getId());
                     ia.setIdUtilisateur(user.getId());
                     ia.setIdEntreprise(user.getIdEntreprise());
-                    ia.setBeta(InterfaceExercice.BETA_EXISTANT);
+                    ia.setBeta(InterfaceAnnee.BETA_EXISTANT);
                     listeNewElevesTempo.add(ia);
                 }
             }
@@ -572,7 +572,7 @@ public class GestionAdhesion {
         }
     }
 
-    private void saveAyantDroits(SortiesInscription se, EcouteurEnregistrement ee, Utilisateur user, Exercice annee) {
+    private void saveAyantDroits(SortiesInscription se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
         Vector<Ayantdroit> listeNewAy = se.getListeAyantDroit();
         Vector<Ayantdroit> listeNewAYTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
@@ -592,7 +592,7 @@ public class GestionAdhesion {
                     ia.setIdExercice(annee.getId());
                     ia.setIdUtilisateur(user.getId());
                     ia.setIdEntreprise(user.getIdEntreprise());
-                    ia.setBeta(InterfaceExercice.BETA_EXISTANT);
+                    ia.setBeta(InterfaceAnnee.BETA_EXISTANT);
                     listeNewAYTempo.add(ia);
                 }
             }

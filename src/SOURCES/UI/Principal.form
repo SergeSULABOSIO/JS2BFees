@@ -216,7 +216,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/IMG/Facture01.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Backup"/>
+                <Property name="text" type="java.lang.String" value="Synchroniser"/>
                 <Property name="toolTipText" type="java.lang.String" value="Sauvegarde des donn&#xe9;es sur le serveur distant. Cliquer pour relancer le chargement."/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalTextPosition" type="int" value="4"/>

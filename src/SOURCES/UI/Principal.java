@@ -742,7 +742,7 @@ public class Principal extends javax.swing.JFrame {
         jToolBar1.add(btEtatLicence);
 
         btEtatBackup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Facture01.png"))); // NOI18N
-        btEtatBackup.setText("Backup");
+        btEtatBackup.setText("Synchroniser");
         btEtatBackup.setToolTipText("Sauvegarde des données sur le serveur distant. Cliquer pour relancer le chargement.");
         btEtatBackup.setFocusable(false);
         btEtatBackup.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);

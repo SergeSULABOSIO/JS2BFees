@@ -1,0 +1,60 @@
+{
+  "id" : 2,
+  "idUtilisateur" : 12,
+  "idEntreprise" : 2,
+  "idExercice" : 1,
+  "idMonnaie" : 1,
+  "montantDefaut" : 1000.0,
+  "nom" : "MINERVALE",
+  "monnaie" : "$",
+  "signatureMonnaie" : -6260773919042109085,
+  "signature" : -6301337134612314618,
+  "liaisonsClasses" : [ {
+    "idClasse" : 1,
+    "nomClasse" : "1e",
+    "signatureClasse" : -2055240488843885410,
+    "montant" : 1000.0
+  }, {
+    "idClasse" : 2,
+    "nomClasse" : "2e",
+    "signatureClasse" : 7582712656577987811,
+    "montant" : 1000.0
+  }, {
+    "idClasse" : 3,
+    "nomClasse" : "3e",
+    "signatureClasse" : 6685388443530116927,
+    "montant" : 1000.0
+  }, {
+    "idClasse" : 4,
+    "nomClasse" : "4e",
+    "signatureClasse" : -6049104863333285897,
+    "montant" : 1000.0
+  }, {
+    "idClasse" : 5,
+    "nomClasse" : "5e",
+    "signatureClasse" : 1333140858930156691,
+    "montant" : 1000.0
+  }, {
+    "idClasse" : 6,
+    "nomClasse" : "6e",
+    "signatureClasse" : -279723619106261711,
+    "montant" : 1000.0
+  } ],
+  "liaisonsPeriodes" : [ {
+    "idPeriode" : 1,
+    "nomPeriode" : "1er Trimestre",
+    "signaturePeriode" : 2320992710172948763,
+    "pourcentage" : 33.0
+  }, {
+    "idPeriode" : 2,
+    "nomPeriode" : "2ème Trimestre",
+    "signaturePeriode" : 7345233328802828,
+    "pourcentage" : 33.0
+  }, {
+    "idPeriode" : 3,
+    "nomPeriode" : "3ème Trimestre",
+    "signaturePeriode" : -4785613042392523406,
+    "pourcentage" : 33.0
+  } ],
+  "beta" : 0
+}

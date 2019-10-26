@@ -41,7 +41,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.util.Vector;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 
 /**

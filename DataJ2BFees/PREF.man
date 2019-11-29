@@ -1,6 +1,6 @@
 {
-  "fenetre_x" : 538.0,
+  "fenetre_x" : 488.0,
   "fenetre_y" : 0.0,
-  "fenetre_w" : 828.0,
-  "fenetre_h" : 730.0
+  "fenetre_w" : 878.0,
+  "fenetre_h" : 728.0
 }

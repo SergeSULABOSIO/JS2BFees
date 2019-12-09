@@ -1,0 +1,18 @@
+{
+  "id" : 1,
+  "idEleve" : 1,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 1,
+  "idPeriode" : 1,
+  "mode" : 0,
+  "reference" : "1575900248949",
+  "nomEleve" : "SULA BOSIO Serge",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "SULA BOSIO Serge",
+  "montant" : 16.5,
+  "date" : 1575900248949,
+  "signature" : 4498292373790484653,
+  "beta" : 0,
+  "referenceTransaction" : "1575900248949"
+}

@@ -1,0 +1,11 @@
+{
+  "id" : 3,
+  "idUtilisateur" : 12,
+  "idEntreprise" : 2,
+  "idExercice" : 1,
+  "nom" : "3e",
+  "capacite" : 50,
+  "nomLocal" : "LOCAL 3",
+  "signature" : -3084737022416707130,
+  "beta" : 0
+}

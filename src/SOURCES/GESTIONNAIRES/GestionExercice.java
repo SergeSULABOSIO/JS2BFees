@@ -104,7 +104,7 @@ public class GestionExercice {
             boolean mustLoadData = true;
             int nbOnglets = tabOnglet.getComponentCount();
             for (int i = 0; i < nbOnglets; i++) {
-                JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
+                //JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
                 String titreOnglet = tabOnglet.getTitleAt(i);
                 System.out.println("Onglet - " + titreOnglet);
                 if (titreOnglet.equals(selectedAnnee)) {
@@ -1080,6 +1080,7 @@ public class GestionExercice {
         progress.setIndeterminate(false);
     }
 }
+
 
 
 

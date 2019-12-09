@@ -347,7 +347,7 @@ public class Principal extends javax.swing.JFrame {
         btEtatBackup.setText("Synchroniser");
 
         moi.setTitle(texteTitre);
-
+        
         lf_progress(false, "", progressEtat, 0);
     }
 
@@ -552,6 +552,9 @@ public class Principal extends javax.swing.JFrame {
         lf_progress(false, "", progressLogin, 0);
         lf_progress(false, "", progressEtat, 0);
         labInfoEtat.setText("Connecté!");
+        
+        //On lance directement la synchronisation.
+        lf_synchroniser();
     }
 
     private void lf_construireListeAnneesScolaires() {

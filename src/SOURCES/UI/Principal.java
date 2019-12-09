@@ -375,7 +375,7 @@ public class Principal extends javax.swing.JFrame {
                     btAnnee.setText("Exercice", 12, true);
                     btAnnee.setInfosBulle("Ouvrir l'Exercice séléctionné");
                     btAnnee.setIcone(icones.getCalendrier_03());
-
+                    
                     if (user.getDroitExercice() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btAnnee.setVisible(false);
                     } else {
@@ -406,6 +406,9 @@ public class Principal extends javax.swing.JFrame {
                     } else {
                         btUtilisateur.setVisible(false);
                     }
+                    
+                    //Juste après sélction de l'année scolaire, il faut lancer la synchronisation très vite
+                    lf_synchroniser();
                 }
             }
         }

@@ -82,6 +82,7 @@ public class Principal extends javax.swing.JFrame {
                 UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_MODIFIER_LOGO);
             }
         });
+        
         btLogo.setForeground(couleurBasique.getCouleur_encadrement_selection());
         fm = new FileManager("http://www.visiterlardc.com/s2b", "processeurS2B.php", btLogo.getBouton());
         fm.fm_setEcouteurFenetre(moi);  // On écoute désormais les mouvements de la fenetre

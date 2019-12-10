@@ -565,7 +565,10 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onSuiveurActive(Date dateDernireModification) {
                 if(btEtatBackup != null){
-                    btEtatBackup.setText(UtilObjet.getDateFrancais(dateDernireModification));
+                    btEtatBackup.setText("Veuillez sauvegarder !");
+                    btEtatBackup.setToolTipText("Dernière modification: " + UtilObjet.getDateFrancais(dateDernireModification)+". Cliquez pour sauvegarder!");
+                    btEtatBackup.setForeground(Color.red);
+                    btEtatBackup.setFont(btEtatBackup.getFont().deriveFont(Font.BOLD));
                 }
             }
 
@@ -573,6 +576,8 @@ public class Principal extends javax.swing.JFrame {
             public void onSuiveurDesactive() {
                 if(btEtatBackup != null){
                     btEtatBackup.setText("Sauvegardé");
+                    btEtatBackup.setForeground(Color.black);
+                    btEtatBackup.setFont(btEtatBackup.getFont().deriveFont(Font.PLAIN));
                 }
             }
         });

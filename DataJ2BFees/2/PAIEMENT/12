@@ -1,0 +1,18 @@
+{
+  "id" : 12,
+  "idEleve" : 3,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 1,
+  "idPeriode" : 3,
+  "mode" : 0,
+  "reference" : "1575993786049",
+  "nomEleve" : "LELE NDJONDO RAMSY",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "LELE NDJONDO RAMSY",
+  "montant" : 16.5,
+  "date" : 1575993786049,
+  "signature" : -1901465282625576375,
+  "beta" : 0,
+  "referenceTransaction" : "1575993786049"
+}

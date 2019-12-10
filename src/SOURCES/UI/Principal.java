@@ -575,7 +575,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onSuiveurDesactive() {
                 if(btEtatBackup != null){
-                    btEtatBackup.setText("Sauvegardé");
+                    btEtatBackup.setText("Sauvegarde");
                     btEtatBackup.setForeground(Color.black);
                     btEtatBackup.setFont(btEtatBackup.getFont().deriveFont(Font.PLAIN));
                 }

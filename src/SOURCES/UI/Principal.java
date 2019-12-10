@@ -12,6 +12,7 @@ import ICONES.Icones;
 import SOURCES.CALLBACK.EcouteurGestionExercice;
 import SOURCES.Callback.EcouteurLongin;
 import SOURCES.Callback.EcouteurOuverture;
+import SOURCES.Callback.EcouteurSuiviEdition;
 import SOURCES.Callback.EcouteurSynchronisation;
 import SOURCES.GESTIONNAIRES.GestionAdhesion;
 import SOURCES.GESTIONNAIRES.GestionExercice;
@@ -37,8 +38,10 @@ import Source.Objet.Revenu;
 import Source.Objet.UtilObjet;
 import Source.Objet.Utilisateur;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
@@ -556,6 +559,23 @@ public class Principal extends javax.swing.JFrame {
         lf_progress(false, "", progressLogin, 0);
         lf_progress(false, "", progressEtat, 0);
         labInfoEtat.setText("Connecté!");
+        
+        //on doit directement commencer à écouter le suiveur d'édition
+        fm.setEcouteurSuiviEdition(new EcouteurSuiviEdition() {
+            @Override
+            public void onSuiveurActive(Date dateDernireModification) {
+                if(btEtatBackup != null){
+                    btEtatBackup.setText(UtilObjet.getDateFrancais(dateDernireModification));
+                }
+            }
+
+            @Override
+            public void onSuiveurDesactive() {
+                if(btEtatBackup != null){
+                    btEtatBackup.setText("Sauvegardé");
+                }
+            }
+        });
         
         //On lance directement la synchronisation.
         lf_synchroniser();

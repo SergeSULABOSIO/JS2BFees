@@ -224,16 +224,21 @@ public class Principal extends javax.swing.JFrame {
                         lf_construireListeAnneesScolaires();
                     }
                     lf_progress(false, message, progressEtat, 0);
+                    btEtatBackup.setEnabled(true);
                 }
 
                 @Override
                 public void onEchec(String message) {
                     lf_progress(false, message, progressEtat, 0);
+                    btEtatBackup.setText("Reessayez!");
+                    btEtatBackup.setEnabled(true);
                 }
 
                 @Override
                 public void onProcessing(String message, int pourcentage) {
                     lf_progress(true, message, progressEtat, pourcentage);
+                    btEtatBackup.setText("En cours...");
+                    btEtatBackup.setEnabled(false);
                 }
             });
         }
@@ -565,7 +570,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onSuiveurActive(Date dateDernireModification) {
                 if(btEtatBackup != null){
-                    btEtatBackup.setText("Veuillez sauvegarder !");
+                    btEtatBackup.setText("Sauvegardez (!)");
                     btEtatBackup.setToolTipText("Dernière modification: " + UtilObjet.getDateFrancais(dateDernireModification)+". Cliquez pour sauvegarder!");
                     btEtatBackup.setForeground(Color.red);
                     btEtatBackup.setFont(btEtatBackup.getFont().deriveFont(Font.BOLD));

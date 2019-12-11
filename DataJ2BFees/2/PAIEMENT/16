@@ -1,0 +1,18 @@
+{
+  "id" : 16,
+  "idEleve" : 4,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 2,
+  "idPeriode" : 1,
+  "mode" : 0,
+  "reference" : "1576078199115",
+  "nomEleve" : "SULA LIKUNDE PAVEL",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "SULA LIKUNDE PAVEL",
+  "montant" : 33.0,
+  "date" : 1576078199115,
+  "signature" : -1126164897752211627,
+  "beta" : 0,
+  "referenceTransaction" : "1576078199115"
+}

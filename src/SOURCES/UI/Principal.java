@@ -217,7 +217,6 @@ public class Principal extends javax.swing.JFrame {
                 idExerciceSelected = -1;
             }
             
-            
             fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
                 @Override
                 public void onSuccess(String message) {

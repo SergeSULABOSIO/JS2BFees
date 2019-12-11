@@ -245,7 +245,7 @@ public class Principal extends javax.swing.JFrame {
                     }
                 });
             } else {
-                JOptionPane.showMessageDialog(null, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
+                JOptionPane.showMessageDialog(moi, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
                 btEtatBackup.setText("Hors connexion!");
                 btEtatBackup.setEnabled(true);
             }

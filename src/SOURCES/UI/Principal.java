@@ -45,6 +45,7 @@ import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.Vector;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 
 /**
@@ -244,6 +245,7 @@ public class Principal extends javax.swing.JFrame {
                     }
                 });
             } else {
+                JOptionPane.showMessageDialog(null, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
                 btEtatBackup.setText("Hors connexion!");
                 btEtatBackup.setEnabled(true);
             }

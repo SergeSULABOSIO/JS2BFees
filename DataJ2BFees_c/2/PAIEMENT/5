@@ -1,18 +1,18 @@
 {
-  "id" : 2,
+  "id" : 5,
   "idEleve" : 1,
   "idExercice" : 1,
   "idEntreprise" : 2,
   "idFrais" : 2,
-  "idPeriode" : 1,
+  "idPeriode" : 2,
   "mode" : 0,
-  "reference" : "1575900853547",
+  "reference" : "1575902185768",
   "nomEleve" : "SULA BOSIO Serge",
   "nomFrais" : "MINERVALE",
   "nomDepositaire" : "SULA BOSIO Serge",
   "montant" : 33.0,
-  "date" : 1575900853000,
-  "signature" : -1234686723377514027,
+  "date" : 1575902185000,
+  "signature" : -2531930766156374399,
   "beta" : 0,
-  "referenceTransaction" : "1575900853547"
+  "referenceTransaction" : "1575902185768"
 }

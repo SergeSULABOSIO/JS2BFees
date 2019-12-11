@@ -23,6 +23,7 @@ import SOURCES.Objets.FileManager;
 import SOURCES.Objets.PaiementLicence;
 import SOURCES.Objets.Session;
 import SOURCES.UTILITAIRES.UtilFees;
+import SOURCES.Utilitaires.UtilFileManager;
 import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceUtilisateur;
 import Source.Objet.Agent;
@@ -85,7 +86,7 @@ public class Principal extends javax.swing.JFrame {
                 UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_MODIFIER_LOGO);
             }
         });
-        
+
         btLogo.setForeground(couleurBasique.getCouleur_encadrement_selection());
         fm = new FileManager("http://www.visiterlardc.com/s2b", "processeurS2B.php", btLogo.getBouton());
         fm.fm_setEcouteurFenetre(moi);  // On écoute désormais les mouvements de la fenetre
@@ -210,37 +211,42 @@ public class Principal extends javax.swing.JFrame {
                     exerciceConnected = ex;
                 }
             }
-            
-            if((exerciceConnected != null)){
-                idExerciceSelected =  exerciceConnected.getId();
-            }else{
+
+            if ((exerciceConnected != null)) {
+                idExerciceSelected = exerciceConnected.getId();
+            } else {
                 idExerciceSelected = -1;
             }
-            
-            fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
-                @Override
-                public void onSuccess(String message) {
-                    if(idExerciceSelected == -1){
-                        lf_construireListeAnneesScolaires();
+
+            if (UtilFileManager.isNewWorkAvailable("http://www.google.com") == true) {
+                fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
+                    @Override
+                    public void onSuccess(String message) {
+                        if (idExerciceSelected == -1) {
+                            lf_construireListeAnneesScolaires();
+                        }
+                        lf_progress(false, message, progressEtat, 0);
+                        btEtatBackup.setEnabled(true);
                     }
-                    lf_progress(false, message, progressEtat, 0);
-                    btEtatBackup.setEnabled(true);
-                }
 
-                @Override
-                public void onEchec(String message) {
-                    lf_progress(false, message, progressEtat, 0);
-                    btEtatBackup.setText("Reessayez!");
-                    btEtatBackup.setEnabled(true);
-                }
+                    @Override
+                    public void onEchec(String message) {
+                        lf_progress(false, message, progressEtat, 0);
+                        btEtatBackup.setText("Reessayez!");
+                        btEtatBackup.setEnabled(true);
+                    }
 
-                @Override
-                public void onProcessing(String message, int pourcentage) {
-                    lf_progress(true, message, progressEtat, pourcentage);
-                    btEtatBackup.setText("En cours...");
-                    btEtatBackup.setEnabled(false);
-                }
-            });
+                    @Override
+                    public void onProcessing(String message, int pourcentage) {
+                        lf_progress(true, message, progressEtat, pourcentage);
+                        btEtatBackup.setText("En cours...");
+                        btEtatBackup.setEnabled(false);
+                    }
+                });
+            } else {
+                btEtatBackup.setText("Hors connexion!");
+                btEtatBackup.setEnabled(true);
+            }
         }
     }
 
@@ -356,7 +362,7 @@ public class Principal extends javax.swing.JFrame {
         btEtatBackup.setText("Synchroniser");
 
         moi.setTitle(texteTitre);
-        
+
         lf_progress(false, "", progressEtat, 0);
     }
 
@@ -384,7 +390,7 @@ public class Principal extends javax.swing.JFrame {
                     btAnnee.setText("Exercice", 12, true);
                     btAnnee.setInfosBulle("Ouvrir l'Exercice séléctionné");
                     btAnnee.setIcone(icones.getCalendrier_03());
-                    
+
                     if (user.getDroitExercice() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btAnnee.setVisible(false);
                     } else {
@@ -415,7 +421,7 @@ public class Principal extends javax.swing.JFrame {
                     } else {
                         btUtilisateur.setVisible(false);
                     }
-                    
+
                     //Juste après sélction de l'année scolaire, il faut lancer la synchronisation très vite
                     lf_synchroniser();
                 }
@@ -564,14 +570,14 @@ public class Principal extends javax.swing.JFrame {
         lf_progress(false, "", progressLogin, 0);
         lf_progress(false, "", progressEtat, 0);
         labInfoEtat.setText("Connecté!");
-        
+
         //on doit directement commencer à écouter le suiveur d'édition
         fm.setEcouteurSuiviEdition(new EcouteurSuiviEdition() {
             @Override
             public void onSuiveurActive(Date dateDernireModification) {
-                if(btEtatBackup != null){
+                if (btEtatBackup != null) {
                     btEtatBackup.setText("Backup (!)");
-                    btEtatBackup.setToolTipText("Dernière modification: " + UtilObjet.getDateFrancais(dateDernireModification)+". Cliquez pour sauvegarder!");
+                    btEtatBackup.setToolTipText("Dernière modification: " + UtilObjet.getDateFrancais(dateDernireModification) + ". Cliquez pour sauvegarder!");
                     btEtatBackup.setForeground(Color.red);
                     btEtatBackup.setFont(btEtatBackup.getFont().deriveFont(Font.BOLD));
                 }
@@ -579,14 +585,14 @@ public class Principal extends javax.swing.JFrame {
 
             @Override
             public void onSuiveurDesactive() {
-                if(btEtatBackup != null){
+                if (btEtatBackup != null) {
                     btEtatBackup.setText("Backup");
                     btEtatBackup.setForeground(Color.black);
                     btEtatBackup.setFont(btEtatBackup.getFont().deriveFont(Font.PLAIN));
                 }
             }
         });
-        
+
         //On lance directement la synchronisation.
         lf_synchroniser();
     }

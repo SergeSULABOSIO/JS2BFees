@@ -217,6 +217,7 @@ public class Principal extends javax.swing.JFrame {
                 idExerciceSelected = -1;
             }
             
+            
             fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
                 @Override
                 public void onSuccess(String message) {
@@ -970,7 +971,7 @@ public class Principal extends javax.swing.JFrame {
 
         menuSynchroniser.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
         menuSynchroniser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG_Fees/Facture01.png"))); // NOI18N
-        menuSynchroniser.setText("Synchroniser");
+        menuSynchroniser.setText("Backup");
         menuSynchroniser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuSynchroniserActionPerformed(evt);

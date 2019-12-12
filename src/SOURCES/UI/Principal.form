@@ -247,7 +247,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/IMG/Facture01.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Synchroniser"/>
+                <Property name="text" type="java.lang.String" value="Back-up"/>
                 <Property name="toolTipText" type="java.lang.String" value="Sauvegarde des donn&#xe9;es sur le serveur distant. Cliquer pour relancer le chargement."/>
                 <Property name="focusable" type="boolean" value="false"/>
                 <Property name="horizontalTextPosition" type="int" value="4"/>
@@ -256,8 +256,6 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backBoutonActionPerformed"/>
               </Events>
-            </Component>
-            <Component class="javax.swing.JToolBar$Separator" name="jSeparator3">
             </Component>
             <Component class="javax.swing.JProgressBar" name="backProgress">
               <Properties>
@@ -270,7 +268,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="backLabel">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Pr&#xea;t"/>
+                <Property name="text" type="java.lang.String" value="Pour la sauvegarde de vos donn&#xe9;es sur le serveur."/>
               </Properties>
             </Component>
           </SubComponents>

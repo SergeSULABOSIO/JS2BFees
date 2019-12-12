@@ -226,32 +226,30 @@ public class Principal extends javax.swing.JFrame {
                         if (idExerciceSelected == -1) {
                             lf_construireListeAnneesScolaires();
                         }
-                        lf_progress(false, message, progressEtat, 0);
+                        lf_progressBackUpToobar(false, message, backProgress, 0);
                         backBouton.setEnabled(true);
                         comboListeAnneesScolaires.setEnabled(true);
                     }
 
                     @Override
                     public void onEchec(String message) {
-                        lf_progress(false, message, progressEtat, 0);
-                        backBouton.setText("Reessayez!");
+                        lf_progressBackUpToobar(false, message, backProgress, 0);
                         backBouton.setEnabled(true);
                         comboListeAnneesScolaires.setEnabled(true);
                     }
 
                     @Override
                     public void onProcessing(String message, int pourcentage) {
-                        lf_progress(true, message, progressEtat, pourcentage);
-                        backBouton.setText("En cours...");
+                        lf_progressBackUpToobar(true, message, backProgress, pourcentage);
                         backBouton.setEnabled(false);
                         comboListeAnneesScolaires.setEnabled(false);
                     }
                 });
             } else {
                 JOptionPane.showMessageDialog(moi, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
-                backBouton.setText("Hors connexion!");
                 backBouton.setEnabled(true);
                 comboListeAnneesScolaires.setEnabled(true);
+                lf_progressBackUpToobar(false, "Veuillez vérifier votre connexion Internet, puis réessayer!", backProgress, -1);
             }
         }
     }
@@ -281,6 +279,17 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void lf_progress(boolean afficher, String message, JProgressBar progressBar, int pourcentage) {
+        if (pourcentage == -1) {
+            progressBar.setIndeterminate(afficher);
+        } else {
+            progressBar.setValue(pourcentage);
+        }
+        progressBar.setVisible(afficher);
+        progressBar.setStringPainted(afficher);
+        progressBar.setString(message);
+    }
+    
+    private void lf_progressBackUpToobar(boolean afficher, String message, JProgressBar progressBar, int pourcentage) {
         if (pourcentage == -1) {
             progressBar.setIndeterminate(afficher);
         } else {
@@ -365,7 +374,7 @@ public class Principal extends javax.swing.JFrame {
         } else {
             btEtatLicence.setVisible(false);
         }
-        backBouton.setText("Synchroniser");
+        //backBouton.setText("Synchroniser");
 
         moi.setTitle(texteTitre);
 
@@ -582,19 +591,23 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onSuiveurActive(Date dateDernireModification) {
                 if (backBouton != null) {
-                    backBouton.setText("Backup (!)");
-                    backBouton.setToolTipText("Dernière modification: " + UtilObjet.getDateFrancais(dateDernireModification) + ". Cliquez pour sauvegarder!");
+                    String texteAlert = "Dernière modification: " + UtilObjet.getDateFrancais(dateDernireModification) + ". Cliquez pour sauvegarder!";
+                    backBouton.setText("Back-up(!)");
+                    backBouton.setToolTipText(texteAlert);
                     backBouton.setForeground(Color.red);
                     backBouton.setFont(backBouton.getFont().deriveFont(Font.BOLD));
+                    backLabel.setText(texteAlert);
+                    backLabel.setFont(backBouton.getFont().deriveFont(Font.BOLD));
                 }
             }
 
             @Override
             public void onSuiveurDesactive() {
                 if (backBouton != null) {
-                    backBouton.setText("Backup");
+                    backBouton.setText("Back-up");
                     backBouton.setForeground(Color.black);
                     backBouton.setFont(backBouton.getFont().deriveFont(Font.PLAIN));
+                    backLabel.setFont(backBouton.getFont().deriveFont(Font.PLAIN));
                 }
             }
         });
@@ -704,7 +717,6 @@ public class Principal extends javax.swing.JFrame {
         progressEtat = new javax.swing.JProgressBar();
         backUpToolbar = new javax.swing.JToolBar();
         backBouton = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JToolBar.Separator();
         backProgress = new javax.swing.JProgressBar();
         jSeparator4 = new javax.swing.JToolBar.Separator();
         backLabel = new javax.swing.JLabel();
@@ -806,7 +818,7 @@ public class Principal extends javax.swing.JFrame {
         backUpToolbar.setRollover(true);
 
         backBouton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Facture01.png"))); // NOI18N
-        backBouton.setText("Synchroniser");
+        backBouton.setText("Back-up");
         backBouton.setToolTipText("Sauvegarde des données sur le serveur distant. Cliquer pour relancer le chargement.");
         backBouton.setFocusable(false);
         backBouton.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -817,13 +829,12 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         backUpToolbar.add(backBouton);
-        backUpToolbar.add(jSeparator3);
 
         backProgress.setMaximumSize(new java.awt.Dimension(100, 14));
         backUpToolbar.add(backProgress);
         backUpToolbar.add(jSeparator4);
 
-        backLabel.setText("Prêt");
+        backLabel.setText("Pour la sauvegarde de vos données sur le serveur.");
         backUpToolbar.add(backLabel);
 
         javax.swing.GroupLayout barreEtatLayout = new javax.swing.GroupLayout(barreEtat);
@@ -1199,7 +1210,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
-    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JToolBar.Separator jSeparator6;

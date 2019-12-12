@@ -1,0 +1,18 @@
+{
+  "id" : 17,
+  "idEleve" : 2,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 2,
+  "idPeriode" : 1,
+  "mode" : 0,
+  "reference" : "1576152863305",
+  "nomEleve" : "MAKULA BOFANDO ALAIN",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MAKULA BOFANDO ALAIN",
+  "montant" : 33.0,
+  "date" : 1576152863305,
+  "signature" : -2286560969066106473,
+  "beta" : 0,
+  "referenceTransaction" : "1576152863305"
+}

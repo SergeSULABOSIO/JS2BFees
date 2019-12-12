@@ -740,6 +740,7 @@ public class Principal extends javax.swing.JFrame {
 
         comboListeAnneesScolaires.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Liste d'Années --" }));
         comboListeAnneesScolaires.setToolTipText("Liste d'années scolaires actuellement stockées en base de données");
+        comboListeAnneesScolaires.setMaximumSize(new java.awt.Dimension(500, 32767));
         comboListeAnneesScolaires.setPreferredSize(new java.awt.Dimension(200, 22));
         comboListeAnneesScolaires.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {

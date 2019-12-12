@@ -1,0 +1,18 @@
+{
+  "id" : 19,
+  "idEleve" : 6,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 2,
+  "idPeriode" : 1,
+  "mode" : 0,
+  "reference" : "1576154766740",
+  "nomEleve" : "SULA OKONDJI HERMINE",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "SULA OKONDJI HERMINE",
+  "montant" : 33.0,
+  "date" : 1576154766000,
+  "signature" : 489630535160623335,
+  "beta" : 0,
+  "referenceTransaction" : "1576154766740"
+}

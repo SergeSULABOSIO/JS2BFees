@@ -1,0 +1,18 @@
+{
+  "id" : 22,
+  "idEleve" : 5,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 1,
+  "idPeriode" : 1,
+  "mode" : 0,
+  "reference" : "1576155951265",
+  "nomEleve" : "KASHONGWE KASHONGWE DEO",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "KASHONGWE KASHONGWE DEO",
+  "montant" : 16.5,
+  "date" : 1576155951000,
+  "signature" : -6178277230677282606,
+  "beta" : 0,
+  "referenceTransaction" : "1576155951265"
+}

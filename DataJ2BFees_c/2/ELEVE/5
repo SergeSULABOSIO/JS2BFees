@@ -1,0 +1,18 @@
+{
+  "id" : 5,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 1,
+  "signature" : -595534458978482547,
+  "classe" : "1e",
+  "adresse" : "KINSHASA",
+  "telephonesParents" : "(+243)828727706",
+  "nom" : "KASHONGWE",
+  "postnom" : "KASHONGWE",
+  "prenom" : "DEO",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1576154562000,
+  "beta" : 0
+}

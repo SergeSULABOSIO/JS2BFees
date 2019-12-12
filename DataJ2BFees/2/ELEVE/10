@@ -1,0 +1,18 @@
+{
+  "id" : 10,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 1,
+  "signature" : 8536733433376417173,
+  "classe" : "1e",
+  "adresse" : "KINSHASA",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "MUTOMBO",
+  "postnom" : "BAKANGU",
+  "prenom" : "SILVIE",
+  "status" : 0,
+  "sexe" : 1,
+  "dateNaissance" : 1576161759528,
+  "beta" : 0
+}

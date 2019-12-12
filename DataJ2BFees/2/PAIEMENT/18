@@ -1,0 +1,18 @@
+{
+  "id" : 18,
+  "idEleve" : 6,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 1,
+  "idPeriode" : 1,
+  "mode" : 0,
+  "reference" : "1576154751421",
+  "nomEleve" : "SULA OKONDJI HERMINE",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "SULA OKONDJI HERMINE",
+  "montant" : 16.5,
+  "date" : 1576154751421,
+  "signature" : 36767811415818991,
+  "beta" : 0,
+  "referenceTransaction" : "1576154751421"
+}

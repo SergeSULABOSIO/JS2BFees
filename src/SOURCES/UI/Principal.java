@@ -229,6 +229,7 @@ public class Principal extends javax.swing.JFrame {
                         lf_progressBackUpToobar(false, message, backProgress, 0);
                         backBouton.setEnabled(true);
                         comboListeAnneesScolaires.setEnabled(true);
+                        backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur.");
                     }
 
                     @Override
@@ -236,6 +237,7 @@ public class Principal extends javax.swing.JFrame {
                         lf_progressBackUpToobar(false, message, backProgress, 0);
                         backBouton.setEnabled(true);
                         comboListeAnneesScolaires.setEnabled(true);
+                        backLabel.setText(message);
                     }
 
                     @Override
@@ -243,6 +245,7 @@ public class Principal extends javax.swing.JFrame {
                         lf_progressBackUpToobar(true, message, backProgress, pourcentage);
                         backBouton.setEnabled(false);
                         comboListeAnneesScolaires.setEnabled(false);
+                        backLabel.setText("La sauvegarde des données est en cours...");
                     }
                 });
             } else {
@@ -591,7 +594,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onSuiveurActive(Date dateDernireModification) {
                 if (backBouton != null) {
-                    String texteAlert = "Dernière modification: " + UtilObjet.getDateFrancais(dateDernireModification) + ". Cliquez pour sauvegarder!";
+                    String texteAlert = "Dernière modification: " + UtilObjet.getDateFrancais(dateDernireModification) + ". Cliquez sur BACK-UP pour sauvegarder!";
                     backBouton.setText("Back-up(!)");
                     backBouton.setToolTipText(texteAlert);
                     backBouton.setForeground(Color.red);

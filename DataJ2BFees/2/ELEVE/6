@@ -1,0 +1,18 @@
+{
+  "id" : 6,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 1,
+  "signature" : 8632708411061873245,
+  "classe" : "1e",
+  "adresse" : "KINSHASA",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "SULA",
+  "postnom" : "OKONDJI",
+  "prenom" : "HERMINE",
+  "status" : 0,
+  "sexe" : 1,
+  "dateNaissance" : 1576154693788,
+  "beta" : 0
+}

@@ -94,7 +94,7 @@
           <Group type="102" alignment="1" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="tabPrincipal" max="32767" attributes="0"/>
-                  <Component id="panOutils" min="-2" max="-2" attributes="0"/>
+                  <Component id="panOutils" max="32767" attributes="0"/>
               </Group>
               <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
               <Component id="barreEtat" min="-2" max="-2" attributes="0"/>
@@ -481,7 +481,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="barreOutils" alignment="1" pref="373" max="32767" attributes="0"/>
+              <Component id="barreOutils" alignment="1" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>

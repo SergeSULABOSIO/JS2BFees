@@ -227,27 +227,31 @@ public class Principal extends javax.swing.JFrame {
                             lf_construireListeAnneesScolaires();
                         }
                         lf_progress(false, message, progressEtat, 0);
-                        btEtatBackup.setEnabled(true);
+                        backBouton.setEnabled(true);
+                        comboListeAnneesScolaires.setEnabled(true);
                     }
 
                     @Override
                     public void onEchec(String message) {
                         lf_progress(false, message, progressEtat, 0);
-                        btEtatBackup.setText("Reessayez!");
-                        btEtatBackup.setEnabled(true);
+                        backBouton.setText("Reessayez!");
+                        backBouton.setEnabled(true);
+                        comboListeAnneesScolaires.setEnabled(true);
                     }
 
                     @Override
                     public void onProcessing(String message, int pourcentage) {
                         lf_progress(true, message, progressEtat, pourcentage);
-                        btEtatBackup.setText("En cours...");
-                        btEtatBackup.setEnabled(false);
+                        backBouton.setText("En cours...");
+                        backBouton.setEnabled(false);
+                        comboListeAnneesScolaires.setEnabled(false);
                     }
                 });
             } else {
                 JOptionPane.showMessageDialog(moi, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
-                btEtatBackup.setText("Hors connexion!");
-                btEtatBackup.setEnabled(true);
+                backBouton.setText("Hors connexion!");
+                backBouton.setEnabled(true);
+                comboListeAnneesScolaires.setEnabled(true);
             }
         }
     }
@@ -329,7 +333,7 @@ public class Principal extends javax.swing.JFrame {
         btEtatEntreprise.setIcon(icones.getClasse_01());
         btEtatUser.setIcon(icones.getUtilisateur_01());
         btEtatLicence.setIcon(icones.getAdresse_01());
-        btEtatBackup.setIcon(icones.getServeur_01());
+        backBouton.setIcon(icones.getServeur_01());
         barreEtat.setVisible(true);
 
         lf_construireListeAnneesScolaires();
@@ -361,7 +365,7 @@ public class Principal extends javax.swing.JFrame {
         } else {
             btEtatLicence.setVisible(false);
         }
-        btEtatBackup.setText("Synchroniser");
+        backBouton.setText("Synchroniser");
 
         moi.setTitle(texteTitre);
 
@@ -577,20 +581,20 @@ public class Principal extends javax.swing.JFrame {
         fm.setEcouteurSuiviEdition(new EcouteurSuiviEdition() {
             @Override
             public void onSuiveurActive(Date dateDernireModification) {
-                if (btEtatBackup != null) {
-                    btEtatBackup.setText("Backup (!)");
-                    btEtatBackup.setToolTipText("Dernière modification: " + UtilObjet.getDateFrancais(dateDernireModification) + ". Cliquez pour sauvegarder!");
-                    btEtatBackup.setForeground(Color.red);
-                    btEtatBackup.setFont(btEtatBackup.getFont().deriveFont(Font.BOLD));
+                if (backBouton != null) {
+                    backBouton.setText("Backup (!)");
+                    backBouton.setToolTipText("Dernière modification: " + UtilObjet.getDateFrancais(dateDernireModification) + ". Cliquez pour sauvegarder!");
+                    backBouton.setForeground(Color.red);
+                    backBouton.setFont(backBouton.getFont().deriveFont(Font.BOLD));
                 }
             }
 
             @Override
             public void onSuiveurDesactive() {
-                if (btEtatBackup != null) {
-                    btEtatBackup.setText("Backup");
-                    btEtatBackup.setForeground(Color.black);
-                    btEtatBackup.setFont(btEtatBackup.getFont().deriveFont(Font.PLAIN));
+                if (backBouton != null) {
+                    backBouton.setText("Backup");
+                    backBouton.setForeground(Color.black);
+                    backBouton.setFont(backBouton.getFont().deriveFont(Font.PLAIN));
                 }
             }
         });
@@ -695,10 +699,15 @@ public class Principal extends javax.swing.JFrame {
         btEtatUser = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         btEtatLicence = new javax.swing.JButton();
-        btEtatBackup = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
         labInfoEtat = new javax.swing.JLabel();
         progressEtat = new javax.swing.JProgressBar();
+        backUpToolbar = new javax.swing.JToolBar();
+        backBouton = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        backProgress = new javax.swing.JProgressBar();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
+        backLabel = new javax.swing.JLabel();
         tabPrincipal = new javax.swing.JTabbedPane();
         panLogin = new javax.swing.JPanel();
         panLoginInfos = new javax.swing.JPanel();
@@ -784,19 +793,6 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         jToolBar1.add(btEtatLicence);
-
-        btEtatBackup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Facture01.png"))); // NOI18N
-        btEtatBackup.setText("Synchroniser");
-        btEtatBackup.setToolTipText("Sauvegarde des données sur le serveur distant. Cliquer pour relancer le chargement.");
-        btEtatBackup.setFocusable(false);
-        btEtatBackup.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btEtatBackup.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btEtatBackup.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btEtatBackupActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btEtatBackup);
         jToolBar1.add(jSeparator5);
 
         labInfoEtat.setText("Info");
@@ -805,21 +801,47 @@ public class Principal extends javax.swing.JFrame {
         progressEtat.setIndeterminate(true);
         jToolBar1.add(progressEtat);
 
+        backUpToolbar.setRollover(true);
+
+        backBouton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Facture01.png"))); // NOI18N
+        backBouton.setText("Synchroniser");
+        backBouton.setToolTipText("Sauvegarde des données sur le serveur distant. Cliquer pour relancer le chargement.");
+        backBouton.setFocusable(false);
+        backBouton.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        backBouton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        backBouton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backBoutonActionPerformed(evt);
+            }
+        });
+        backUpToolbar.add(backBouton);
+        backUpToolbar.add(jSeparator3);
+
+        backProgress.setMaximumSize(new java.awt.Dimension(100, 14));
+        backUpToolbar.add(backProgress);
+        backUpToolbar.add(jSeparator4);
+
+        backLabel.setText("Prêt");
+        backUpToolbar.add(backLabel);
+
         javax.swing.GroupLayout barreEtatLayout = new javax.swing.GroupLayout(barreEtat);
         barreEtat.setLayout(barreEtatLayout);
         barreEtatLayout.setHorizontalGroup(
             barreEtatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, barreEtatLayout.createSequentialGroup()
+            .addGroup(barreEtatLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(barreEtatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(backUpToolbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         barreEtatLayout.setVerticalGroup(
             barreEtatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(barreEtatLayout.createSequentialGroup()
-                .addGap(0, 5, Short.MAX_VALUE)
+                .addGap(1, 1, 1)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
+                .addGap(0, 0, 0)
+                .addComponent(backUpToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         btLoginConnexion.setBackground(new java.awt.Color(251, 155, 12));
@@ -939,11 +961,11 @@ public class Principal extends javax.swing.JFrame {
         panLoginLayout.setVerticalGroup(
             panLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panLoginLayout.createSequentialGroup()
-                .addContainerGap(89, Short.MAX_VALUE)
+                .addContainerGap(74, Short.MAX_VALUE)
                 .addComponent(panLoginInfos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panLoginMessage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         tabPrincipal.addTab("Login", panLogin);
@@ -1027,7 +1049,9 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tabPrincipal)
                     .addComponent(panOutils, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addComponent(barreEtat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(barreEtat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -1099,10 +1123,10 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_comboListeAnneesScolairesActionPerformed
 
-    private void btEtatBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatBackupActionPerformed
+    private void backBoutonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBoutonActionPerformed
         // TODO add your handling code here:
         lf_synchroniser();
-    }//GEN-LAST:event_btEtatBackupActionPerformed
+    }//GEN-LAST:event_backBoutonActionPerformed
 
     private void btEtatUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatUserActionPerformed
         // TODO add your handling code here:
@@ -1155,9 +1179,12 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBouton;
+    private javax.swing.JLabel backLabel;
+    private javax.swing.JProgressBar backProgress;
+    private javax.swing.JToolBar backUpToolbar;
     private javax.swing.JPanel barreEtat;
     private javax.swing.JToolBar barreOutils;
-    private javax.swing.JButton btEtatBackup;
     private javax.swing.JButton btEtatEntreprise;
     private javax.swing.JButton btEtatLicence;
     private javax.swing.JButton btEtatUser;
@@ -1170,6 +1197,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JToolBar jToolBar1;

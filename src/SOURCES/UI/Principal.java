@@ -183,7 +183,7 @@ public class Principal extends javax.swing.JFrame {
                 fm.fm_loadSession(new EcouteurLongin() {
                     @Override
                     public void onConnected(String string, Session session) {
-                        lf_chargerEspaceAdmin(session);
+                        lf_chargerEspaceTravail(session);
                     }
 
                     @Override
@@ -579,7 +579,7 @@ public class Principal extends javax.swing.JFrame {
         appliquerDroit();
     }
 
-    private void lf_chargerEspaceAdmin(Session session) {
+    private void lf_chargerEspaceTravail(Session session) {
         this.session = session;
         tabPrincipal.remove(panLogin);
         lf_contruireBarreEtats(session);
@@ -672,7 +672,7 @@ public class Principal extends javax.swing.JFrame {
                 @Override
                 public void onConnected(String message, Session session) {
                     if (session != null) {
-                        lf_chargerEspaceAdmin(session);
+                        lf_chargerEspaceTravail(session);
                     } else {
                         labLoginMessage.setForeground(Color.RED);
                         labLoginMessage.setText("Identifiants non reconnus!");

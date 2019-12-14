@@ -259,6 +259,7 @@ public class Principal extends javax.swing.JFrame {
                     backBouton.setEnabled(true);
                     comboListeAnneesScolaires.setEnabled(true);
                     lf_progressBackUpToobar(false, "Veuillez vérifier votre connexion Internet, puis réessayer!", backProgress, -1);
+                    backLabel.setText("Aucune connexion Internet.");
                 }
 
                 @Override

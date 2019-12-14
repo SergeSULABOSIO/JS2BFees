@@ -10,6 +10,7 @@ import BEAN_BARRE_OUTILS.Bouton;
 import BEAN_BARRE_OUTILS.BoutonListener;
 import ICONES.Icones;
 import SOURCES.CALLBACK.EcouteurGestionExercice;
+import SOURCES.Callback.EcouteurInternet;
 import SOURCES.Callback.EcouteurLongin;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurSuiviEdition;
@@ -219,41 +220,55 @@ public class Principal extends javax.swing.JFrame {
                 idExerciceSelected = -1;
             }
 
-            if (UtilFileManager.isNewWorkAvailable("http://www.google.com") == true) {
-                fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
-                    @Override
-                    public void onSuccess(String message) {
-                        if (idExerciceSelected == -1) {
-                            lf_construireListeAnneesScolaires();
+            UtilFileManager.isNewWorkAvailable("http://www.google.com", new EcouteurInternet() {
+                @Override
+                public void onInternet(String adresseWebDisponible) {
+                    fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
+                        @Override
+                        public void onSuccess(String message) {
+                            if (idExerciceSelected == -1) {
+                                lf_construireListeAnneesScolaires();
+                            }
+                            lf_progressBackUpToobar(false, message, backProgress, 0);
+                            backBouton.setEnabled(true);
+                            comboListeAnneesScolaires.setEnabled(true);
+                            backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur.");
                         }
-                        lf_progressBackUpToobar(false, message, backProgress, 0);
-                        backBouton.setEnabled(true);
-                        comboListeAnneesScolaires.setEnabled(true);
-                        backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur.");
-                    }
 
-                    @Override
-                    public void onEchec(String message) {
-                        lf_progressBackUpToobar(false, message, backProgress, 0);
-                        backBouton.setEnabled(true);
-                        comboListeAnneesScolaires.setEnabled(true);
-                        backLabel.setText(message);
-                    }
+                        @Override
+                        public void onEchec(String message) {
+                            lf_progressBackUpToobar(false, message, backProgress, 0);
+                            backBouton.setEnabled(true);
+                            comboListeAnneesScolaires.setEnabled(true);
+                            backLabel.setText(message);
+                        }
 
-                    @Override
-                    public void onProcessing(String message, int pourcentage) {
-                        lf_progressBackUpToobar(true, message, backProgress, pourcentage);
-                        backBouton.setEnabled(false);
-                        comboListeAnneesScolaires.setEnabled(false);
-                        backLabel.setText("La sauvegarde des données est en cours...");
-                    }
-                });
-            } else {
-                JOptionPane.showMessageDialog(moi, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
-                backBouton.setEnabled(true);
-                comboListeAnneesScolaires.setEnabled(true);
-                lf_progressBackUpToobar(false, "Veuillez vérifier votre connexion Internet, puis réessayer!", backProgress, -1);
-            }
+                        @Override
+                        public void onProcessing(String message, int pourcentage) {
+                            lf_progressBackUpToobar(true, message, backProgress, pourcentage);
+                            backBouton.setEnabled(false);
+                            comboListeAnneesScolaires.setEnabled(false);
+                            backLabel.setText("La sauvegarde des données est en cours...");
+                        }
+                    });
+                }
+
+                @Override
+                public void onError() {
+                    JOptionPane.showMessageDialog(moi, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
+                    backBouton.setEnabled(true);
+                    comboListeAnneesScolaires.setEnabled(true);
+                    lf_progressBackUpToobar(false, "Veuillez vérifier votre connexion Internet, puis réessayer!", backProgress, -1);
+                }
+
+                @Override
+                public void onVerification(String message) {
+                    lf_progressBackUpToobar(true, message, backProgress, 75);
+                    backBouton.setEnabled(false);
+                    comboListeAnneesScolaires.setEnabled(false);
+                    backLabel.setText(message);
+                }
+            });
         }
     }
 
@@ -291,7 +306,7 @@ public class Principal extends javax.swing.JFrame {
         progressBar.setStringPainted(afficher);
         progressBar.setString(message);
     }
-    
+
     private void lf_progressBackUpToobar(boolean afficher, String message, JProgressBar progressBar, int pourcentage) {
         if (pourcentage == -1) {
             progressBar.setIndeterminate(afficher);

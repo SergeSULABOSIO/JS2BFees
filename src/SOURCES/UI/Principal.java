@@ -229,7 +229,7 @@ public class Principal extends javax.swing.JFrame {
                             if (idExerciceSelected == -1) {
                                 lf_construireListeAnneesScolaires();
                             }
-                            lf_progressBackUpToobar(false, message, backProgress, 0);
+                            lf_progressBackUpToobar(false, "Prêt", backProgress, 0);
                             backBouton.setEnabled(true);
                             comboListeAnneesScolaires.setEnabled(true);
                             backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur.");
@@ -237,7 +237,7 @@ public class Principal extends javax.swing.JFrame {
 
                         @Override
                         public void onEchec(String message) {
-                            lf_progressBackUpToobar(false, message, backProgress, 0);
+                            lf_progressBackUpToobar(false, "Erreur !", backProgress, 0);
                             backBouton.setEnabled(true);
                             comboListeAnneesScolaires.setEnabled(true);
                             backLabel.setText(message);
@@ -245,10 +245,10 @@ public class Principal extends javax.swing.JFrame {
 
                         @Override
                         public void onProcessing(String message, int pourcentage) {
-                            lf_progressBackUpToobar(true, message, backProgress, pourcentage);
+                            lf_progressBackUpToobar(true, "(" + pourcentage + "%) Patientez...", backProgress, pourcentage);
                             backBouton.setEnabled(false);
                             comboListeAnneesScolaires.setEnabled(false);
-                            backLabel.setText("La sauvegarde des données est en cours...");
+                            backLabel.setText("Back-up en cours: " + message);
                         }
                     });
                 }
@@ -263,7 +263,7 @@ public class Principal extends javax.swing.JFrame {
 
                 @Override
                 public void onVerification(String message) {
-                    lf_progressBackUpToobar(true, message, backProgress, 75);
+                    lf_progressBackUpToobar(true, "Patientez...", backProgress, 75);
                     backBouton.setEnabled(false);
                     comboListeAnneesScolaires.setEnabled(false);
                     backLabel.setText(message);

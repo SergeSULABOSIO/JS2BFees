@@ -56,7 +56,7 @@ import javax.swing.JProgressBar;
 public class Principal extends javax.swing.JFrame {
 
     public BarreOutils bOutils = null;
-    public Bouton btAnnee, btInscription, btTresorerie, btPaie, btLitige, btLicence, btLogo, btUtilisateur;
+    public Bouton btAnnee, btInscription, btTresorerie, btPaie, btLitige, btLicence, btLogo, btUtilisateur, btBackup;
     private Icones icones = null;
     private FileManager fm = null;
     private JFrame moi = null;
@@ -231,6 +231,8 @@ public class Principal extends javax.swing.JFrame {
                             }
                             lf_progressBackUpToobar(false, "Prêt", backProgress, 0);
                             backBouton.setEnabled(true);
+                            btBackup.getBouton().setEnabled(true);
+                            menuSynchroniser.setEnabled(true);
                             comboListeAnneesScolaires.setEnabled(true);
                             backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur.");
                         }
@@ -239,6 +241,8 @@ public class Principal extends javax.swing.JFrame {
                         public void onEchec(String message) {
                             lf_progressBackUpToobar(false, "Erreur !", backProgress, 0);
                             backBouton.setEnabled(true);
+                            btBackup.getBouton().setEnabled(true);
+                            menuSynchroniser.setEnabled(true);
                             comboListeAnneesScolaires.setEnabled(true);
                             backLabel.setText(message);
                         }
@@ -247,6 +251,8 @@ public class Principal extends javax.swing.JFrame {
                         public void onProcessing(String message, int pourcentage) {
                             lf_progressBackUpToobar(true, "(" + pourcentage + "%) Patientez...", backProgress, pourcentage);
                             backBouton.setEnabled(false);
+                            btBackup.getBouton().setEnabled(false);
+                            menuSynchroniser.setEnabled(false);
                             comboListeAnneesScolaires.setEnabled(false);
                             backLabel.setText("Back-up en cours: " + message);
                         }
@@ -257,6 +263,8 @@ public class Principal extends javax.swing.JFrame {
                 public void onError() {
                     JOptionPane.showMessageDialog(moi, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
                     backBouton.setEnabled(true);
+                    btBackup.getBouton().setEnabled(true);
+                    menuSynchroniser.setEnabled(true);
                     comboListeAnneesScolaires.setEnabled(true);
                     lf_progressBackUpToobar(false, "Veuillez vérifier votre connexion Internet, puis réessayer!", backProgress, -1);
                     backLabel.setText("Aucune connexion Internet.");
@@ -266,6 +274,8 @@ public class Principal extends javax.swing.JFrame {
                 public void onVerification(String message) {
                     lf_progressBackUpToobar(true, "Patientez...", backProgress, 75);
                     backBouton.setEnabled(false);
+                    btBackup.getBouton().setEnabled(false);
+                    menuSynchroniser.setEnabled(false);
                     comboListeAnneesScolaires.setEnabled(false);
                     backLabel.setText(message);
                 }
@@ -321,7 +331,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void lf_initIcones() {
         icones = new Icones();
-        menuSynchroniser.setIcon(icones.getSynchroniser_01());
+        menuSynchroniser.setIcon(icones.getServeur_01());
         menuDeconnexion.setIcon(icones.getDéconnecté_01());
         menuQuitter.setIcon(icones.getSortie_01());
         this.setIconImage(icones.getAdresse_03().getImage());
@@ -420,6 +430,7 @@ public class Principal extends javax.swing.JFrame {
                     btPaie.setVisible(false);
                     btTresorerie.setVisible(false);
                     btUtilisateur.setVisible(false);
+                    
                 } else {  //tentative de modification ou suppression
                     btAnnee.setText("Exercice", 12, true);
                     btAnnee.setInfosBulle("Ouvrir l'Exercice séléctionné");
@@ -578,7 +589,15 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         btUtilisateur.setForeground(UtilFees.COULEUR_ORANGE);
-
+        
+        btBackup = new Bouton(12, "Back-up", "Sauvegarder vos données en ligne", true, icones.getServeur_03(), new BoutonListener() {
+            @Override
+            public void OnEcouteLeClick() {
+                lf_synchroniser();
+            }
+        });
+        btBackup.setForeground(UtilFees.COULEUR_ORANGE);
+        
         bOutils.AjouterBouton(btLogo);
         bOutils.AjouterBouton(btLicence);
         bOutils.AjouterSeparateur();
@@ -588,6 +607,7 @@ public class Principal extends javax.swing.JFrame {
         bOutils.AjouterBouton(btTresorerie);
         bOutils.AjouterBouton(btPaie);
         bOutils.AjouterBouton(btUtilisateur);
+        bOutils.AjouterBouton(btBackup);
 
         panOutils.setVisible(true);
         barreOutils.setVisible(true);
@@ -1032,7 +1052,7 @@ public class Principal extends javax.swing.JFrame {
 
         menuSynchroniser.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Y, java.awt.event.InputEvent.CTRL_MASK));
         menuSynchroniser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG_Fees/Facture01.png"))); // NOI18N
-        menuSynchroniser.setText("Backup");
+        menuSynchroniser.setText("Back-up");
         menuSynchroniser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuSynchroniserActionPerformed(evt);

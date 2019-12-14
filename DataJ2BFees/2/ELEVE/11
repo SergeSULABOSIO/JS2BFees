@@ -1,0 +1,18 @@
+{
+  "id" : 11,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 2,
+  "signature" : -3795364122127120628,
+  "classe" : "2e",
+  "adresse" : "Kinshasa",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "LELO",
+  "postnom" : "NGOMA",
+  "prenom" : "TABU",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1576344691070,
+  "beta" : 0
+}

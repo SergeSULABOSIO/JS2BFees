@@ -1,0 +1,18 @@
+{
+  "id" : 31,
+  "idEleve" : 11,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 1,
+  "idPeriode" : 3,
+  "mode" : 0,
+  "reference" : "1576344752085",
+  "nomEleve" : "LELO NGOMA TABU",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "LELO NGOMA TABU",
+  "montant" : 16.5,
+  "date" : 1576344752085,
+  "signature" : -8043849594149726954,
+  "beta" : 0,
+  "referenceTransaction" : "1576344752085"
+}

@@ -1,0 +1,18 @@
+{
+  "id" : 36,
+  "idEleve" : 12,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 2,
+  "idPeriode" : 1,
+  "mode" : 0,
+  "reference" : "1576526448717",
+  "nomEleve" : "Eleve_11 SULA SCHEKINAH",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "Eleve_11 SULA SCHEKINAH",
+  "montant" : 33.0,
+  "date" : 1576526448717,
+  "signature" : -7402449475400365847,
+  "beta" : 0,
+  "referenceTransaction" : "1576526448717"
+}

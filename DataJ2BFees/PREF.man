@@ -2,5 +2,5 @@
   "fenetre_x" : 300.0,
   "fenetre_y" : 0.0,
   "fenetre_w" : 1064.0,
-  "fenetre_h" : 728.0
+  "fenetre_h" : 727.0
 }

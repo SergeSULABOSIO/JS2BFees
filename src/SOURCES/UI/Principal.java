@@ -434,7 +434,7 @@ public class Principal extends javax.swing.JFrame {
                 } else {  //tentative de modification ou suppression
                     btAnnee.setText("Exercice", 12, true);
                     btAnnee.setInfosBulle("Ouvrir l'Exercice séléctionné");
-                    btAnnee.setIcone(icones.getCalendrier_03());
+                    btAnnee.setIcone(icones.getCalendrier_02());
 
                     if (user.getDroitExercice() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btAnnee.setVisible(false);

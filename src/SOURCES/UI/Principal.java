@@ -484,7 +484,7 @@ public class Principal extends javax.swing.JFrame {
         });
         btLicence.setForeground(UtilFees.COULEUR_ORANGE);
 
-        btAnnee = new Bouton(12, "Démarrer", "Créer une voulle année scolaire", true, icones.getDémarrer_03(), new BoutonListener() {
+        btAnnee = new Bouton(12, "Démarrer", "Créer une voulle année scolaire", true, icones.getDémarrer_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
 
@@ -512,7 +512,7 @@ public class Principal extends javax.swing.JFrame {
         });
         btAnnee.setForeground(UtilFees.COULEUR_ORANGE);
 
-        btInscription = new Bouton(12, "Adhésion", "Inscrire des étudiants", true, icones.getAjouter_03(), new BoutonListener() {
+        btInscription = new Bouton(12, "Adhésion", "Inscrire des étudiants", true, icones.getAjouter_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
                 if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
@@ -529,7 +529,7 @@ public class Principal extends javax.swing.JFrame {
         });
         btInscription.setForeground(UtilFees.COULEUR_ORANGE);
 
-        btPaie = new Bouton(12, "Salaire", "Paie des Agents de l'établissement", true, icones.getRecette_03(), new BoutonListener() {
+        btPaie = new Bouton(12, "Salaire", "Paie des Agents de l'établissement", true, icones.getRecette_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
                 if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
@@ -546,7 +546,7 @@ public class Principal extends javax.swing.JFrame {
         });
         btPaie.setForeground(UtilFees.COULEUR_ORANGE);
 
-        btTresorerie = new Bouton(12, "Trésorerie", "La trésorerie (Encaissements & Décaissements)", true, icones.getTableau_de_bord_03(), new BoutonListener() {
+        btTresorerie = new Bouton(12, "Trésorerie", "La trésorerie (Encaissements & Décaissements)", true, icones.getTableau_de_bord_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
                 /*
@@ -563,7 +563,7 @@ public class Principal extends javax.swing.JFrame {
         });
         btTresorerie.setForeground(UtilFees.COULEUR_ORANGE);
 
-        btLitige = new Bouton(12, "Litiges", "Litiges et reglèment des dettes", true, icones.getFournisseur_03(), new BoutonListener() {
+        btLitige = new Bouton(12, "Litiges", "Litiges et reglèment des dettes", true, icones.getFournisseur_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
                 /**/
@@ -582,7 +582,7 @@ public class Principal extends javax.swing.JFrame {
         });
         btLitige.setForeground(UtilFees.COULEUR_ORANGE);
 
-        btUtilisateur = new Bouton(12, "Utilisateurs", "Gérer les utilisateurs ainsi que leurs droits d'accès.", true, icones.getUtilisateur_03(), new BoutonListener() {
+        btUtilisateur = new Bouton(12, "Utilisateurs", "Gérer les utilisateurs ainsi que leurs droits d'accès.", true, icones.getUtilisateur_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
                 UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_LISTER_UTILISATEUR);
@@ -590,7 +590,7 @@ public class Principal extends javax.swing.JFrame {
         });
         btUtilisateur.setForeground(UtilFees.COULEUR_ORANGE);
         
-        btBackup = new Bouton(12, "Back-up", "Sauvegarder vos données en ligne", true, icones.getServeur_03(), new BoutonListener() {
+        btBackup = new Bouton(12, "Back-up", "Sauvegarder vos données en ligne", true, icones.getServeur_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
                 lf_synchroniser();

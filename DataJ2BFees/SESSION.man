@@ -36,17 +36,17 @@
     "beta" : 0
   },
   "paiement" : {
-    "id" : 14,
-    "idEntreprise" : 2,
-    "idUtilisateur" : 12,
-    "plan" : 0,
-    "canal" : 0,
-    "reference" : "dfdfd1f2f4d5",
-    "dateReception" : "2019-12-14 17:38:20",
-    "montant" : 100.0,
-    "dateActivation" : "2019-12-14 16:39:01",
-    "dateExpiration" : "2020-06-14 16:39:01"
+    "id" : -1,
+    "idEntreprise" : -1,
+    "idUtilisateur" : -1,
+    "plan" : -1,
+    "canal" : -1,
+    "reference" : "",
+    "dateReception" : null,
+    "montant" : 0.0,
+    "dateActivation" : null,
+    "dateExpiration" : null
   },
-  "token" : "1576859641188",
-  "derniereConnexion" : 1576859641188
+  "token" : "1576862416594",
+  "derniereConnexion" : 1576862416594
 }

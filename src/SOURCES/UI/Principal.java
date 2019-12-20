@@ -397,9 +397,14 @@ public class Principal extends javax.swing.JFrame {
 
         PaiementLicence licence = session.getPaiement();
         if (licence != null) {
-            String dateExpirationL = UtilFees.convertDatePaiement(licence.getDateExpiration()).toLocaleString();
-            btEtatLicence.setText(dateExpirationL);
-            texteTitre += " - Echéance: " + dateExpirationL;
+            if (licence.getDateExpiration() != null) {
+                String dateExpirationL = UtilFees.convertDatePaiement(licence.getDateExpiration()).toLocaleString();
+                btEtatLicence.setText(dateExpirationL);
+                texteTitre += " - Echéance: " + dateExpirationL;
+            }else{
+                btEtatLicence.setText("Mode Gratuit");
+                texteTitre += " - Mode Gratuit";
+            }
         } else {
             btEtatLicence.setVisible(false);
         }
@@ -430,7 +435,7 @@ public class Principal extends javax.swing.JFrame {
                     btPaie.setVisible(false);
                     btTresorerie.setVisible(false);
                     btUtilisateur.setVisible(false);
-                    
+
                 } else {  //tentative de modification ou suppression
                     btAnnee.setText("Exercice", 12, true);
                     btAnnee.setInfosBulle("Ouvrir l'Exercice séléctionné");
@@ -589,7 +594,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         btUtilisateur.setForeground(UtilFees.COULEUR_ORANGE);
-        
+
         btBackup = new Bouton(12, "Back-up", "Sauvegarder vos données en ligne", true, icones.getServeur_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
@@ -597,7 +602,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         btBackup.setForeground(UtilFees.COULEUR_ORANGE);
-        
+
         bOutils.AjouterBouton(btLogo);
         bOutils.AjouterBouton(btLicence);
         bOutils.AjouterSeparateur();
@@ -698,7 +703,7 @@ public class Principal extends javax.swing.JFrame {
         String loginEmail = chLoginEmail.getText();
         String loginPasseW = chLoginMotDePasse.getText();
         String loginID = chLoginIDEcole.getText();
-        
+
         if (loginEmail.length() == 0 || loginPasseW.length() == 0 || loginID.length() == 0) {
             labLoginMessage.setForeground(Color.red);
             labLoginMessage.setText("Veuillez fournir vos identifiants!");

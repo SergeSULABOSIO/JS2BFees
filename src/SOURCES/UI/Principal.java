@@ -698,7 +698,7 @@ public class Principal extends javax.swing.JFrame {
         String loginEmail = chLoginEmail.getText();
         String loginPasseW = chLoginMotDePasse.getText();
         String loginID = chLoginIDEcole.getText();
-
+        
         if (loginEmail.length() == 0 || loginPasseW.length() == 0 || loginID.length() == 0) {
             labLoginMessage.setForeground(Color.red);
             labLoginMessage.setText("Veuillez fournir vos identifiants!");
@@ -711,15 +711,15 @@ public class Principal extends javax.swing.JFrame {
                         lf_chargerEspaceTravail(session);
                     } else {
                         labLoginMessage.setForeground(Color.RED);
-                        labLoginMessage.setText("Identifiants non reconnus!");
+                        labLoginMessage.setText(message);
                         lf_progress(false, "", progressLogin, 0);
                     }
                 }
 
                 @Override
-                public void onEchec(String string) {
+                public void onEchec(String message) {
                     labLoginMessage.setForeground(Color.RED);
-                    labLoginMessage.setText("Connexion impossible");
+                    labLoginMessage.setText(message);
                     lf_progress(false, "", progressLogin, 0);
                 }
 
@@ -985,8 +985,8 @@ public class Principal extends javax.swing.JFrame {
             .addGroup(panLoginMessageLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panLoginMessageLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labLoginMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(progressLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE))
+                    .addComponent(labLoginMessage, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(progressLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         panLoginMessageLayout.setVerticalGroup(

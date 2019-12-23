@@ -18,6 +18,7 @@ import Source.Callbacks.EcouteurCrossCanalAgent;
 import Source.Callbacks.EcouteurCrossCanalCharge;
 import Source.Callbacks.EcouteurCrossCanalRevenu;
 import Source.Callbacks.EcouteurEnregistrement;
+import Source.Callbacks.EcouteurFreemium;
 import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceFrais;
 import Source.Interface.InterfaceMonnaie;
@@ -38,7 +39,6 @@ import Source.Objet.UtilObjet;
 import Source.Objet.Utilisateur;
 import java.util.Vector;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import Source.Interface.InterfaceAnnee;
@@ -73,8 +73,10 @@ public class GestionExercice {
     private CouleurBasique couleurBasique;
     public JFrame fenetre;
     public Icones icones;
+    public EcouteurFreemium ef = null;
 
-    public GestionExercice(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output, EcouteurGestionExercice ecouteurExercice) {
+    public GestionExercice(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output, EcouteurGestionExercice ecouteurExercice) {
+        this.ef = ef;
         this.couleurBasique = couleurBasique;
         this.fm = fm;
         this.fenetre = fenetre;
@@ -971,8 +973,10 @@ public class GestionExercice {
         }
     }
 
+    boolean rep = false;
+
     public void ga_initUI(String nomTab) {
-        panel = new PanelExercice(couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurExerice() {
+        panel = new PanelExercice(ef, couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurExerice() {
             @Override
             public void onEnregistre(SortiesExercice se) {
                 if (se != null) {
@@ -1032,7 +1036,7 @@ public class GestionExercice {
 
         });
         //Chargement du gestionnaire sur l'onglet
-        
+
         panel.setEcouteurCrossCanalAgent(new EcouteurCrossCanalAgent() {
             @Override
             public void onOuvrirFicheDePaie(Agent agent) {
@@ -1041,33 +1045,31 @@ public class GestionExercice {
                         //On ouvre les fiches de paie de l'agent séléctioné
                         //System.out.println("");
                         //System.out.println("Agent : " + agent);
-                        GestionSalaire gestionSalaire = new GestionSalaire(fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, agent);
+                        GestionSalaire gestionSalaire = new GestionSalaire(ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, agent);
                         gestionSalaire.gp_setDonneesFromFileManager(newIannee.getNom(), true);
                     }
                 }.start();
             }
         });
-        
-        
+
         panel.setEcouteurCrossCanalRevenu(new EcouteurCrossCanalRevenu() {
             @Override
             public void onOuvrirRevenu(Revenu revenu) {
                 new Thread() {
                     public void run() {
-                        GestionTresorerie gestionTresorerie = new GestionTresorerie(fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, revenu);
+                        GestionTresorerie gestionTresorerie = new GestionTresorerie(ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, revenu);
                         gestionTresorerie.gt_setDonneesFromFileManager(newIannee.getNom(), true);
                     }
                 }.start();
             }
         });
-        
-        
+
         panel.setEcouteurCrossCanalCharge(new EcouteurCrossCanalCharge() {
             @Override
             public void onOuvrirCharge(Charge charge) {
                 new Thread() {
                     public void run() {
-                        GestionTresorerie gestionTresorerie = new GestionTresorerie(fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, charge);
+                        GestionTresorerie gestionTresorerie = new GestionTresorerie(ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, charge);
                         gestionTresorerie.gt_setDonneesFromFileManager(newIannee.getNom(), true);
                     }
                 }.start();
@@ -1080,61 +1082,3 @@ public class GestionExercice {
         progress.setIndeterminate(false);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

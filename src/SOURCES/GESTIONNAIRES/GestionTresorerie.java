@@ -18,6 +18,7 @@ import SOURCES.Utilitaires_Tresorerie.SortiesTresorerie;
 import SOURCES.Utilitaires_Tresorerie.UtilTresorerie;
 import Source.Callbacks.ConstructeurCriteres;
 import Source.Callbacks.EcouteurEnregistrement;
+import Source.Callbacks.EcouteurFreemium;
 import Source.Callbacks.EcouteurNavigateurPages;
 import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceDecaissement;
@@ -77,8 +78,10 @@ public class GestionTresorerie {
     public JFrame fenetre;
     public Icones icones;
     public boolean canBeSaved = false;
+    public EcouteurFreemium ef = null;
 
-    public GestionTresorerie(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionTresorerie(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+        this.ef = ef;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -91,7 +94,8 @@ public class GestionTresorerie {
         this.chargeConcerned = null;
     }
 
-    public GestionTresorerie(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Revenu revenueConcerned) {
+    public GestionTresorerie(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Revenu revenueConcerned) {
+        this.ef = ef;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -104,7 +108,8 @@ public class GestionTresorerie {
         this.chargeConcerned = null;
     }
 
-    public GestionTresorerie(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Charge chargeConcerned) {
+    public GestionTresorerie(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Charge chargeConcerned) {
+        this.ef = ef;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -771,7 +776,7 @@ public class GestionTresorerie {
     }
 
     private void initUI(String nomTab) {
-        panel = new PanelTresorerie(couleurBasique, progress, tabOnglet, getData(), new EcouteurTresorerie() {
+        panel = new PanelTresorerie(ef, couleurBasique, progress, tabOnglet, getData(), new EcouteurTresorerie() {
             @Override
             public void onEnregistre(SortiesTresorerie st) {
                 if (st != null) {

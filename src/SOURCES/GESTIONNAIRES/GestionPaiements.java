@@ -16,6 +16,7 @@ import SOURCES.Utilitaires_Facture.DonneesFacture;
 import SOURCES.Utilitaires_Facture.ParametresFacture;
 import SOURCES.Utilitaires_Facture.SortiesFacture;
 import Source.Callbacks.EcouteurEnregistrement;
+import Source.Callbacks.EcouteurFreemium;
 import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceMonnaie;
 import Source.Interface.InterfaceUtilisateur;
@@ -67,8 +68,10 @@ public class GestionPaiements {
     public String selectedAnnee;
     public boolean canBeSaved = false;
     public Icones icones = null;
+    public EcouteurFreemium ef = null;
 
-    public GestionPaiements(Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleve) {
+    public GestionPaiements(EcouteurFreemium ef, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleve) {
+        this.ef = ef;
         this.couleurBasique = couleurBasique;
         this.icones = icones;
         this.fm = fm;
@@ -431,7 +434,7 @@ public class GestionPaiements {
     }
 
     private void initUI(String nomTab) {
-        panel = new PanelFacture(couleurBasique, progress, tabOnglet, getData(), new EcouteurFacture() {
+        panel = new PanelFacture(ef, couleurBasique, progress, tabOnglet, getData(), new EcouteurFacture() {
             @Override
             public void onEnregistre(SortiesFacture sortiesFacture) {
                 savePaiements(sortiesFacture, sortiesFacture.getEcouteurEnregistrement(), utilisateur, exercice);

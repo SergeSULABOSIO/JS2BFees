@@ -18,6 +18,7 @@ import SOURCES.Utilitaires_Paie.UtilPaie;
 import SOURCES.Utilitaires_Tresorerie.UtilTresorerie;
 import Source.Callbacks.ConstructeurCriteres;
 import Source.Callbacks.EcouteurEnregistrement;
+import Source.Callbacks.EcouteurFreemium;
 import Source.Callbacks.EcouteurNavigateurPages;
 import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceMonnaie;
@@ -66,8 +67,10 @@ public class GestionSalaire {
     public JFrame fenetre;
     public Icones icones;
     public boolean canBeSaved = false;
+    private EcouteurFreemium ef = null;
 
-    public GestionSalaire(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionSalaire(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+        this.ef = ef;
         this.couleurBasique = couleurBasique;
         this.fm = fm;
         this.fenetre = fenetre;
@@ -79,7 +82,8 @@ public class GestionSalaire {
         this.agentConcerned = null;
     }
 
-    public GestionSalaire(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Agent agentConcerned) {
+    public GestionSalaire(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Agent agentConcerned) {
+        this.ef = ef;
         this.couleurBasique = couleurBasique;
         this.fm = fm;
         this.fenetre = fenetre;
@@ -402,7 +406,7 @@ public class GestionSalaire {
     }
 
     private void initUI(String nomTab) {
-        panel = new PanelPaie(couleurBasique, progress, tabOnglet, getData(), new EcouteurPaie() {
+        panel = new PanelPaie(ef, couleurBasique, progress, tabOnglet, getData(), new EcouteurPaie() {
             @Override
             public void onEnregistre(SortiesFichesDePaies si) {
                 if (si != null) {

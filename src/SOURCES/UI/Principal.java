@@ -25,6 +25,7 @@ import SOURCES.Objets.PaiementLicence;
 import SOURCES.Objets.Session;
 import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires.UtilFileManager;
+import Source.Callbacks.EcouteurFreemium;
 import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceUtilisateur;
 import Source.Objet.Agent;
@@ -72,6 +73,8 @@ public class Principal extends javax.swing.JFrame {
     public GestionSalaire gestionSalaire = null;
     public Vector<Annee> listeExercTempo = new Vector<>();
     public int idExerciceSelected;
+    public String texteTitre = "";
+    public EcouteurFreemium ef = null;
 
     /**
      * Creates new form Principal
@@ -82,6 +85,7 @@ public class Principal extends javax.swing.JFrame {
         panOutils.setVisible(false);
         moi = this;
         lf_initIcones();
+
         btLogo = new Bouton(12, "", "Votre logo - Cliquer pour ouvrir votre page web", true, icones.getSablier_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
@@ -92,6 +96,7 @@ public class Principal extends javax.swing.JFrame {
         btLogo.setForeground(couleurBasique.getCouleur_encadrement_selection());
         fm = new FileManager("http://www.visiterlardc.com/s2b", "processeurS2B.php", btLogo.getBouton());
         fm.fm_setEcouteurFenetre(moi);  // On écoute désormais les mouvements de la fenetre
+        lf_initEcuteurFreemium();
         lf_initEcouteurExercice();
         lf_construirePageLogin();
         loadUserSession();//
@@ -205,81 +210,94 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
-    private void lf_synchroniser() {
+    private void synchroniser() {
+        Annee exerciceConnected = null;
+        for (Annee ex : listeExercTempo) {
+            if ((comboListeAnneesScolaires.getSelectedItem() + "").equals(ex.getNom())) {
+                exerciceConnected = ex;
+            }
+        }
+
+        if ((exerciceConnected != null)) {
+            idExerciceSelected = exerciceConnected.getId();
+        } else {
+            idExerciceSelected = -1;
+        }
+
+        UtilFileManager.isNewWorkAvailable("http://www.google.com", new EcouteurInternet() {
+            @Override
+            public void onInternet(String adresseWebDisponible) {
+                fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
+                    @Override
+                    public void onSuccess(String message) {
+                        if (idExerciceSelected == -1) {
+                            lf_construireListeAnneesScolaires();
+                        }
+                        lf_progressBackUpToobar(false, "Prêt", backProgress, 0);
+                        backBouton.setEnabled(true);
+                        btBackup.getBouton().setEnabled(true);
+                        menuSynchroniser.setEnabled(true);
+                        comboListeAnneesScolaires.setEnabled(true);
+                        backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur.");
+                    }
+
+                    @Override
+                    public void onEchec(String message) {
+                        lf_progressBackUpToobar(false, "Erreur !", backProgress, 0);
+                        backBouton.setEnabled(true);
+                        btBackup.getBouton().setEnabled(true);
+                        menuSynchroniser.setEnabled(true);
+                        comboListeAnneesScolaires.setEnabled(true);
+                        backLabel.setText(message);
+                    }
+
+                    @Override
+                    public void onProcessing(String message, int pourcentage) {
+                        lf_progressBackUpToobar(true, "(" + pourcentage + "%) Patientez...", backProgress, pourcentage);
+                        backBouton.setEnabled(false);
+                        btBackup.getBouton().setEnabled(false);
+                        menuSynchroniser.setEnabled(false);
+                        comboListeAnneesScolaires.setEnabled(false);
+                        backLabel.setText("Back-up en cours: " + message);
+                    }
+                });
+            }
+
+            @Override
+            public void onError() {
+                JOptionPane.showMessageDialog(moi, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
+                backBouton.setEnabled(true);
+                btBackup.getBouton().setEnabled(true);
+                menuSynchroniser.setEnabled(true);
+                comboListeAnneesScolaires.setEnabled(true);
+                lf_progressBackUpToobar(false, "Veuillez vérifier votre connexion Internet, puis réessayer!", backProgress, -1);
+                backLabel.setText("Aucune connexion Internet.");
+            }
+
+            @Override
+            public void onVerification(String message) {
+                lf_progressBackUpToobar(true, "Patientez...", backProgress, 75);
+                backBouton.setEnabled(false);
+                btBackup.getBouton().setEnabled(false);
+                menuSynchroniser.setEnabled(false);
+                comboListeAnneesScolaires.setEnabled(false);
+                backLabel.setText(message);
+            }
+        });
+    }
+
+    private void lf_synchroniser(boolean isDialogBoxNeeded) {
         if (fm != null) {
-            Annee exerciceConnected = null;
-            for (Annee ex : listeExercTempo) {
-                if ((comboListeAnneesScolaires.getSelectedItem() + "").equals(ex.getNom())) {
-                    exerciceConnected = ex;
+            if (isDialogBoxNeeded == true) {
+                if (fm.fm_isLicenceValide(moi, icones.getAdresse_02()) == true) {
+                    synchroniser();
                 }
-            }
-
-            if ((exerciceConnected != null)) {
-                idExerciceSelected = exerciceConnected.getId();
             } else {
-                idExerciceSelected = -1;
+                if (fm.fm_isLicenceValide(null, null) == true) {
+                    synchroniser();
+                }
             }
 
-            UtilFileManager.isNewWorkAvailable("http://www.google.com", new EcouteurInternet() {
-                @Override
-                public void onInternet(String adresseWebDisponible) {
-                    fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
-                        @Override
-                        public void onSuccess(String message) {
-                            if (idExerciceSelected == -1) {
-                                lf_construireListeAnneesScolaires();
-                            }
-                            lf_progressBackUpToobar(false, "Prêt", backProgress, 0);
-                            backBouton.setEnabled(true);
-                            btBackup.getBouton().setEnabled(true);
-                            menuSynchroniser.setEnabled(true);
-                            comboListeAnneesScolaires.setEnabled(true);
-                            backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur.");
-                        }
-
-                        @Override
-                        public void onEchec(String message) {
-                            lf_progressBackUpToobar(false, "Erreur !", backProgress, 0);
-                            backBouton.setEnabled(true);
-                            btBackup.getBouton().setEnabled(true);
-                            menuSynchroniser.setEnabled(true);
-                            comboListeAnneesScolaires.setEnabled(true);
-                            backLabel.setText(message);
-                        }
-
-                        @Override
-                        public void onProcessing(String message, int pourcentage) {
-                            lf_progressBackUpToobar(true, "(" + pourcentage + "%) Patientez...", backProgress, pourcentage);
-                            backBouton.setEnabled(false);
-                            btBackup.getBouton().setEnabled(false);
-                            menuSynchroniser.setEnabled(false);
-                            comboListeAnneesScolaires.setEnabled(false);
-                            backLabel.setText("Back-up en cours: " + message);
-                        }
-                    });
-                }
-
-                @Override
-                public void onError() {
-                    JOptionPane.showMessageDialog(moi, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
-                    backBouton.setEnabled(true);
-                    btBackup.getBouton().setEnabled(true);
-                    menuSynchroniser.setEnabled(true);
-                    comboListeAnneesScolaires.setEnabled(true);
-                    lf_progressBackUpToobar(false, "Veuillez vérifier votre connexion Internet, puis réessayer!", backProgress, -1);
-                    backLabel.setText("Aucune connexion Internet.");
-                }
-
-                @Override
-                public void onVerification(String message) {
-                    lf_progressBackUpToobar(true, "Patientez...", backProgress, 75);
-                    backBouton.setEnabled(false);
-                    btBackup.getBouton().setEnabled(false);
-                    menuSynchroniser.setEnabled(false);
-                    comboListeAnneesScolaires.setEnabled(false);
-                    backLabel.setText(message);
-                }
-            });
         }
     }
 
@@ -378,7 +396,7 @@ public class Principal extends javax.swing.JFrame {
         lf_construireBoutons();
 
         Utilisateur user = session.getUtilisateur();
-        String texteTitre = "";
+
         if (user != null) {
             String noms = user.getNom() + " " + user.getPostnom() + " " + user.getPrenom();
             btEtatUser.setText(user.getPrenom());
@@ -397,18 +415,17 @@ public class Principal extends javax.swing.JFrame {
 
         PaiementLicence licence = session.getPaiement();
         if (licence != null) {
-            if (licence.getDateExpiration() != null) {
+            if (fm.fm_isLicenceValide(null, null) == true) {
                 String dateExpirationL = UtilFees.convertDatePaiement(licence.getDateExpiration()).toLocaleString();
                 btEtatLicence.setText(dateExpirationL);
                 texteTitre += " - Echéance: " + dateExpirationL;
-            }else{
+            } else {
                 btEtatLicence.setText("Mode Gratuit");
                 texteTitre += " - Mode Gratuit";
             }
         } else {
             btEtatLicence.setVisible(false);
         }
-        //backBouton.setText("Synchroniser");
 
         moi.setTitle(texteTitre);
 
@@ -473,10 +490,23 @@ public class Principal extends javax.swing.JFrame {
                     }
 
                     //Juste après sélction de l'année scolaire, il faut lancer la synchronisation très vite
-                    lf_synchroniser();
+                    lf_synchroniser(false);
                 }
             }
         }
+    }
+
+    private void lf_initEcuteurFreemium() {
+        ef = new EcouteurFreemium() {
+            @Override
+            public boolean onVerifie() {
+                if (fm != null) {
+                    return fm.fm_isLicenceValide(moi, icones.getAdresse_02());
+                } else {
+                    return false;
+                }
+            }
+        };
     }
 
     public void lf_construireBoutons() {
@@ -497,7 +527,7 @@ public class Principal extends javax.swing.JFrame {
                     new Thread() {
                         public void run() {
                             //Nouvelle année scolaire
-                            gestionAnnee = new GestionExercice(moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
+                            gestionAnnee = new GestionExercice(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
                             gestionAnnee.ga_setDonnees(null, new Vector<Agent>(), new Vector<Charge>(), new Vector<Classe>(), new Vector<Cours>(), new Vector<Frais>(), new Vector<Monnaie>(), new Vector<Revenu>(), new Vector<>());
                             gestionAnnee.ga_initUI("Nouvel Exercice");
                         }
@@ -507,7 +537,7 @@ public class Principal extends javax.swing.JFrame {
                         public void run() {
                             //On ouvre une année scolaire existante
                             //System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
-                            gestionAnnee = new GestionExercice(moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
+                            gestionAnnee = new GestionExercice(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
                             gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
                         }
                     }.start();
@@ -525,7 +555,7 @@ public class Principal extends javax.swing.JFrame {
                         public void run() {
                             //On ouvre les inscriptions
                             //System.out.println("Ouverture des adhésions");
-                            gestionAdhesion = new GestionAdhesion(moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                            gestionAdhesion = new GestionAdhesion(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                             gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
                         }
                     }.start();
@@ -542,7 +572,7 @@ public class Principal extends javax.swing.JFrame {
                         public void run() {
                             //On ouvre les inscriptions
                             System.out.println("Ouverture des fiches de paie");
-                            gestionSalaire = new GestionSalaire(moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                            gestionSalaire = new GestionSalaire(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                             gestionSalaire.gp_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
                         }
                     }.start();
@@ -560,7 +590,7 @@ public class Principal extends javax.swing.JFrame {
                     public void run() {
                         //On ouvre les inscriptions
                         //System.out.println("Ouverture de la trésorerie");
-                        gestionTresorerie = new GestionTresorerie(moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                        gestionTresorerie = new GestionTresorerie(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                         gestionTresorerie.gt_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
                     }
                 }.start();
@@ -577,7 +607,7 @@ public class Principal extends javax.swing.JFrame {
                         public void run() {
                             //On ouvre les inscriptions
                             //System.out.println("Ouverture des litiges");
-                            gestionLitiges = new GestionLitiges(moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                            gestionLitiges = new GestionLitiges(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                             gestionLitiges.gl_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
                         }
                     }.start();
@@ -598,7 +628,7 @@ public class Principal extends javax.swing.JFrame {
         btBackup = new Bouton(12, "Back-up", "Sauvegarder vos données en ligne", true, icones.getServeur_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                lf_synchroniser();
+                lf_synchroniser(true);
             }
         });
         btBackup.setForeground(UtilFees.COULEUR_ORANGE);
@@ -629,6 +659,7 @@ public class Principal extends javax.swing.JFrame {
         lf_progress(false, "", progressLogin, 0);
         lf_progress(false, "", progressEtat, 0);
         labInfoEtat.setText("Connecté!");
+        backProgress.setVisible(false);
 
         //on doit directement commencer à écouter le suiveur d'édition
         fm.setEcouteurSuiviEdition(new EcouteurSuiviEdition() {
@@ -657,7 +688,7 @@ public class Principal extends javax.swing.JFrame {
         });
 
         //On lance directement la synchronisation.
-        lf_synchroniser();
+        lf_synchroniser(false);
     }
 
     private void lf_construireListeAnneesScolaires() {
@@ -1182,7 +1213,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void backBoutonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBoutonActionPerformed
         // TODO add your handling code here:
-        lf_synchroniser();
+        lf_synchroniser(true);
     }//GEN-LAST:event_backBoutonActionPerformed
 
     private void btEtatUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatUserActionPerformed
@@ -1197,7 +1228,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void menuSynchroniserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSynchroniserActionPerformed
         // TODO add your handling code here:
-        lf_synchroniser();
+        lf_synchroniser(true);
     }//GEN-LAST:event_menuSynchroniserActionPerformed
 
     /**

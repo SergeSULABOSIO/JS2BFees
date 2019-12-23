@@ -14,6 +14,7 @@ import SOURCES.Utilitaires.DataLitiges;
 import SOURCES.Utilitaires.ParametresLitige;
 import Source.Callbacks.ConstructeurCriteres;
 import Source.Callbacks.EcouteurCrossCanal;
+import Source.Callbacks.EcouteurFreemium;
 import Source.Callbacks.EcouteurNavigateurPages;
 import Source.Interface.InterfaceLitige;
 import Source.Objet.Ayantdroit;
@@ -80,8 +81,10 @@ public class GestionLitiges {
     public int idPeriode = -1;
     public int idSolvabilite = -1;
     public Litige litige = null;
+    public EcouteurFreemium ef = null;
 
-    public GestionLitiges(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionLitiges(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+        this.ef = ef;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -93,7 +96,8 @@ public class GestionLitiges {
         this.eleveConcerned = null;
     }
 
-    public GestionLitiges(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+    public GestionLitiges(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+        this.ef = ef;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -516,12 +520,12 @@ public class GestionLitiges {
     }
 
     private void initUI(String nomTab) {
-        panel = new PanelLitige(couleurBasique, tabOnglet, getData(), progress, new EcouteurCrossCanal() {
+        panel = new PanelLitige(ef, couleurBasique, tabOnglet, getData(), progress, new EcouteurCrossCanal() {
             @Override
             public void onOuvrirPaiements(Eleve eleve) {
                 new Thread() {
                     public void run() {
-                        new GestionPaiements(icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve)
+                        new GestionPaiements(ef, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve)
                                 .gl_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();
@@ -531,7 +535,7 @@ public class GestionLitiges {
             public void onOuvrirInscription(Eleve eleve) {
                 new Thread() {
                     public void run() {
-                        new GestionAdhesion(fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve)
+                        new GestionAdhesion(ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve)
                                 .gi_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();

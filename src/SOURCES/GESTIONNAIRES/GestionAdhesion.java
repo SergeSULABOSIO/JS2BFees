@@ -18,6 +18,7 @@ import SOURCES.Utilitaires_Insc.UtilInscription;
 import Source.Callbacks.ConstructeurCriteres;
 import Source.Callbacks.EcouteurCrossCanal;
 import Source.Callbacks.EcouteurEnregistrement;
+import Source.Callbacks.EcouteurFreemium;
 import Source.Callbacks.EcouteurNavigateurPages;
 import Source.Callbacks.EcouteurStandard;
 import Source.Interface.InterfaceEleve;
@@ -75,8 +76,10 @@ public class GestionAdhesion {
     public JFrame fenetre = null;
     public Icones icones = null;
     public boolean canBeSaved;
+    public EcouteurFreemium ef = null;
 
-    public GestionAdhesion(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionAdhesion(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+        this.ef = ef;
         this.fenetre = fenetre;
         this.icones = icones;
         this.couleurBasique = couleurBasique;
@@ -88,7 +91,8 @@ public class GestionAdhesion {
         this.eleveConcerned = null;
     }
 
-    public GestionAdhesion(JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+    public GestionAdhesion(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+        this.ef = ef;
         this.fenetre = fenetre;
         this.icones = icones;
         this.couleurBasique = couleurBasique;
@@ -630,7 +634,7 @@ public class GestionAdhesion {
     }
 
     private void initUI(String nomTab) {
-        panel = new PanelInscription(couleurBasique, tabOnglet, getData(), progress, new EcouteurInscription() {
+        panel = new PanelInscription(ef, couleurBasique, tabOnglet, getData(), progress, new EcouteurInscription() {
             @Override
             public void onEnregistre(SortiesInscription si) {
                 if (si != null) {
@@ -662,7 +666,7 @@ public class GestionAdhesion {
             public void onOuvrirPaiements(Eleve eleve) {
                 new Thread() {
                     public void run() {
-                        new GestionPaiements(icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
+                        new GestionPaiements(ef, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();
             }
@@ -677,7 +681,7 @@ public class GestionAdhesion {
                 new Thread() {
                     public void run() {
                         System.out.println("Ouverture des litiges de " + eleve.getNom());
-                        new GestionLitiges(fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
+                        new GestionLitiges(ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();
             }

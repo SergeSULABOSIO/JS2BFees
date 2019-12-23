@@ -513,7 +513,7 @@ public class Principal extends javax.swing.JFrame {
             public boolean onVerifieNombre(String nomTable) {
                 if(fm != null){
                     if(fm.fm_isLicenceValide(moi, icones.getAdresse_02()) == false){ // Si c'est en mode GRATUIT
-                        return fm.fm_getContenusDossier(nomTable).length < 10; //On n'autorise que tout au plus 100 enregistrement
+                        return fm.fm_getContenusDossier(nomTable).length < 15; //On n'autorise que tout au plus 100 enregistrement
                     }else{
                         return true;
                     }

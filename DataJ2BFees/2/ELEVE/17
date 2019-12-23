@@ -1,0 +1,18 @@
+{
+  "id" : 17,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 2,
+  "signature" : -7325582415381663836,
+  "classe" : "2e",
+  "adresse" : "Togo",
+  "telephonesParents" : "(+243)828787878",
+  "nom" : "Eleve_15",
+  "postnom" : "Bobo",
+  "prenom" : "yann",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1577122428876,
+  "beta" : 0
+}

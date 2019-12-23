@@ -1,0 +1,18 @@
+{
+  "id" : 16,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 1,
+  "signature" : -2595139285498276887,
+  "classe" : "1e",
+  "adresse" : "kisangani",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "Eleve_12",
+  "postnom" : "toto",
+  "prenom" : "rubenga",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1577122382582,
+  "beta" : 0
+}

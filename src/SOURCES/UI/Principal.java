@@ -44,6 +44,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
+import static java.awt.image.ImageObserver.ALLBITS;
+import static java.awt.image.ImageObserver.PROPERTIES;
 import java.util.Date;
 import java.util.Vector;
 import javax.swing.JFrame;
@@ -503,6 +505,19 @@ public class Principal extends javax.swing.JFrame {
                 if (fm != null) {
                     return fm.fm_isLicenceValide(moi, icones.getAdresse_02());
                 } else {
+                    return false;
+                }
+            }
+
+            @Override
+            public boolean onVerifieNombre(String nomTable) {
+                if(fm != null){
+                    if(fm.fm_isLicenceValide(moi, icones.getAdresse_02()) == false){ // Si c'est en mode GRATUIT
+                        return fm.fm_getContenusDossier(nomTable).length < 10; //On n'autorise que tout au plus 100 enregistrement
+                    }else{
+                        return true;
+                    }
+                }else{
                     return false;
                 }
             }

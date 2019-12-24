@@ -512,7 +512,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public boolean onVerifieNombre(String nomTable) {
                 if(fm != null){
-                    if(fm.fm_getContenusDossier(nomTable).length < 15){
+                    if(fm.fm_getContenusDossier(nomTable).length < 100){
                         return true;
                     }else{
                         return fm.fm_isLicenceValide(moi, icones.getAdresse_02()) == true;

@@ -1,0 +1,18 @@
+{
+  "id" : 43,
+  "idEleve" : 16,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 1,
+  "idPeriode" : 1,
+  "mode" : 0,
+  "reference" : "1577177585626",
+  "nomEleve" : "BOTOLOME GEOLI TRESORE",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "BOTOLOME GEOLI TRESORE",
+  "montant" : 16.5,
+  "date" : 1577177585626,
+  "signature" : 3284408118784335038,
+  "beta" : 0,
+  "referenceTransaction" : "1577177585626"
+}

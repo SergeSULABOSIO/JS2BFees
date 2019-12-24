@@ -529,7 +529,7 @@ public class Principal extends javax.swing.JFrame {
         btLicence = new Bouton(12, ":: Licence ::", "Payer votre abonnement", true, icones.getAdresse_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_PAYER_LICENCE, icones.getAlarme_02());
+                UtilObjet.lancerPagePaiementEnLigne(session.getUtilisateur(), session.getEntreprise());
             }
         });
         btLicence.setForeground(UtilFees.COULEUR_ORANGE);
@@ -1210,7 +1210,7 @@ public class Principal extends javax.swing.JFrame {
 
     private void btEtatLicenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatLicenceActionPerformed
         // TODO add your handling code here:
-        UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_PAYER_LICENCE, icones.getAlarme_02());
+        UtilObjet.lancerPagePaiementEnLigne(session.getUtilisateur(), session.getEntreprise());
     }//GEN-LAST:event_btEtatLicenceActionPerformed
 
     private void comboListeAnneesScolairesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboListeAnneesScolairesItemStateChanged

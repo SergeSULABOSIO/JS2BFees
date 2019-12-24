@@ -91,7 +91,7 @@ public class Principal extends javax.swing.JFrame {
         btLogo = new Bouton(12, "", "Votre logo - Cliquer pour ouvrir votre page web", true, icones.getSablier_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_MODIFIER_LOGO);
+                UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_MODIFIER_LOGO, icones.getAlarme_02());
             }
         });
 
@@ -377,7 +377,7 @@ public class Principal extends javax.swing.JFrame {
         barreOutils.setVisible(false);
         progressLogin.setVisible(false);
 
-        moi.setTitle(UtilFees.nomApplication);
+        moi.setTitle(UtilObjet.nomApplication);
         labLoginMessage.setText("Veuillez saisir vos identifiants");
 
         lf_progress(false, "", progressEtat, 0);
@@ -402,7 +402,7 @@ public class Principal extends javax.swing.JFrame {
         if (user != null) {
             String noms = user.getNom() + " " + user.getPostnom() + " " + user.getPrenom();
             btEtatUser.setText(user.getPrenom());
-            texteTitre += UtilFees.nomApplication + " - " + noms;
+            texteTitre += UtilObjet.nomApplication + " - " + noms;
         } else {
             btEtatUser.setVisible(false);
         }
@@ -529,7 +529,7 @@ public class Principal extends javax.swing.JFrame {
         btLicence = new Bouton(12, ":: Licence ::", "Payer votre abonnement", true, icones.getAdresse_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_PAYER_LICENCE);
+                UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_PAYER_LICENCE, icones.getAlarme_02());
             }
         });
         btLicence.setForeground(UtilFees.COULEUR_ORANGE);
@@ -635,7 +635,7 @@ public class Principal extends javax.swing.JFrame {
         btUtilisateur = new Bouton(12, "Utilisateurs", "Gérer les utilisateurs ainsi que leurs droits d'accès.", true, icones.getUtilisateur_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_LISTER_UTILISATEUR);
+                UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_LISTER_UTILISATEUR, icones.getAlarme_02());
             }
         });
         btUtilisateur.setForeground(UtilFees.COULEUR_ORANGE);
@@ -1205,12 +1205,12 @@ public class Principal extends javax.swing.JFrame {
 
     private void labLoginNouveauCompteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labLoginNouveauCompteMouseClicked
         // TODO add your handling code here:
-        UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_HOME_PAGE);
+        UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_HOME_PAGE, icones.getAlarme_02());
     }//GEN-LAST:event_labLoginNouveauCompteMouseClicked
 
     private void btEtatLicenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatLicenceActionPerformed
         // TODO add your handling code here:
-        UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_PAYER_LICENCE);
+        UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_PAYER_LICENCE, icones.getAlarme_02());
     }//GEN-LAST:event_btEtatLicenceActionPerformed
 
     private void comboListeAnneesScolairesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboListeAnneesScolairesItemStateChanged
@@ -1233,12 +1233,12 @@ public class Principal extends javax.swing.JFrame {
 
     private void btEtatUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatUserActionPerformed
         // TODO add your handling code here:
-        UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_LISTER_UTILISATEUR);
+        UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_LISTER_UTILISATEUR, icones.getAlarme_02());
     }//GEN-LAST:event_btEtatUserActionPerformed
 
     private void btEtatEntrepriseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatEntrepriseActionPerformed
         // TODO add your handling code here:
-        UtilFees.lancerPageWebAdmin(moi, session, UtilFees.ACTION_MODIFIER_INFO_ECOLE);
+        UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_MODIFIER_INFO_ECOLE, icones.getAlarme_02());
     }//GEN-LAST:event_btEtatEntrepriseActionPerformed
 
     private void menuSynchroniserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSynchroniserActionPerformed

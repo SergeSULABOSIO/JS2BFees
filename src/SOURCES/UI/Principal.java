@@ -44,8 +44,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
-import static java.awt.image.ImageObserver.ALLBITS;
-import static java.awt.image.ImageObserver.PROPERTIES;
 import java.util.Date;
 import java.util.Vector;
 import javax.swing.JFrame;
@@ -87,21 +85,27 @@ public class Principal extends javax.swing.JFrame {
         panOutils.setVisible(false);
         moi = this;
         lf_initIcones();
+        lf_initBtLogo();
+        lf_initFileManaer();
+        lf_initEcuteurFreemium();
+        lf_initEcouteurExercice();
+        lf_construirePageLogin();
+        loadUserSession();
+    }
 
+    private void lf_initBtLogo() {
         btLogo = new Bouton(12, "", "Votre logo - Cliquer pour ouvrir votre page web", true, icones.getSablier_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
                 UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_MODIFIER_LOGO, icones.getAlarme_02());
             }
         });
-
         btLogo.setForeground(couleurBasique.getCouleur_encadrement_selection());
+    }
+
+    private void lf_initFileManaer() {
         fm = new FileManager("http://www.visiterlardc.com/s2b", "processeurS2B.php", btLogo.getBouton());
         fm.fm_setEcouteurFenetre(moi);  // On écoute désormais les mouvements de la fenetre
-        lf_initEcuteurFreemium();
-        lf_initEcouteurExercice();
-        lf_construirePageLogin();
-        loadUserSession();//
     }
 
     private void lf_initCouleurs() {
@@ -511,13 +515,25 @@ public class Principal extends javax.swing.JFrame {
 
             @Override
             public boolean onVerifieNombre(String nomTable) {
-                if(fm != null){
-                    if(fm.fm_getContenusDossier(nomTable).length < 100){
-                        return true;
-                    }else{
-                        return fm.fm_isLicenceValide(moi, icones.getAdresse_02()) == true;
+                int nombreMax = 100;    //Nombre maximal de données à ne pas dépasser pour le mode Free.
+                int nomActuelData = 0;  //Nombre actuel des données déjà enregistrées dans la base de données.
+                if (fm != null) {
+                    if (nomTable == null) {
+                        nomActuelData = fm.fm_getContenusDossier(UtilObjet.DOSSIER_ELEVE).length;
+                        if (nomActuelData < 21) {   //On ne fait que quand on a au maximum 20 étudiants
+                            return true;
+                        } else {
+                            return fm.fm_isLicenceValide(moi, icones.getAdresse_02()) == true;
+                        }
+                    } else {
+                        nomActuelData = fm.fm_getContenusDossier(nomTable).length;
+                        if (nomActuelData < nombreMax) {
+                            return true;
+                        } else {
+                            return fm.fm_isLicenceValide(moi, icones.getAdresse_02()) == true;
+                        }
                     }
-                }else{
+                } else {
                     return false;
                 }
             }

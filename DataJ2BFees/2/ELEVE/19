@@ -1,0 +1,18 @@
+{
+  "id" : 19,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 1,
+  "signature" : 5460599984014732756,
+  "classe" : "1e",
+  "adresse" : "",
+  "telephonesParents" : "(+243)",
+  "nom" : "Eleve_20",
+  "postnom" : "toto",
+  "prenom" : "jean",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1577473749626,
+  "beta" : 0
+}

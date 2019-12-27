@@ -516,7 +516,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public boolean onVerifieNombre(String nomTable) {
                 int nombreMax = 100;    //Nombre maximal de données à ne pas dépasser pour le mode Free.
-                int nomActuelData = 0;  //Nombre actuel des données déjà enregistrées dans la base de données.
+                int nomActuelData;  //Nombre actuel des données déjà enregistrées dans la base de données.
                 if (fm != null) {
                     if (nomTable == null) {
                         nomActuelData = fm.fm_getContenusDossier(UtilObjet.DOSSIER_ELEVE).length;

@@ -13,6 +13,6 @@
   "prenom" : "jean",
   "status" : 0,
   "sexe" : 0,
-  "dateNaissance" : 1577473744112,
+  "dateNaissance" : 1577473744000,
   "beta" : 0
 }

@@ -26,7 +26,7 @@ import Source.Objet.Agent;
 import Source.Objet.CouleurBasique;
 import Source.Objet.Entreprise;
 import Source.Objet.Annee;
-import Source.Objet.Fiche;
+import Source.Objet.Fiche_paie;
 import Source.Objet.Monnaie;
 import Source.Objet.UtilObjet;
 import Source.Objet.Utilisateur;
@@ -230,7 +230,7 @@ public class GestionSalaire {
     }
 
     public boolean checkCriteresPaie(String motCle, Object data, JS2BPanelPropriete jsbpp) {
-        Fiche paie = (Fiche) data;
+        Fiche_paie paie = (Fiche_paie) data;
 
         if (paie.getIdExercice() != exercice.getId()) {
             return false;
@@ -291,7 +291,7 @@ public class GestionSalaire {
     }
 
     private void loadFiches(String motCle, int pageActuelle, int taillePage, JS2BPanelPropriete criteresAvances, NavigateurPages navigateurPages) {
-        fm.fm_ouvrirTout(0, Fiche.class, UtilObjet.DOSSIER_FICHE_DE_PAIE, pageActuelle, taillePage, new EcouteurOuverture() {
+        fm.fm_ouvrirTout(0, Fiche_paie.class, UtilObjet.DOSSIER_FICHE_DE_PAIE, pageActuelle, taillePage, new EcouteurOuverture() {
             @Override
             public boolean isCriteresRespectes(Object object) {
                 return checkCriteresPaie(motCle, object, criteresAvances);
@@ -299,7 +299,7 @@ public class GestionSalaire {
 
             @Override
             public void onElementLoaded(String message, Object data) {
-                panel.setDonneesFichePaie((Fiche) data);
+                panel.setDonneesFichePaie((Fiche_paie) data);
             }
 
             @Override
@@ -331,10 +331,10 @@ public class GestionSalaire {
     }
 
     private void saveFiches(SortiesFichesDePaies se, EcouteurEnregistrement ee, Utilisateur user, Annee annee) {
-        Vector<Fiche> listeNewFiches = se.getListeFichesDePaie();
-        Vector<Fiche> listeNewFichesTempo = new Vector<>();
+        Vector<Fiche_paie> listeNewFiches = se.getListeFichesDePaie();
+        Vector<Fiche_paie> listeNewFichesTempo = new Vector<>();
         //On précise qui est en train d'enregistrer cette donnée
-        for (Fiche ia : listeNewFiches) {
+        for (Fiche_paie ia : listeNewFiches) {
             if (ia.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ia.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 ia.setIdExercice(annee.getId());
                 ia.setIdUtilisateur(user.getId());
@@ -418,10 +418,10 @@ public class GestionSalaire {
             @Override
             public void onDetruitTout(int idExercice) {
                 System.out.println("Destruction des fiches de paie pour l'exercice " + idExercice);
-                fm.fm_supprimerTout(Fiche.class, UtilObjet.DOSSIER_FICHE_DE_PAIE, null, new CritereSuppression() {
+                fm.fm_supprimerTout(Fiche_paie.class, UtilObjet.DOSSIER_FICHE_DE_PAIE, null, new CritereSuppression() {
                     @Override
                     public boolean canBeDeleted(Object objToDelete) {
-                        return ((Fiche) objToDelete).getIdExercice() == exercice.getId();
+                        return ((Fiche_paie) objToDelete).getIdExercice() == exercice.getId();
                     }
                 });
             }

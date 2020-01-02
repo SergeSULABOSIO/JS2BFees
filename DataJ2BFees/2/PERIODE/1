@@ -4,8 +4,8 @@
   "idUtilisateur" : 12,
   "idExercice" : 1,
   "nom" : "1er Trimestre",
-  "debut" : 1575884611297,
-  "fin" : 1586425411297,
+  "debut" : 1575884611000,
+  "fin" : 1586425411000,
   "signature" : -5723610466211360956,
   "beta" : 0
 }

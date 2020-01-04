@@ -107,12 +107,14 @@ public class GestionExercice {
             int nbOnglets = tabOnglet.getComponentCount();
             for (int i = 0; i < nbOnglets; i++) {
                 //JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
-                String titreOnglet = tabOnglet.getTitleAt(i);
-                System.out.println("Onglet - " + titreOnglet);
-                if (titreOnglet.equals(selectedAnnee)) {
-                    System.out.println(" * Lannée " + titreOnglet + " est déjà ouverte, inutile de charger les données. On va juste activer l'onglet");
-                    tabOnglet.setSelectedIndex(i);
-                    mustLoadData = false;
+                if (tabOnglet.getComponentCount() > i) {
+                    String titreOnglet = tabOnglet.getTitleAt(i);
+                    System.out.println("Onglet - " + titreOnglet);
+                    if (titreOnglet.equals(selectedAnnee)) {
+                        System.out.println(" * Lannée " + titreOnglet + " est déjà ouverte, inutile de charger les données. On va juste activer l'onglet");
+                        tabOnglet.setSelectedIndex(i);
+                        mustLoadData = false;
+                    }
                 }
             }
 
@@ -1034,6 +1036,13 @@ public class GestionExercice {
                 }
             }
 
+            @Override
+            public void onClose() {
+                if (ecouteurExercice != null) {
+                    ecouteurExercice.onClosed();
+                }
+            }
+
         });
         //Chargement du gestionnaire sur l'onglet
 
@@ -1045,7 +1054,7 @@ public class GestionExercice {
                         //On ouvre les fiches de paie de l'agent séléctioné
                         //System.out.println("");
                         //System.out.println("Agent : " + agent);
-                        GestionSalaire gestionSalaire = new GestionSalaire(ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, agent);
+                        GestionSalaire gestionSalaire = new GestionSalaire(null, ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, agent);
                         gestionSalaire.gp_setDonneesFromFileManager(newIannee.getNom(), true);
                     }
                 }.start();
@@ -1057,7 +1066,7 @@ public class GestionExercice {
             public void onOuvrirRevenu(Revenu revenu) {
                 new Thread() {
                     public void run() {
-                        GestionTresorerie gestionTresorerie = new GestionTresorerie(ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, revenu);
+                        GestionTresorerie gestionTresorerie = new GestionTresorerie(null, ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, revenu);
                         gestionTresorerie.gt_setDonneesFromFileManager(newIannee.getNom(), true);
                     }
                 }.start();
@@ -1069,7 +1078,7 @@ public class GestionExercice {
             public void onOuvrirCharge(Charge charge) {
                 new Thread() {
                     public void run() {
-                        GestionTresorerie gestionTresorerie = new GestionTresorerie(ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, charge);
+                        GestionTresorerie gestionTresorerie = new GestionTresorerie(null, ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, charge);
                         gestionTresorerie.gt_setDonneesFromFileManager(newIannee.getNom(), true);
                     }
                 }.start();

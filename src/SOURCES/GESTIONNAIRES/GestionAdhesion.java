@@ -6,6 +6,7 @@
 package SOURCES.GESTIONNAIRES;
 
 import ICONES.Icones;
+import SOURCES.CALLBACK.EcouteurGestionInscription;
 import SOURCES.Callback.EcouteurContains;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback_Insc.EcouteurInscription;
@@ -77,9 +78,11 @@ public class GestionAdhesion {
     public Icones icones = null;
     public boolean canBeSaved;
     public EcouteurFreemium ef = null;
+    private EcouteurGestionInscription ei;
 
-    public GestionAdhesion(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionAdhesion(EcouteurGestionInscription ei, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.ef = ef;
+        this.ei = ei;
         this.fenetre = fenetre;
         this.icones = icones;
         this.couleurBasique = couleurBasique;
@@ -91,8 +94,9 @@ public class GestionAdhesion {
         this.eleveConcerned = null;
     }
 
-    public GestionAdhesion(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+    public GestionAdhesion(EcouteurGestionInscription ei, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
         this.ef = ef;
+        this.ei = ei;
         this.fenetre = fenetre;
         this.icones = icones;
         this.couleurBasique = couleurBasique;
@@ -117,14 +121,16 @@ public class GestionAdhesion {
             if (deleteCurrentTab == true) {
                 int nbOnglets = tabOnglet.getComponentCount();
                 for (int i = 0; i < nbOnglets; i++) {
-                    String titreOnglet = tabOnglet.getTitleAt(i);
-                    String Snom = NOM;
-                    if (eleveConcerned != null) {
-                        Snom = NOM + " - " + eleveConcerned.getNom() + " " + eleveConcerned.getPrenom();
-                    }
-                    if (titreOnglet.equals(Snom)) {
-                        tabOnglet.remove(i);
-                        mustLoadData = true;
+                    if (tabOnglet.getComponentCount() > i) {
+                        String titreOnglet = tabOnglet.getTitleAt(i);
+                        String Snom = NOM;
+                        if (eleveConcerned != null) {
+                            Snom = NOM + " - " + eleveConcerned.getNom() + " " + eleveConcerned.getPrenom();
+                        }
+                        if (titreOnglet.equals(Snom)) {
+                            tabOnglet.remove(i);
+                            mustLoadData = true;
+                        }
                     }
                 }
             }
@@ -271,10 +277,10 @@ public class GestionAdhesion {
             public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 progress.setVisible(false);
                 progress.setIndeterminate(false);
-                
+
                 nav.setInfos(resultatTotal, panel.getTailleResultatEleves());
                 nav.patienter(false, "Prêt.");
-                
+
             }
 
             @Override
@@ -591,7 +597,7 @@ public class GestionAdhesion {
                     JOptionPane.showMessageDialog(panel, "Désolé, veuillez préciser l'élève à considérer comme Ayant droit!", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
                     panel.setBtEnregistrerNouveau();
                 }
-                
+
                 if (canBeSaved == true) {
                     ia.setIdExercice(annee.getId());
                     ia.setIdUtilisateur(user.getId());
@@ -661,6 +667,11 @@ public class GestionAdhesion {
                     }
                 }
             }
+
+            @Override
+            public void onClose() {
+                ei.onClosed();
+            }
         }, new EcouteurCrossCanal() {
             @Override
             public void onOuvrirPaiements(Eleve eleve) {
@@ -681,7 +692,7 @@ public class GestionAdhesion {
                 new Thread() {
                     public void run() {
                         System.out.println("Ouverture des litiges de " + eleve.getNom());
-                        new GestionLitiges(ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
+                        new GestionLitiges(null, ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();
             }
@@ -743,23 +754,3 @@ public class GestionAdhesion {
         naviNavigateurPages.criteresActuels_activer();
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

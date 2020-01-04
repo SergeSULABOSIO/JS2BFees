@@ -6,6 +6,7 @@
 package SOURCES.GESTIONNAIRES;
 
 import ICONES.Icones;
+import SOURCES.CALLBACK.EcouteurGestionPaie;
 import SOURCES.CallBack_Paie.EcouteurPaie;
 import SOURCES.Callback.CritereSuppression;
 import SOURCES.Callback.EcouteurOuverture;
@@ -68,9 +69,11 @@ public class GestionSalaire {
     public Icones icones;
     public boolean canBeSaved = false;
     private EcouteurFreemium ef = null;
+    private EcouteurGestionPaie ep = null;
 
-    public GestionSalaire(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionSalaire(EcouteurGestionPaie ep, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.ef = ef;
+        this.ep = ep;
         this.couleurBasique = couleurBasique;
         this.fm = fm;
         this.fenetre = fenetre;
@@ -82,8 +85,9 @@ public class GestionSalaire {
         this.agentConcerned = null;
     }
 
-    public GestionSalaire(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Agent agentConcerned) {
+    public GestionSalaire(EcouteurGestionPaie ep, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Agent agentConcerned) {
         this.ef = ef;
+        this.ep = ep;
         this.couleurBasique = couleurBasique;
         this.fm = fm;
         this.fenetre = fenetre;
@@ -108,17 +112,20 @@ public class GestionSalaire {
             if (deleteCurrentTab == true) {
                 int nbOnglets = tabOnglet.getComponentCount();
                 for (int i = 0; i < nbOnglets; i++) {
-                    String titreOnglet = tabOnglet.getTitleAt(i);
-                    //System.out.println("Onglet - " + titreOnglet);
-                    String Snom = NOM;
-                    if (agentConcerned != null) {
-                        Snom = NOM + " - " + agentConcerned.getNom() + " " + agentConcerned.getPrenom();
+                    if (tabOnglet.getComponentCount() > i) {
+                        String titreOnglet = tabOnglet.getTitleAt(i);
+                        //System.out.println("Onglet - " + titreOnglet);
+                        String Snom = NOM;
+                        if (agentConcerned != null) {
+                            Snom = NOM + " - " + agentConcerned.getNom() + " " + agentConcerned.getPrenom();
+                        }
+                        if (titreOnglet.equals(Snom)) {
+                            //System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
+                            tabOnglet.remove(i);
+                            mustLoadData = true;
+                        }
                     }
-                    if (titreOnglet.equals(Snom)) {
-                        //System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
-                        tabOnglet.remove(i);
-                        mustLoadData = true;
-                    }
+
                 }
             }
 
@@ -246,12 +253,12 @@ public class GestionSalaire {
         PROPRIETE propCategorie = null;
         PROPRIETE propMois = null;
 
-        if(agentConcerned != null){
-            if(agentConcerned.getId() != paie.getIdAgent()){
+        if (agentConcerned != null) {
+            if (agentConcerned.getId() != paie.getIdAgent()) {
                 return false;
             }
         }
-        
+
         repMotCle = panel.search_verifier_motcle(paie, motCle);
         if (repMotCle == false) {
             return false;
@@ -433,6 +440,13 @@ public class GestionSalaire {
                     fm.fm_supprimer(UtilObjet.DOSSIER_FICHE_DE_PAIE, idElement, signature);
                 }
             }
+
+            @Override
+            public void onClosed() {
+                if (ep != null) {
+                    ep.onClosed();
+                }
+            }
         });
 
         NavigateurPages navigateurPages = panel.getNavigateurPagesFichePaie();
@@ -496,10 +510,3 @@ public class GestionSalaire {
     }
 
 }
-
-
-
-
-
-
-

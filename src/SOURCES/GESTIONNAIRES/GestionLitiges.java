@@ -6,7 +6,9 @@
 package SOURCES.GESTIONNAIRES;
 
 import ICONES.Icones;
+import SOURCES.CALLBACK.EcouteurGestionLitige;
 import SOURCES.Callback.EcouteurOuverture;
+import SOURCES.EcouteurLitiges.EcouteurLitiges;
 import SOURCES.Objets.FileManager;
 import SOURCES.UI.PanelLitige;
 import SOURCES.Utilitaires.CalculateurLitiges;
@@ -82,9 +84,11 @@ public class GestionLitiges {
     public int idSolvabilite = -1;
     public Litige litige = null;
     public EcouteurFreemium ef = null;
+    public EcouteurGestionLitige el = null;
 
-    public GestionLitiges(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionLitiges(EcouteurGestionLitige el, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.ef = ef;
+        this.el = el;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -96,8 +100,9 @@ public class GestionLitiges {
         this.eleveConcerned = null;
     }
 
-    public GestionLitiges(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+    public GestionLitiges(EcouteurGestionLitige el, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
         this.ef = ef;
+        this.el = el;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -122,17 +127,20 @@ public class GestionLitiges {
             if (deleteCurrentTab == true) {
                 int nbOnglets = tabOnglet.getComponentCount();
                 for (int i = 0; i < nbOnglets; i++) {
-                    String titreOnglet = tabOnglet.getTitleAt(i);
-                    //System.out.println("Onglet - " + titreOnglet);
-                    String Snom = NOM;
-                    if (eleveConcerned != null) {
-                        Snom = NOM + " - " + eleveConcerned.getNom() + " " + eleveConcerned.getPrenom();
+                    if (tabOnglet.getComponentCount() > i) {
+                        String titreOnglet = tabOnglet.getTitleAt(i);
+                        //System.out.println("Onglet - " + titreOnglet);
+                        String Snom = NOM;
+                        if (eleveConcerned != null) {
+                            Snom = NOM + " - " + eleveConcerned.getNom() + " " + eleveConcerned.getPrenom();
+                        }
+                        if (titreOnglet.equals(Snom)) {
+                            //System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
+                            tabOnglet.remove(i);
+                            mustLoadData = true;
+                        }
                     }
-                    if (titreOnglet.equals(Snom)) {
-                        //System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
-                        tabOnglet.remove(i);
-                        mustLoadData = true;
-                    }
+
                 }
             }
 
@@ -176,9 +184,9 @@ public class GestionLitiges {
         if (eleve.getIdExercice() != exercice.getId()) {
             return false;
         }
-        
-        if(eleveConcerned != null){
-            if(eleveConcerned.getId() != eleve.getId()){
+
+        if (eleveConcerned != null) {
+            if (eleveConcerned.getId() != eleve.getId()) {
                 return false;
             }
         }
@@ -520,7 +528,14 @@ public class GestionLitiges {
     }
 
     private void initUI(String nomTab) {
-        panel = new PanelLitige(ef, couleurBasique, tabOnglet, getData(), progress, new EcouteurCrossCanal() {
+        panel = new PanelLitige(new EcouteurLitiges() {
+            @Override
+            public void onClose() {
+                if (el != null) {
+                    el.onClosed();
+                }
+            }
+        }, ef, couleurBasique, tabOnglet, getData(), progress, new EcouteurCrossCanal() {
             @Override
             public void onOuvrirPaiements(Eleve eleve) {
                 new Thread() {
@@ -535,7 +550,7 @@ public class GestionLitiges {
             public void onOuvrirInscription(Eleve eleve) {
                 new Thread() {
                     public void run() {
-                        new GestionAdhesion(ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve)
+                        new GestionAdhesion(null, ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve)
                                 .gi_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();
@@ -559,7 +574,7 @@ public class GestionLitiges {
                         idPeriode = -1;
                         idSolvabilite = -1;
                         litige = null;
-                        
+
                         naviNavigateurPages.setInfos(0, litiges.size());
                         naviNavigateurPages.patienter(true, "Chargement...");
                         panel.reiniliserLitige();
@@ -616,48 +631,8 @@ public class GestionLitiges {
         }
         progress.setVisible(false);
         progress.setIndeterminate(false);
-        
+
         naviNavigateurPages.criteresActuels_activer();
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

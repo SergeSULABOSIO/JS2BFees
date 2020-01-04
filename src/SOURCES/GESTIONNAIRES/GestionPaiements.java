@@ -96,14 +96,17 @@ public class GestionPaiements {
             if (deleteCurrentTab == true) {
                 int nbOnglets = tabOnglet.getComponentCount();
                 for (int i = 0; i < nbOnglets; i++) {
-                    //JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
-                    String titreOnglet = tabOnglet.getTitleAt(i);
-                    //System.out.println("Onglet - " + titreOnglet);
-                    if (titreOnglet.equals(NOM + " - " + eleve.getNom() + " " + eleve.getPrenom())) {
-                        //System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
-                        tabOnglet.remove(i);
-                        mustLoadData = true;
+                    if (tabOnglet.getComponentCount() > i) {
+                        //JPanel onglet = (JPanel) tabOnglet.getComponentAt(i);
+                        String titreOnglet = tabOnglet.getTitleAt(i);
+                        //System.out.println("Onglet - " + titreOnglet);
+                        if (titreOnglet.equals(NOM + " - " + eleve.getNom() + " " + eleve.getPrenom())) {
+                            //System.out.println("Une page d'adhésion était déjà ouverte, je viens de la fermer");
+                            tabOnglet.remove(i);
+                            mustLoadData = true;
+                        }
                     }
+
                 }
             }
 
@@ -383,16 +386,16 @@ public class GestionPaiements {
         for (Paiement ia : listeNewEleves) {
             if (ia.getBeta() == InterfaceMonnaie.BETA_MODIFIE || ia.getBeta() == InterfaceMonnaie.BETA_NOUVEAU) {
                 canBeSaved = true;
-                
+
                 //Pour id étrangère incomplètes
                 if (ia.getIdFrais() == -1) {
                     canBeSaved = false;
-                    JOptionPane.showMessageDialog(panel, "Désolé,\nVeuillez préciser le frais que " + eleve.getNom()+" est en train de payer!", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
+                    JOptionPane.showMessageDialog(panel, "Désolé,\nVeuillez préciser le frais que " + eleve.getNom() + " est en train de payer!", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
                     panel.setBtEnregistrerNouveau();
                 }
                 if (ia.getIdPeriode() == -1) {
                     canBeSaved = false;
-                    JOptionPane.showMessageDialog(panel, "Désolé,\nVeuillez préciser la période pour laquelle " + eleve.getNom()+" est en train de payer!", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
+                    JOptionPane.showMessageDialog(panel, "Désolé,\nVeuillez préciser la période pour laquelle " + eleve.getNom() + " est en train de payer!", "Alert!", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
                     panel.setBtEnregistrerNouveau();
                 }
                 if (ia.getMontant() == 0) {
@@ -469,29 +472,3 @@ public class GestionPaiements {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

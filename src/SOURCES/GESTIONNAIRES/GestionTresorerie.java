@@ -6,6 +6,7 @@
 package SOURCES.GESTIONNAIRES;
 
 import ICONES.Icones;
+import SOURCES.CALLBACK.EcouteurGestionTresorerie;
 import SOURCES.CallBack_Tresorerie.EcouteurTresorerie;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback.EcouteurParametreDecaissement;
@@ -79,9 +80,11 @@ public class GestionTresorerie {
     public Icones icones;
     public boolean canBeSaved = false;
     public EcouteurFreemium ef = null;
+    public EcouteurGestionTresorerie et = null;
 
-    public GestionTresorerie(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionTresorerie(EcouteurGestionTresorerie et, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.ef = ef;
+        this.et = et;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -94,8 +97,9 @@ public class GestionTresorerie {
         this.chargeConcerned = null;
     }
 
-    public GestionTresorerie(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Revenu revenueConcerned) {
+    public GestionTresorerie(EcouteurGestionTresorerie et, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Revenu revenueConcerned) {
         this.ef = ef;
+        this.et = et;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -108,8 +112,9 @@ public class GestionTresorerie {
         this.chargeConcerned = null;
     }
 
-    public GestionTresorerie(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Charge chargeConcerned) {
+    public GestionTresorerie(EcouteurGestionTresorerie et, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Charge chargeConcerned) {
         this.ef = ef;
+        this.et = et;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -136,14 +141,17 @@ public class GestionTresorerie {
                 int nbOnglets = tabOnglet.getComponentCount();
                 if (nbOnglets != 0) {
                     for (int i = 0; i < nbOnglets; i++) {
-                        if (i < nbOnglets) {
-                            String titreOnglet = tabOnglet.getTitleAt(i);
-                            String Snom = NOM;
-                            if (titreOnglet.equals(Snom)) {
-                                tabOnglet.remove(i);
-                                mustLoadData = true;
+                        if (tabOnglet.getComponentCount() > i) {
+                            if (i < nbOnglets) {
+                                String titreOnglet = tabOnglet.getTitleAt(i);
+                                String Snom = NOM;
+                                if (titreOnglet.equals(Snom)) {
+                                    tabOnglet.remove(i);
+                                    mustLoadData = true;
+                                }
                             }
                         }
+
                     }
                 }
             }
@@ -798,6 +806,13 @@ public class GestionTresorerie {
                     }
                 }
             }
+
+            @Override
+            public void onClosed() {
+                if (et != null) {
+                    et.onClosed();
+                }
+            }
         });
 
         //Navigateur pour Encaissements
@@ -949,6 +964,3 @@ public class GestionTresorerie {
     }
 
 }
-
-
-

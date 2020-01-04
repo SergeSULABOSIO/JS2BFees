@@ -8,8 +8,13 @@ package SOURCES.UI;
 import BEAN_BARRE_OUTILS.BarreOutils;
 import BEAN_BARRE_OUTILS.Bouton;
 import BEAN_BARRE_OUTILS.BoutonListener;
+import BEAN_BARRE_OUTILS.CustomBordure;
 import ICONES.Icones;
 import SOURCES.CALLBACK.EcouteurGestionExercice;
+import SOURCES.CALLBACK.EcouteurGestionInscription;
+import SOURCES.CALLBACK.EcouteurGestionLitige;
+import SOURCES.CALLBACK.EcouteurGestionPaie;
+import SOURCES.CALLBACK.EcouteurGestionTresorerie;
 import SOURCES.Callback.EcouteurInternet;
 import SOURCES.Callback.EcouteurLongin;
 import SOURCES.Callback.EcouteurOuverture;
@@ -49,6 +54,8 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -62,7 +69,14 @@ public class Principal extends javax.swing.JFrame {
     private FileManager fm = null;
     private JFrame moi = null;
     private Session session;
+    
     private EcouteurGestionExercice ecouteurExercice = null;
+    private EcouteurGestionInscription ecouteurGestionInscription = null;
+    private EcouteurGestionLitige ecouteurGestionLitige = null;
+    private EcouteurGestionPaie ecouteurGestionPaie = null;
+    private EcouteurGestionTresorerie ecouteurGestionTresorerie = null;
+    
+    
     private CouleurBasique couleurBasique;
 
     //Les GEstionnaires
@@ -88,9 +102,16 @@ public class Principal extends javax.swing.JFrame {
         lf_initBtLogo();
         lf_initFileManaer();
         lf_initEcuteurFreemium();
+        
         lf_initEcouteurExercice();
+        lf_initEcouteurInscription();
+        lf_initEcouteurLitige();
+        lf_initEcouteurPaie();
+        lf_initEcouteurTreoserie();
+        
         lf_construirePageLogin();
         loadUserSession();
+        initEffectSelectionTab();
     }
 
     private void lf_initBtLogo() {
@@ -101,6 +122,75 @@ public class Principal extends javax.swing.JFrame {
             }
         });
         btLogo.setForeground(couleurBasique.getCouleur_encadrement_selection());
+    }
+
+    private void initEffectSelectionTab() {
+        tabPrincipal.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                int tabIndex = tabPrincipal.getSelectedIndex();
+                if (tabIndex != -1) {
+                    
+                    String titre = tabPrincipal.getTitleAt(tabIndex);
+                    System.out.println("Tab: " + tabIndex + " : " + titre);
+                    
+                    //Effet selection Tab ANNEE
+                    if (titre.startsWith(UtilObjet.DOSSIER_ANNEE)) {
+                        if (btAnnee != null) {
+                            btAnnee.setIsSelected(true);
+                        }
+                    } else {
+                        if (btAnnee != null) {
+                            btAnnee.setIsSelected(false);
+                        }
+                    }
+                    
+                    //Effet selection Tab INSCRIPTION
+                    if (titre.startsWith(GestionAdhesion.NOM)) {
+                        if (btInscription != null) {
+                            btInscription.setIsSelected(true);
+                        }
+                    } else {
+                        if (btInscription != null) {
+                            btInscription.setIsSelected(false);
+                        }
+                    }
+                    
+                    //Effet selection Tab LITIGE
+                    if (titre.startsWith(GestionLitiges.NOM)) {
+                        if (btLitige != null) {
+                            btLitige.setIsSelected(true);
+                        }
+                    } else {
+                        if (btLitige != null) {
+                            btLitige.setIsSelected(false);
+                        }
+                    }
+                    
+                    //Effet selection Tab SALAIRE
+                    if (titre.startsWith(GestionSalaire.NOM)) {
+                        if (btPaie != null) {
+                            btPaie.setIsSelected(true);
+                        }
+                    } else {
+                        if (btPaie != null) {
+                            btPaie.setIsSelected(false);
+                        }
+                    }
+                    
+                    //Effet selection Tab TRESORERIE
+                    if (titre.startsWith(GestionTresorerie.NOM)) {
+                        if (btTresorerie != null) {
+                            btTresorerie.setIsSelected(true);
+                        }
+                    } else {
+                        if (btTresorerie != null) {
+                            btTresorerie.setIsSelected(false);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void lf_initFileManaer() {
@@ -173,8 +263,51 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
 
+            @Override
+            public void onClosed() {
+                btAnnee.setIsClosed();
+            }
+
         };
     }
+    
+    private void lf_initEcouteurInscription() {
+        ecouteurGestionInscription = new EcouteurGestionInscription() {
+            @Override
+            public void onClosed() {
+                btInscription.setIsClosed();
+            }
+        };
+    }
+    
+    private void lf_initEcouteurLitige() {
+        ecouteurGestionLitige = new EcouteurGestionLitige() {
+            @Override
+            public void onClosed() {
+                btLitige.setIsClosed();
+            }
+        };
+    }
+    
+    private void lf_initEcouteurPaie() {
+        ecouteurGestionPaie = new EcouteurGestionPaie() {
+            @Override
+            public void onClosed() {
+                btPaie.setIsClosed();
+            }
+        };
+    }
+    
+    private void lf_initEcouteurTreoserie() {
+        ecouteurGestionTresorerie = new EcouteurGestionTresorerie() {
+            @Override
+            public void onClosed() {
+                btTresorerie.setIsClosed();
+            }
+        };
+    }
+    
+    
 
     private boolean listeExerciceContient(String nomAnnee) {
         for (int i = 0; i < comboListeAnneesScolaires.getItemCount(); i++) {
@@ -574,6 +707,7 @@ public class Principal extends javax.swing.JFrame {
                     }.start();
                 }
 
+                btAnnee.setIsOpenned();
             }
         });
         btAnnee.setForeground(UtilFees.COULEUR_ORANGE);
@@ -586,11 +720,12 @@ public class Principal extends javax.swing.JFrame {
                         public void run() {
                             //On ouvre les inscriptions
                             //System.out.println("Ouverture des adhésions");
-                            gestionAdhesion = new GestionAdhesion(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                            gestionAdhesion = new GestionAdhesion(ecouteurGestionInscription, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                             gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
                         }
                     }.start();
                 }
+                btInscription.setIsOpenned();
             }
         });
         btInscription.setForeground(UtilFees.COULEUR_ORANGE);
@@ -603,11 +738,12 @@ public class Principal extends javax.swing.JFrame {
                         public void run() {
                             //On ouvre les inscriptions
                             System.out.println("Ouverture des fiches de paie");
-                            gestionSalaire = new GestionSalaire(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                            gestionSalaire = new GestionSalaire(ecouteurGestionPaie, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                             gestionSalaire.gp_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
                         }
                     }.start();
                 }
+                btPaie.setIsOpenned();
             }
         });
         btPaie.setForeground(UtilFees.COULEUR_ORANGE);
@@ -621,10 +757,11 @@ public class Principal extends javax.swing.JFrame {
                     public void run() {
                         //On ouvre les inscriptions
                         //System.out.println("Ouverture de la trésorerie");
-                        gestionTresorerie = new GestionTresorerie(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                        gestionTresorerie = new GestionTresorerie(ecouteurGestionTresorerie, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                         gestionTresorerie.gt_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
                     }
                 }.start();
+                btTresorerie.setIsOpenned();
             }
         });
         btTresorerie.setForeground(UtilFees.COULEUR_ORANGE);
@@ -638,12 +775,12 @@ public class Principal extends javax.swing.JFrame {
                         public void run() {
                             //On ouvre les inscriptions
                             //System.out.println("Ouverture des litiges");
-                            gestionLitiges = new GestionLitiges(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                            gestionLitiges = new GestionLitiges(ecouteurGestionLitige, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                             gestionLitiges.gl_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
                         }
                     }.start();
                 }
-
+                btLitige.setIsOpenned();
             }
         });
         btLitige.setForeground(UtilFees.COULEUR_ORANGE);
@@ -963,6 +1100,12 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(backUpToolbar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
+        tabPrincipal.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                tabPrincipalStateChanged(evt);
+            }
+        });
+
         btLoginConnexion.setBackground(new java.awt.Color(251, 155, 12));
         btLoginConnexion.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btLoginConnexion.setForeground(new java.awt.Color(26, 46, 77));
@@ -1261,6 +1404,11 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
         lf_synchroniser(true);
     }//GEN-LAST:event_menuSynchroniserActionPerformed
+
+    private void tabPrincipalStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabPrincipalStateChanged
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_tabPrincipalStateChanged
 
     /**
      * @param args the command line arguments

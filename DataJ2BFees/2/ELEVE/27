@@ -1,0 +1,18 @@
+{
+  "id" : 27,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 98,
+  "idExercice" : 1,
+  "idClasse" : 3,
+  "signature" : 3848864728809617517,
+  "classe" : "3e",
+  "adresse" : "",
+  "telephonesParents" : "(+243)",
+  "nom" : "OTO",
+  "postnom" : "BABA",
+  "prenom" : "SERGE",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1578233801744,
+  "beta" : 0
+}

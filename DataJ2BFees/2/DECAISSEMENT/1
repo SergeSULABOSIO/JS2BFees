@@ -1,0 +1,17 @@
+{
+  "id" : 1,
+  "source" : 0,
+  "reference" : "0DEC1",
+  "date" : 1578233075926,
+  "montant" : 5.0,
+  "idMonnaie" : 3,
+  "monnaie" : "$",
+  "beneficiaire" : "ALAIN",
+  "motif" : "TRANSPORT",
+  "idCharge" : 13,
+  "charge" : "",
+  "idExercice" : 2,
+  "idUtilisateur" : 12,
+  "signature" : -4789793744588876199,
+  "beta" : 0
+}

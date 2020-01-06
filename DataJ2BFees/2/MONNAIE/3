@@ -1,0 +1,12 @@
+{
+  "id" : 3,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 2,
+  "nom" : "DOLLARS AMERICAINS",
+  "code" : "$",
+  "nature" : 1,
+  "tauxMonnaieLocale" : 1620.0,
+  "signature" : 4995574314508428918,
+  "beta" : 0
+}

@@ -1,0 +1,18 @@
+{
+  "id" : 50,
+  "idEleve" : 3,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 12,
+  "idPeriode" : 1,
+  "mode" : 0,
+  "reference" : "1578234139329",
+  "nomEleve" : "LELE NDJONDO RAMSY",
+  "nomFrais" : "orgamath",
+  "nomDepositaire" : "LELE NDJONDO RAMSY",
+  "montant" : 200.0,
+  "date" : 1578234139329,
+  "signature" : -6235740035466330265,
+  "beta" : 0,
+  "referenceTransaction" : "1578234139329"
+}

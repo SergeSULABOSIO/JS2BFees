@@ -539,7 +539,7 @@ public class Principal extends javax.swing.JFrame {
         if (user != null) {
             String noms = user.getNom() + " " + user.getPostnom() + " " + user.getPrenom();
             btEtatUser.setText(user.getPrenom());
-            texteTitre += UtilObjet.nomApplication + " - " + noms;
+            texteTitre = UtilObjet.nomApplication + " - " + noms;
         } else {
             btEtatUser.setVisible(false);
         }

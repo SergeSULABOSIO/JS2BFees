@@ -1,0 +1,90 @@
+{
+  "id" : 5,
+  "idUtilisateur" : 12,
+  "idEntreprise" : 2,
+  "idExercice" : 2,
+  "idMonnaie" : 3,
+  "montantDefaut" : 0.0,
+  "nom" : "FRS_3",
+  "monnaie" : "$",
+  "signatureMonnaie" : 4995574314508428918,
+  "signature" : 5141366038310900841,
+  "liaisonsClasses" : [ {
+    "idClasse" : 7,
+    "nomClasse" : "1e",
+    "signatureClasse" : -5176161771655060218,
+    "montant" : 0.0
+  }, {
+    "idClasse" : 8,
+    "nomClasse" : "2e",
+    "signatureClasse" : 7555765754779629912,
+    "montant" : 0.0
+  }, {
+    "idClasse" : 9,
+    "nomClasse" : "3e",
+    "signatureClasse" : 1441160345410354470,
+    "montant" : 0.0
+  }, {
+    "idClasse" : 10,
+    "nomClasse" : "4e",
+    "signatureClasse" : 5643899661678454002,
+    "montant" : 0.0
+  }, {
+    "idClasse" : 11,
+    "nomClasse" : "5e",
+    "signatureClasse" : -5620410091329610500,
+    "montant" : 0.0
+  }, {
+    "idClasse" : 12,
+    "nomClasse" : "HJHJHJ",
+    "signatureClasse" : -4294890125526036045,
+    "montant" : 0.0
+  } ],
+  "liaisonsPeriodes" : [ {
+    "idPeriode" : 4,
+    "nomPeriode" : "1er Trimestre",
+    "signaturePeriode" : -8881783528077998361,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 5,
+    "nomPeriode" : "2ème Trimestre",
+    "signaturePeriode" : -7437764188094844488,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 6,
+    "nomPeriode" : "3ème Trimestre",
+    "signaturePeriode" : 1457357663363993808,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 7,
+    "nomPeriode" : "4ème Trimestre",
+    "signaturePeriode" : 1578232173764,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 8,
+    "nomPeriode" : "5ème Trimestre",
+    "signaturePeriode" : 1578232175712,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 9,
+    "nomPeriode" : "6ème Trimestre",
+    "signaturePeriode" : 1578232176059,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 10,
+    "nomPeriode" : "7ème Trimestre",
+    "signaturePeriode" : 1578232176203,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 11,
+    "nomPeriode" : "8ème Trimestre",
+    "signaturePeriode" : 1578232176438,
+    "pourcentage" : 0.0
+  }, {
+    "idPeriode" : 12,
+    "nomPeriode" : "10ème Trimestre",
+    "signaturePeriode" : 1578232176683,
+    "pourcentage" : 0.0
+  } ],
+  "beta" : 0
+}

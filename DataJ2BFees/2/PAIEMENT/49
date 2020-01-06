@@ -1,0 +1,18 @@
+{
+  "id" : 49,
+  "idEleve" : 12,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 2,
+  "idPeriode" : 3,
+  "mode" : 0,
+  "reference" : "1578233924740",
+  "nomEleve" : "MUTA KANKU CHRISTIANNE",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MUTA KANKU CHRISTIANNE",
+  "montant" : 33.0,
+  "date" : 1578233924740,
+  "signature" : -6761375827070249593,
+  "beta" : 0,
+  "referenceTransaction" : "1578233924740"
+}

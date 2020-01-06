@@ -1,44 +1,44 @@
 {
-  "id" : 13,
+  "id" : 15,
   "idUtilisateur" : 12,
   "idEntreprise" : 2,
   "idExercice" : 1,
   "idMonnaie" : 1,
-  "montantDefaut" : 10.0,
-  "nom" : "FRS_4",
+  "montantDefaut" : 30.0,
+  "nom" : "LABO",
   "monnaie" : "$",
   "signatureMonnaie" : -8848093425617771423,
-  "signature" : -526606608366306305,
+  "signature" : 6491700711330680624,
   "liaisonsClasses" : [ {
     "idClasse" : 1,
     "nomClasse" : "1e",
     "signatureClasse" : 8917865368999382056,
-    "montant" : 10.0
+    "montant" : 0.0
   }, {
     "idClasse" : 2,
     "nomClasse" : "2e",
     "signatureClasse" : -3729111417842714322,
-    "montant" : 10.0
+    "montant" : 30.0
   }, {
     "idClasse" : 3,
     "nomClasse" : "3e",
     "signatureClasse" : -3084737022416707130,
-    "montant" : 10.0
+    "montant" : 30.0
   }, {
     "idClasse" : 4,
     "nomClasse" : "4e",
     "signatureClasse" : -7512912423625765083,
-    "montant" : 10.0
+    "montant" : 30.0
   }, {
     "idClasse" : 5,
     "nomClasse" : "5e",
     "signatureClasse" : -8748716042888184652,
-    "montant" : 10.0
+    "montant" : 30.0
   }, {
     "idClasse" : 6,
     "nomClasse" : "6e",
     "signatureClasse" : 8781889559401430248,
-    "montant" : 10.0
+    "montant" : 30.0
   } ],
   "liaisonsPeriodes" : [ {
     "idPeriode" : 1,

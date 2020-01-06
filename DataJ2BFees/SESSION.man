@@ -17,22 +17,22 @@
     "codeSwift" : "Swift0901292929"
   },
   "utilisateur" : {
-    "id" : 12,
+    "id" : 98,
     "idEntreprise" : 2,
-    "nom" : "SULA",
-    "postnom" : "BOSIO",
-    "prenom" : "Serge",
-    "email" : "sulabosiog@gmail.com",
+    "nom" : "BATUBENGA",
+    "postnom" : "MAKANDA",
+    "prenom" : "Didier",
+    "email" : "didier@gmail.com",
     "motDePasse" : "abc",
-    "type" : 0,
-    "signature" : 1559310939233,
-    "droitLitige" : 2,
-    "droitExercice" : 2,
-    "droitFacture" : 2,
+    "type" : 1,
+    "signature" : 1578233503684,
+    "droitLitige" : 1,
+    "droitExercice" : 0,
+    "droitFacture" : 1,
     "droitInscription" : 2,
-    "droitPaie" : 2,
-    "droitTresorerie" : 2,
-    "droitUtilisateur" : 2,
+    "droitPaie" : 0,
+    "droitTresorerie" : 0,
+    "droitUtilisateur" : 0,
     "beta" : 0
   },
   "paiement" : {
@@ -47,6 +47,6 @@
     "dateActivation" : null,
     "dateExpiration" : null
   },
-  "token" : "1578234377838",
-  "derniereConnexion" : 1578234377838
+  "token" : "1578325497771",
+  "derniereConnexion" : 1578325497771
 }

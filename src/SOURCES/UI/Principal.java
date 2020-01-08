@@ -128,16 +128,16 @@ public class Principal extends javax.swing.JFrame {
             int nbTabs = tabPrincipal.getComponentCount();
             for (int tabIndex = 0; tabIndex < nbTabs; tabIndex++) {
                 String tabTitle = tabPrincipal.getTitleAt(tabIndex);
+                System.out.println("tabTitle: " + tabTitle);
+                System.out.println("rubrique: " + rubrique);
                 if (tabTitle.contains(rubrique)) {
                     tabPrincipal.setSelectedIndex(tabIndex);
                     return false;
-                } else {
-                    return true;
                 }
             }
-            return false;
+            return true;
         } else {
-            return false;
+            return true;
         }
     }
 
@@ -711,7 +711,7 @@ public class Principal extends javax.swing.JFrame {
                         }
                     }.start();
                 } else {
-                    if (!canWeOpenAndLoadData(GestionExercice.NOM)) {
+                    if (canWeOpenAndLoadData(GestionExercice.NOM) == true) {
                         new Thread() {
                             public void run() {
                                 //On ouvre une année scolaire existante
@@ -732,7 +732,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void OnEcouteLeClick() {
                 if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
-                    if (!canWeOpenAndLoadData(GestionAdhesion.NOM)) {
+                    if (canWeOpenAndLoadData(GestionAdhesion.NOM) == true) {
                         new Thread() {
                             public void run() {
                                 //On ouvre les inscriptions
@@ -753,14 +753,17 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void OnEcouteLeClick() {
                 if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
-                    new Thread() {
-                        public void run() {
-                            //On ouvre les inscriptions
-                            System.out.println("Ouverture des fiches de paie");
-                            gestionSalaire = new GestionSalaire(ecouteurGestionPaie, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
-                            gestionSalaire.gp_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
-                        }
-                    }.start();
+                    if (canWeOpenAndLoadData(GestionSalaire.NOM) == true) {
+                        new Thread() {
+                            public void run() {
+                                //On ouvre les inscriptions
+                                System.out.println("Ouverture des fiches de paie");
+                                gestionSalaire = new GestionSalaire(ecouteurGestionPaie, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                                gestionSalaire.gp_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                            }
+                        }.start();
+                    }
+
                 }
                 btPaie.setIsOpenned();
             }
@@ -770,16 +773,17 @@ public class Principal extends javax.swing.JFrame {
         btTresorerie = new Bouton(12, "Trésorerie", "La trésorerie (Encaissements & Décaissements)", true, icones.getTableau_de_bord_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                /*
-                 */
-                new Thread() {
-                    public void run() {
-                        //On ouvre les inscriptions
-                        //System.out.println("Ouverture de la trésorerie");
-                        gestionTresorerie = new GestionTresorerie(ecouteurGestionTresorerie, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
-                        gestionTresorerie.gt_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
-                    }
-                }.start();
+                if (canWeOpenAndLoadData(GestionTresorerie.NOM) == true) {
+                    new Thread() {
+                        public void run() {
+                            //On ouvre les inscriptions
+                            //System.out.println("Ouverture de la trésorerie");
+                            gestionTresorerie = new GestionTresorerie(ecouteurGestionTresorerie, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                            gestionTresorerie.gt_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                        }
+                    }.start();
+                }
+
                 btTresorerie.setIsOpenned();
             }
         });
@@ -788,16 +792,17 @@ public class Principal extends javax.swing.JFrame {
         btLitige = new Bouton(12, "Litiges", "Litiges et reglèment des dettes", true, icones.getFournisseur_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                /**/
                 if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
-                    new Thread() {
-                        public void run() {
-                            //On ouvre les inscriptions
-                            //System.out.println("Ouverture des litiges");
-                            gestionLitiges = new GestionLitiges(ecouteurGestionLitige, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
-                            gestionLitiges.gl_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
-                        }
-                    }.start();
+                    if (canWeOpenAndLoadData(GestionLitiges.NOM) == true) {
+                        new Thread() {
+                            public void run() {
+                                //On ouvre les inscriptions
+                                //System.out.println("Ouverture des litiges");
+                                gestionLitiges = new GestionLitiges(ecouteurGestionLitige, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                                gestionLitiges.gl_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                            }
+                        }.start();
+                    }
                 }
                 btLitige.setIsOpenned();
             }

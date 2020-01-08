@@ -47,6 +47,6 @@
     "dateActivation" : null,
     "dateExpiration" : null
   },
-  "token" : "1578327012646",
-  "derniereConnexion" : 1578327012646
+  "token" : "1578488689531",
+  "derniereConnexion" : 1578488689531
 }

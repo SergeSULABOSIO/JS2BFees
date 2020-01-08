@@ -69,14 +69,13 @@ public class Principal extends javax.swing.JFrame {
     private FileManager fm = null;
     private JFrame moi = null;
     private Session session;
-    
+
     private EcouteurGestionExercice ecouteurExercice = null;
     private EcouteurGestionInscription ecouteurGestionInscription = null;
     private EcouteurGestionLitige ecouteurGestionLitige = null;
     private EcouteurGestionPaie ecouteurGestionPaie = null;
     private EcouteurGestionTresorerie ecouteurGestionTresorerie = null;
-    
-    
+
     private CouleurBasique couleurBasique;
 
     //Les GEstionnaires
@@ -102,13 +101,13 @@ public class Principal extends javax.swing.JFrame {
         lf_initBtLogo();
         lf_initFileManaer();
         lf_initEcuteurFreemium();
-        
+
         lf_initEcouteurExercice();
         lf_initEcouteurInscription();
         lf_initEcouteurLitige();
         lf_initEcouteurPaie();
         lf_initEcouteurTreoserie();
-        
+
         lf_construirePageLogin();
         loadUserSession();
         initEffectSelectionTab();
@@ -124,16 +123,33 @@ public class Principal extends javax.swing.JFrame {
         btLogo.setForeground(couleurBasique.getCouleur_encadrement_selection());
     }
 
+    private boolean canWeOpenAndLoadData(String rubrique) {
+        if (tabPrincipal != null) {
+            int nbTabs = tabPrincipal.getComponentCount();
+            for (int tabIndex = 0; tabIndex < nbTabs; tabIndex++) {
+                String tabTitle = tabPrincipal.getTitleAt(tabIndex);
+                if (tabTitle.contains(rubrique)) {
+                    tabPrincipal.setSelectedIndex(tabIndex);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
+
     private void initEffectSelectionTab() {
         tabPrincipal.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
                 int tabIndex = tabPrincipal.getSelectedIndex();
                 if (tabIndex != -1) {
-                    
                     String titre = tabPrincipal.getTitleAt(tabIndex);
                     System.out.println("Tab: " + tabIndex + " : " + titre);
-                    
+
                     //Effet selection Tab ANNEE
                     if (titre.startsWith(UtilObjet.DOSSIER_ANNEE)) {
                         if (btAnnee != null) {
@@ -144,7 +160,7 @@ public class Principal extends javax.swing.JFrame {
                             btAnnee.setIsSelected(false);
                         }
                     }
-                    
+
                     //Effet selection Tab INSCRIPTION
                     if (titre.startsWith(GestionAdhesion.NOM)) {
                         if (btInscription != null) {
@@ -155,7 +171,7 @@ public class Principal extends javax.swing.JFrame {
                             btInscription.setIsSelected(false);
                         }
                     }
-                    
+
                     //Effet selection Tab LITIGE
                     if (titre.startsWith(GestionLitiges.NOM)) {
                         if (btLitige != null) {
@@ -166,7 +182,7 @@ public class Principal extends javax.swing.JFrame {
                             btLitige.setIsSelected(false);
                         }
                     }
-                    
+
                     //Effet selection Tab SALAIRE
                     if (titre.startsWith(GestionSalaire.NOM)) {
                         if (btPaie != null) {
@@ -177,7 +193,7 @@ public class Principal extends javax.swing.JFrame {
                             btPaie.setIsSelected(false);
                         }
                     }
-                    
+
                     //Effet selection Tab TRESORERIE
                     if (titre.startsWith(GestionTresorerie.NOM)) {
                         if (btTresorerie != null) {
@@ -270,7 +286,7 @@ public class Principal extends javax.swing.JFrame {
 
         };
     }
-    
+
     private void lf_initEcouteurInscription() {
         ecouteurGestionInscription = new EcouteurGestionInscription() {
             @Override
@@ -279,7 +295,7 @@ public class Principal extends javax.swing.JFrame {
             }
         };
     }
-    
+
     private void lf_initEcouteurLitige() {
         ecouteurGestionLitige = new EcouteurGestionLitige() {
             @Override
@@ -288,7 +304,7 @@ public class Principal extends javax.swing.JFrame {
             }
         };
     }
-    
+
     private void lf_initEcouteurPaie() {
         ecouteurGestionPaie = new EcouteurGestionPaie() {
             @Override
@@ -297,7 +313,7 @@ public class Principal extends javax.swing.JFrame {
             }
         };
     }
-    
+
     private void lf_initEcouteurTreoserie() {
         ecouteurGestionTresorerie = new EcouteurGestionTresorerie() {
             @Override
@@ -306,8 +322,6 @@ public class Principal extends javax.swing.JFrame {
             }
         };
     }
-    
-    
 
     private boolean listeExerciceContient(String nomAnnee) {
         for (int i = 0; i < comboListeAnneesScolaires.getItemCount(); i++) {
@@ -697,14 +711,16 @@ public class Principal extends javax.swing.JFrame {
                         }
                     }.start();
                 } else {
-                    new Thread() {
-                        public void run() {
-                            //On ouvre une année scolaire existante
-                            //System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
-                            gestionAnnee = new GestionExercice(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
-                            gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
-                        }
-                    }.start();
+                    if (!canWeOpenAndLoadData(GestionExercice.NOM)) {
+                        new Thread() {
+                            public void run() {
+                                //On ouvre une année scolaire existante
+                                //System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
+                                gestionAnnee = new GestionExercice(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
+                                gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
+                            }
+                        }.start();
+                    }
                 }
 
                 btAnnee.setIsOpenned();
@@ -716,14 +732,17 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void OnEcouteLeClick() {
                 if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
-                    new Thread() {
-                        public void run() {
-                            //On ouvre les inscriptions
-                            //System.out.println("Ouverture des adhésions");
-                            gestionAdhesion = new GestionAdhesion(ecouteurGestionInscription, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
-                            gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
-                        }
-                    }.start();
+                    if (!canWeOpenAndLoadData(GestionAdhesion.NOM)) {
+                        new Thread() {
+                            public void run() {
+                                //On ouvre les inscriptions
+                                //System.out.println("Ouverture des adhésions");
+                                gestionAdhesion = new GestionAdhesion(ecouteurGestionInscription, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                                gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                            }
+                        }.start();
+                    }
+
                 }
                 btInscription.setIsOpenned();
             }

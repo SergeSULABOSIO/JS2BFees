@@ -1,0 +1,18 @@
+{
+  "id" : 53,
+  "idEleve" : 10,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 1,
+  "idPeriode" : 3,
+  "mode" : 0,
+  "reference" : "1578388572288",
+  "nomEleve" : "MUTOMBO BAKANGU SILVIE",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "MUTOMBO BAKANGU SILVIE",
+  "montant" : 16.5,
+  "date" : 1578388572288,
+  "signature" : 2503995505407203575,
+  "beta" : 0,
+  "referenceTransaction" : "1578388572288"
+}

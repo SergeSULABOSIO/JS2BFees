@@ -74,6 +74,7 @@ public class GestionExercice {
     public JFrame fenetre;
     public Icones icones;
     public EcouteurFreemium ef = null;
+    public static String NOM = "ANNEE";
 
     public GestionExercice(EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Monnaie monnaie_output, EcouteurGestionExercice ecouteurExercice) {
         this.ef = ef;
@@ -1091,3 +1092,5 @@ public class GestionExercice {
         progress.setIndeterminate(false);
     }
 }
+
+

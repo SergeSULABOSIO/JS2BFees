@@ -36,17 +36,17 @@
     "beta" : 0
   },
   "paiement" : {
-    "id" : -1,
-    "idEntreprise" : -1,
-    "idUtilisateur" : -1,
-    "plan" : -1,
-    "canal" : -1,
-    "reference" : "",
-    "dateReception" : null,
-    "montant" : 0.0,
-    "dateActivation" : null,
-    "dateExpiration" : null
+    "id" : 34,
+    "idEntreprise" : 2,
+    "idUtilisateur" : 12,
+    "plan" : 0,
+    "canal" : 0,
+    "reference" : "457GHTF177",
+    "dateReception" : "2020-01-10 08:15:23",
+    "montant" : 30.0,
+    "dateActivation" : "2020-01-10 07:19:00",
+    "dateExpiration" : "2020-07-10 07:19:00"
   },
-  "token" : "1578639993301",
-  "derniereConnexion" : 1578639993301
+  "token" : "1578666970376",
+  "derniereConnexion" : 1578666970376
 }

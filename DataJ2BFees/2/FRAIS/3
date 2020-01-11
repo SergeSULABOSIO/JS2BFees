@@ -2,89 +2,44 @@
   "id" : 3,
   "idUtilisateur" : 12,
   "idEntreprise" : 2,
-  "idExercice" : 2,
-  "idMonnaie" : 3,
-  "montantDefaut" : 100.0,
-  "nom" : "inscription",
+  "idExercice" : 1,
+  "idMonnaie" : 1,
+  "montantDefaut" : 10.0,
+  "nom" : "LABO",
   "monnaie" : "$",
-  "signatureMonnaie" : 4995574314508428918,
-  "signature" : -4081296591864409959,
+  "signatureMonnaie" : 8995297021524780276,
+  "signature" : 2412258962967424001,
   "liaisonsClasses" : [ {
-    "idClasse" : 7,
+    "idClasse" : 1,
     "nomClasse" : "1e",
-    "signatureClasse" : -5176161771655060218,
-    "montant" : 100.0
+    "signatureClasse" : -4642291146903279494,
+    "montant" : 10.0
   }, {
-    "idClasse" : 8,
+    "idClasse" : 2,
     "nomClasse" : "2e",
-    "signatureClasse" : 7555765754779629912,
-    "montant" : 100.0
+    "signatureClasse" : 406511986570320356,
+    "montant" : 10.0
   }, {
-    "idClasse" : 9,
+    "idClasse" : 3,
     "nomClasse" : "3e",
-    "signatureClasse" : 1441160345410354470,
-    "montant" : 100.0
-  }, {
-    "idClasse" : 10,
-    "nomClasse" : "4e",
-    "signatureClasse" : 5643899661678454002,
-    "montant" : 100.0
-  }, {
-    "idClasse" : 11,
-    "nomClasse" : "5e",
-    "signatureClasse" : -5620410091329610500,
-    "montant" : 50.0
-  }, {
-    "idClasse" : 12,
-    "nomClasse" : "HJHJHJ",
-    "signatureClasse" : -4294890125526036045,
-    "montant" : 100.0
+    "signatureClasse" : -6787598802640704319,
+    "montant" : 10.0
   } ],
   "liaisonsPeriodes" : [ {
-    "idPeriode" : 4,
+    "idPeriode" : 1,
     "nomPeriode" : "1er Trimestre",
-    "signaturePeriode" : -8881783528077998361,
-    "pourcentage" : 50.0
+    "signaturePeriode" : 7226330603147843604,
+    "pourcentage" : 100.0
   }, {
-    "idPeriode" : 5,
+    "idPeriode" : 2,
     "nomPeriode" : "2ème Trimestre",
-    "signaturePeriode" : -7437764188094844488,
-    "pourcentage" : 6.25
+    "signaturePeriode" : -4855836029626084839,
+    "pourcentage" : 0.0
   }, {
-    "idPeriode" : 6,
+    "idPeriode" : 3,
     "nomPeriode" : "3ème Trimestre",
-    "signaturePeriode" : 1457357663363993808,
-    "pourcentage" : 6.25
-  }, {
-    "idPeriode" : 7,
-    "nomPeriode" : "4ème Trimestre",
-    "signaturePeriode" : 1578232173764,
-    "pourcentage" : 6.25
-  }, {
-    "idPeriode" : 8,
-    "nomPeriode" : "5ème Trimestre",
-    "signaturePeriode" : 1578232175712,
-    "pourcentage" : 6.25
-  }, {
-    "idPeriode" : 9,
-    "nomPeriode" : "6ème Trimestre",
-    "signaturePeriode" : 1578232176059,
-    "pourcentage" : 6.25
-  }, {
-    "idPeriode" : 10,
-    "nomPeriode" : "7ème Trimestre",
-    "signaturePeriode" : 1578232176203,
-    "pourcentage" : 6.25
-  }, {
-    "idPeriode" : 11,
-    "nomPeriode" : "8ème Trimestre",
-    "signaturePeriode" : 1578232176438,
-    "pourcentage" : 6.25
-  }, {
-    "idPeriode" : 12,
-    "nomPeriode" : "10ème Trimestre",
-    "signaturePeriode" : 1578232176683,
-    "pourcentage" : 6.25
+    "signaturePeriode" : -7931590136250071127,
+    "pourcentage" : 0.0
   } ],
   "beta" : 0
 }

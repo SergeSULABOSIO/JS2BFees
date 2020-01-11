@@ -47,6 +47,6 @@
     "dateActivation" : "2020-01-10 07:19:00",
     "dateExpiration" : "2020-07-10 07:19:00"
   },
-  "token" : "1578666970376",
-  "derniereConnexion" : 1578666970376
+  "token" : "1578739566228",
+  "derniereConnexion" : 1578739566228
 }

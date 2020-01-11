@@ -6,7 +6,7 @@
     "telephone" : "+243844803514",
     "email" : "sulabosiog@gmail.com",
     "siteWeb" : "www.aib-brokers.com",
-    "logo" : "logo/2_281475.png",
+    "logo" : "logo/2_600607.jpg",
     "rccm" : "CDFK0014-15-200",
     "idnat" : "Idnat09988",
     "numeroImpot" : "Imp0988839393",
@@ -36,17 +36,17 @@
     "beta" : 0
   },
   "paiement" : {
-    "id" : 34,
+    "id" : 35,
     "idEntreprise" : 2,
     "idUtilisateur" : 12,
     "plan" : 0,
     "canal" : 0,
-    "reference" : "457GHTF177",
-    "dateReception" : "2020-01-10 08:15:23",
+    "reference" : "457GHTF188",
+    "dateReception" : "2020-01-11 14:45:22",
     "montant" : 30.0,
-    "dateActivation" : "2020-01-10 07:19:00",
-    "dateExpiration" : "2020-07-10 07:19:00"
+    "dateActivation" : "2020-07-10 07:19:00",
+    "dateExpiration" : "2021-01-10 07:19:00"
   },
-  "token" : "1578739566228",
-  "derniereConnexion" : 1578739566228
+  "token" : "1578756905948",
+  "derniereConnexion" : 1578756905948
 }

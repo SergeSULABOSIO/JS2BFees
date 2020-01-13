@@ -1,0 +1,14 @@
+{
+  "id" : 2,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "nom" : "LELE",
+  "postnom" : "NDJONDO",
+  "prenom" : "RAMSY",
+  "sexe" : 0,
+  "niveauEtude" : 2,
+  "signature" : 1578947318122,
+  "categorie" : 0,
+  "beta" : 0
+}

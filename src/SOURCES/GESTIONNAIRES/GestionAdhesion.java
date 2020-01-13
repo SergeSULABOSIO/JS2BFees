@@ -45,6 +45,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import Source.Interface.InterfaceAnnee;
+import Source.Objet.Paiement;
 
 /**
  *
@@ -658,10 +659,88 @@ public class GestionAdhesion {
                 if (idElement != -1) {
                     switch (index) {
                         case 0://ELEVE
-                            fm.fm_supprimer(UtilObjet.DOSSIER_ELEVE, idElement, signature);
+                            //On va d'abord charger tous les paiement effectué par cet élève que l'on veut supprimer
+                            //L'objectif ici est de supprimer également tous les paiements que celui-ci a déjà effectués
+                            fm.fm_ouvrirTout(0, Paiement.class, UtilObjet.DOSSIER_PAIEMENT, 1, 1000000, new EcouteurOuverture() {
+                                @Override
+                                public boolean isCriteresRespectes(Object object) {
+                                    Paiement p = (Paiement) object;
+                                    return p.getIdEleve() == idElement;
+                                }
+
+                                @Override
+                                public void onElementLoaded(String message, Object data) {
+                                    Paiement pas = (Paiement) data;
+                                    fm.fm_supprimer(UtilObjet.DOSSIER_PAIEMENT, pas.getId(), pas.getSignature());
+                                }
+
+                                @Override
+                                public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                                    //C'est quand on a finit de supprimer les paiements de cet élève que l'on va lui supprimer lui-même
+                                    fm.fm_supprimer(UtilObjet.DOSSIER_ELEVE, idElement, signature);
+                                    progress.setVisible(false);
+                                    progress.setIndeterminate(false);
+                                    progress.setString("Prêt.");
+                                    
+                                }
+
+                                @Override
+                                public void onError(String message) {
+                                    progress.setVisible(false);
+                                    progress.setIndeterminate(false);
+                                    progress.setString("Erreur !");
+                                }
+
+                                @Override
+                                public void onProcessing(String message) {
+                                    progress.setVisible(true);
+                                    progress.setIndeterminate(true);
+                                    progress.setString("Suppression en cours");
+                                }
+                            });
+
                             break;
                         case 1://AYANT-DROIT
-                            fm.fm_supprimer(UtilObjet.DOSSIER_AYANT_DROIT, idElement, signature);
+                            //On va d'abord charger tous les paiement effectué par cet ayant-droit que l'on veut supprimer
+                            //L'objectif ici est de supprimer également tous les paiements que celui-ci a déjà effectués
+                            fm.fm_ouvrirTout(0, Paiement.class, UtilObjet.DOSSIER_PAIEMENT, 1, 1000000, new EcouteurOuverture() {
+                                @Override
+                                public boolean isCriteresRespectes(Object object) {
+                                    Paiement p = (Paiement) object;
+                                    return p.getIdEleve() == idElement;
+                                }
+
+                                @Override
+                                public void onElementLoaded(String message, Object data) {
+                                    Paiement pas = (Paiement) data;
+                                    fm.fm_supprimer(UtilObjet.DOSSIER_PAIEMENT, pas.getId(), pas.getSignature());
+                                }
+
+                                @Override
+                                public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                                    //C'est quand on a finit de supprimer les paiements de cet élève que l'on va lui supprimer lui-même
+                                    fm.fm_supprimer(UtilObjet.DOSSIER_AYANT_DROIT, idElement, signature);
+                                    progress.setVisible(false);
+                                    progress.setIndeterminate(false);
+                                    progress.setString("Prêt.");
+                                    
+                                }
+
+                                @Override
+                                public void onError(String message) {
+                                    progress.setVisible(false);
+                                    progress.setIndeterminate(false);
+                                    progress.setString("Erreur !");
+                                }
+
+                                @Override
+                                public void onProcessing(String message) {
+                                    progress.setVisible(true);
+                                    progress.setIndeterminate(true);
+                                    progress.setString("Suppression en cours");
+                                }
+                            });
+                            
                             break;
                         default:
                     }

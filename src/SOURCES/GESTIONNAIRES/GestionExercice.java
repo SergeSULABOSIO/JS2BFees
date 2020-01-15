@@ -42,6 +42,7 @@ import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import Source.Interface.InterfaceAnnee;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -1044,6 +1045,61 @@ public class GestionExercice {
                 }
             }
 
+            @Override
+            public boolean onCanDelete(int idElement, int index, long signature) {
+                switch(index){
+                    case 0:
+                        //Il faut d'abord s'assurer que cette donnée n'est pas utilisée ailleurs
+                            
+                            //PERIODE et FRAIS
+                            int idPeriode = idElement;
+                            fm.fm_ouvrirTout(0, Frais.class, UtilObjet.DOSSIER_FRAIS, 1, 1000000, new EcouteurOuverture() {
+                                @Override
+                                public boolean isCriteresRespectes(Object object) {
+                                    Frais ff = (Frais) object;
+                                    boolean rep = false;
+                                    for(LiaisonFraisPeriode lfp: ff.getLiaisonsPeriodes()){
+                                        if(lfp.getIdPeriode() == idPeriode){
+                                            rep = true;
+                                        }
+                                    }
+                                    return rep;
+                                }
+
+                                @Override
+                                public void onElementLoaded(String message, Object data) {
+                                    
+                                }
+
+                                @Override
+                                public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                                    progress.setVisible(false);
+                                    progress.setIndeterminate(false);
+                                    if(resultatTotalObjets.isEmpty()){
+                                        
+                                    }else{
+                                        JOptionPane.showMessageDialog(panel, "Impossible de supprimer car cette information est utilisée dans la rubrique Frais.", "Suppression Impossible", JOptionPane.ERROR_MESSAGE, icones.getAlert_02());
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String message) {
+                                    progress.setVisible(false);
+                                    progress.setIndeterminate(false);
+                                }
+
+                                @Override
+                                public void onProcessing(String message) {
+                                    progress.setVisible(true);
+                                    progress.setIndeterminate(true);
+                                }
+                            });
+                    case 1:
+                        break;
+                    default:
+                }
+            }
+
         });
         //Chargement du gestionnaire sur l'onglet
 
@@ -1092,5 +1148,51 @@ public class GestionExercice {
         progress.setIndeterminate(false);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

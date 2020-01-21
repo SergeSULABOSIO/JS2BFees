@@ -1,0 +1,18 @@
+{
+  "id" : 25,
+  "idEleve" : 7,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 6,
+  "idPeriode" : 6,
+  "mode" : 0,
+  "reference" : "1579365007105",
+  "nomEleve" : "ELEMBO ENDJINGA JEAN-PAUL",
+  "nomFrais" : "LABO",
+  "nomDepositaire" : "ELEMBO ENDJINGA JEAN-PAUL",
+  "montant" : 1.65,
+  "date" : 1579365007105,
+  "signature" : 263333257220668783,
+  "beta" : 0,
+  "referenceTransaction" : "1579365007105"
+}

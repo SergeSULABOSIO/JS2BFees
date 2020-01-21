@@ -51,6 +51,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.Vector;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
@@ -64,7 +65,7 @@ import javax.swing.event.ChangeListener;
 public class Principal extends javax.swing.JFrame {
 
     public BarreOutils bOutils = null;
-    public Bouton btAnnee, btInscription, btTresorerie, btPaie, btLitige, btLicence, btLogo, btUtilisateur, btBackup;
+    public Bouton btAnnee, btInscription, btTresorerie, btPaie, btLitige, btLicence, btLogo, btUtilisateur, btBackup, btFermer;
     private Icones icones = null;
     private FileManager fm = null;
     private JFrame moi = null;
@@ -117,7 +118,22 @@ public class Principal extends javax.swing.JFrame {
         btLogo = new Bouton(12, "", "Votre logo - Cliquer pour ouvrir votre page web", true, icones.getSablier_03(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_MODIFIER_LOGO, icones.getAlarme_02());
+                UtilFileManager.isNewWorkAvailable("http://www.google.com", new EcouteurInternet() {
+                    @Override
+                    public void onInternet(String adresseWebDisponible) {
+                        UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_MODIFIER_LOGO, icones.getAlarme_02());
+                    }
+
+                    @Override
+                    public void onError() {
+                        JOptionPane.showMessageDialog(moi, "Désolé, il n'y a pas de connexion Internet.\nImpossible de lancer la page web.", "Pas de connexion Internet", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
+                    }
+
+                    @Override
+                    public void onVerification(String message) {
+                        //lf_progress(false, "", progressLogin, 0);
+                    }
+                });
             }
         });
         btLogo.setForeground(couleurBasique.getCouleur_encadrement_selection());
@@ -220,9 +236,9 @@ public class Principal extends javax.swing.JFrame {
 
     private void updateListeExercice(String selectedExercice) {
         //System.out.println("******************* ACTUALISER LISTE ANNEES ************************");
-        int nbRow = comboListeAnneesScolaires.getItemCount();
+        int nbRow = comboListeAnneesScolairesDemarrer.getItemCount();
         for (int i = nbRow - 1; 0 < i; i--) {
-            comboListeAnneesScolaires.removeItemAt(i);
+            comboListeAnneesScolairesDemarrer.removeItemAt(i);
         }
 
         fm.fm_ouvrirTout(0, Annee.class, UtilObjet.DOSSIER_ANNEE, 1, 10000, new EcouteurOuverture() {
@@ -238,7 +254,7 @@ public class Principal extends javax.swing.JFrame {
                 Annee oAnnee = (Annee) data;
                 //System.out.println(" * " + oAnnee.toString());
                 if (!listeExerciceContient(oAnnee.getNom())) {
-                    comboListeAnneesScolaires.addItem(oAnnee.getNom());
+                    comboListeAnneesScolairesDemarrer.addItem(oAnnee.getNom());
                 }
             }
 
@@ -246,7 +262,7 @@ public class Principal extends javax.swing.JFrame {
             public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 progressEtat.setVisible(false);
                 progressEtat.setIndeterminate(false);
-                comboListeAnneesScolaires.setSelectedItem(selectedExercice);
+                comboListeAnneesScolairesDemarrer.setSelectedItem(selectedExercice);
             }
 
             @Override
@@ -275,7 +291,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onExerciceDeleteded(String nom) {
                 if (listeExerciceContient(nom)) {
-                    comboListeAnneesScolaires.removeItem(nom);
+                    comboListeAnneesScolairesDemarrer.removeItem(nom);
                 }
             }
 
@@ -324,8 +340,8 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private boolean listeExerciceContient(String nomAnnee) {
-        for (int i = 0; i < comboListeAnneesScolaires.getItemCount(); i++) {
-            if (nomAnnee.equals(comboListeAnneesScolaires.getItemAt(i))) {
+        for (int i = 0; i < comboListeAnneesScolairesDemarrer.getItemCount(); i++) {
+            if (nomAnnee.equals(comboListeAnneesScolairesDemarrer.getItemAt(i))) {
                 return true;
             }
         }
@@ -364,9 +380,10 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void synchroniser() {
+        System.out.println("Synchronisation.");
         Annee exerciceConnected = null;
         for (Annee ex : listeExercTempo) {
-            if ((comboListeAnneesScolaires.getSelectedItem() + "").equals(ex.getNom())) {
+            if ((comboListeAnneesScolairesDemarrer.getSelectedItem() + "").equals(ex.getNom())) {
                 exerciceConnected = ex;
             }
         }
@@ -384,13 +401,15 @@ public class Principal extends javax.swing.JFrame {
                     @Override
                     public void onSuccess(String message) {
                         if (idExerciceSelected == -1) {
-                            lf_construireListeAnneesScolaires();
+                            //lf_construireListeAnneesScolaires(comboListeAnneesScolaires);
+                            lf_construireListeAnneesScolaires(comboListeAnneesScolairesDemarrer);
                         }
                         lf_progressBackUpToobar(false, "Prêt", backProgress, 0);
                         backBouton.setEnabled(true);
                         btBackup.getBouton().setEnabled(true);
                         menuSynchroniser.setEnabled(true);
-                        comboListeAnneesScolaires.setEnabled(true);
+                        //comboListeAnneesScolaires.setEnabled(true);
+                        comboListeAnneesScolairesDemarrer.setEnabled(true);
                         backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur.");
                     }
 
@@ -400,7 +419,8 @@ public class Principal extends javax.swing.JFrame {
                         backBouton.setEnabled(true);
                         btBackup.getBouton().setEnabled(true);
                         menuSynchroniser.setEnabled(true);
-                        comboListeAnneesScolaires.setEnabled(true);
+                        //comboListeAnneesScolaires.setEnabled(true);
+                        comboListeAnneesScolairesDemarrer.setEnabled(true);
                         backLabel.setText(message);
                     }
 
@@ -410,7 +430,8 @@ public class Principal extends javax.swing.JFrame {
                         backBouton.setEnabled(false);
                         btBackup.getBouton().setEnabled(false);
                         menuSynchroniser.setEnabled(false);
-                        comboListeAnneesScolaires.setEnabled(false);
+                        //comboListeAnneesScolaires.setEnabled(false);
+                        comboListeAnneesScolairesDemarrer.setEnabled(false);
                         backLabel.setText("Back-up en cours: " + message);
                     }
                 });
@@ -418,11 +439,12 @@ public class Principal extends javax.swing.JFrame {
 
             @Override
             public void onError() {
-                JOptionPane.showMessageDialog(moi, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
+                //JOptionPane.showMessageDialog(moi, "Veuillez vérifier votre connexion Internet!", "Pas de connexion", JOptionPane.WARNING_MESSAGE, icones.getAlert_02());
                 backBouton.setEnabled(true);
                 btBackup.getBouton().setEnabled(true);
                 menuSynchroniser.setEnabled(true);
-                comboListeAnneesScolaires.setEnabled(true);
+                //comboListeAnneesScolaires.setEnabled(true);
+                comboListeAnneesScolairesDemarrer.setEnabled(true);
                 lf_progressBackUpToobar(false, "Veuillez vérifier votre connexion Internet, puis réessayer!", backProgress, -1);
                 backLabel.setText("Aucune connexion Internet.");
             }
@@ -433,20 +455,22 @@ public class Principal extends javax.swing.JFrame {
                 backBouton.setEnabled(false);
                 btBackup.getBouton().setEnabled(false);
                 menuSynchroniser.setEnabled(false);
-                comboListeAnneesScolaires.setEnabled(false);
+                //comboListeAnneesScolaires.setEnabled(false);
+                comboListeAnneesScolairesDemarrer.setEnabled(false);
                 backLabel.setText(message);
             }
         });
     }
 
     private void lf_synchroniser(boolean isDialogBoxNeeded) {
+        System.out.println("lf_synchroniser " + fm);
         if (fm != null) {
             if (isDialogBoxNeeded == true) {
-                if (fm.fm_isLicenceValide(moi, icones.getAdresse_02()) == true) {
+                if (fm.fm_isLicenceValide(moi, icones.getAdresse_02(), session.getPaiement()) == true) {
                     synchroniser();
                 }
             } else {
-                if (fm.fm_isLicenceValide(null, null) == true) {
+                if (fm.fm_isLicenceValide(null, null, session.getPaiement()) == true) {
                     synchroniser();
                 }
             }
@@ -534,8 +558,30 @@ public class Principal extends javax.swing.JFrame {
         lf_progress(false, "", progressEtat, 0);
         lf_progress(false, "", progressLogin, 0);
 
+        lf_chargerOngletLogin();
+    }
+
+    private void lf_chargerOngletLogin() {
         tabPrincipal.removeAll();
         tabPrincipal.add("Login", panLogin);
+    }
+
+    private void lf_chargerOngletDemarrer() {
+        lf_setIsClosed();
+        tabPrincipal.removeAll();
+        tabPrincipal.add("Démarrer", panDemarrer);
+    }
+
+    private void lf_setIsClosed() {
+        btAnnee.setIsClosed();
+        btInscription.setIsClosed();
+        btLitige.setIsClosed();
+        btPaie.setIsClosed();
+        btTresorerie.setIsClosed();
+    }
+
+    private void lf_effacerTousOnglets() {
+        tabPrincipal.removeAll();
     }
 
     private void lf_contruireBarreEtats(Session session) {
@@ -545,7 +591,9 @@ public class Principal extends javax.swing.JFrame {
         backBouton.setIcon(icones.getServeur_01());
         barreEtat.setVisible(true);
 
-        lf_construireListeAnneesScolaires();
+        //lf_construireListeAnneesScolaires(comboListeAnneesScolaires);
+        lf_construireListeAnneesScolaires(comboListeAnneesScolairesDemarrer);
+
         lf_construireBoutons();
 
         Utilisateur user = session.getUtilisateur();
@@ -568,7 +616,7 @@ public class Principal extends javax.swing.JFrame {
 
         PaiementLicence licence = session.getPaiement();
         if (licence != null) {
-            if (fm.fm_isLicenceValide(null, null) == true) {
+            if (fm.fm_isLicenceValide(null, null, licence) == true) {
                 String dateExpirationL = UtilFees.convertDatePaiement(licence.getDateExpiration()).toLocaleString();
                 btEtatLicence.setText(dateExpirationL);
                 texteTitre += " - Echéance: " + dateExpirationL;
@@ -585,12 +633,12 @@ public class Principal extends javax.swing.JFrame {
         lf_progress(false, "", progressEtat, 0);
     }
 
-    private void appliquerDroit() {
+    private void appliquerDroit(JComboBox combo) {
         if (btAnnee != null && btInscription != null && btLicence != null && btLitige != null && btPaie != null && btTresorerie != null) {
             if (session != null) {
                 Utilisateur user = session.getUtilisateur();
 
-                if (comboListeAnneesScolaires.getSelectedIndex() == 0) {    //tentative de création
+                if (combo.getSelectedIndex() == 0) {    //tentative de création
                     btAnnee.setText("Démarrer", 12, true);
                     btAnnee.setInfosBulle("Commencer par créer un Exercice (Année scolaire ou Année académique)");
                     btAnnee.setIcone(icones.getDémarrer_03());
@@ -605,11 +653,16 @@ public class Principal extends javax.swing.JFrame {
                     btPaie.setVisible(false);
                     btTresorerie.setVisible(false);
                     btUtilisateur.setVisible(false);
+                    btFermer.setVisible(false);
+                    labInfoEtat.setText("Sélectionnez une année");
+                    lf_chargerOngletDemarrer();
 
                 } else {  //tentative de modification ou suppression
                     btAnnee.setText("Exercice", 12, true);
                     btAnnee.setInfosBulle("Ouvrir l'Exercice séléctionné");
                     btAnnee.setIcone(icones.getCalendrier_02());
+                    labInfoEtat.setText("Connecté à " + comboListeAnneesScolairesDemarrer.getSelectedItem() + "");
+                    btFermer.setVisible(true);
 
                     if (user.getDroitExercice() == InterfaceUtilisateur.DROIT_PAS_ACCES) {
                         btAnnee.setVisible(false);
@@ -642,6 +695,7 @@ public class Principal extends javax.swing.JFrame {
                         btUtilisateur.setVisible(false);
                     }
 
+                    lf_effacerTousOnglets();
                     //Juste après sélction de l'année scolaire, il faut lancer la synchronisation très vite
                     lf_synchroniser(false);
                 }
@@ -654,7 +708,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public boolean onVerifie() {
                 if (fm != null) {
-                    return fm.fm_isLicenceValide(moi, icones.getAdresse_02());
+                    return fm.fm_isLicenceValide(moi, icones.getAdresse_02(), session.getPaiement());
                 } else {
                     return false;
                 }
@@ -670,14 +724,14 @@ public class Principal extends javax.swing.JFrame {
                         if (nomActuelData < 21) {   //On ne fait que quand on a au maximum 20 étudiants
                             return true;
                         } else {
-                            return fm.fm_isLicenceValide(moi, icones.getAdresse_02()) == true;
+                            return fm.fm_isLicenceValide(moi, icones.getAdresse_02(), session.getPaiement()) == true;
                         }
                     } else {
                         nomActuelData = fm.fm_getContenusDossier(nomTable).length;
                         if (nomActuelData < nombreMax) {
                             return true;
                         } else {
-                            return fm.fm_isLicenceValide(moi, icones.getAdresse_02()) == true;
+                            return fm.fm_isLicenceValide(moi, icones.getAdresse_02(), session.getPaiement()) == true;
                         }
                     }
                 } else {
@@ -692,7 +746,7 @@ public class Principal extends javax.swing.JFrame {
         btLicence = new Bouton(12, ":: Licence ::", "Payer votre abonnement", true, icones.getAdresse_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                UtilObjet.lancerPagePaiementEnLigne(session.getUtilisateur(), session.getEntreprise());
+                pageWeb_paiementLicence();
             }
         });
         btLicence.setForeground(UtilFees.COULEUR_ORANGE);
@@ -701,15 +755,8 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void OnEcouteLeClick() {
 
-                if (comboListeAnneesScolaires.getSelectedIndex() == 0) {
-                    new Thread() {
-                        public void run() {
-                            //Nouvelle année scolaire
-                            gestionAnnee = new GestionExercice(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
-                            gestionAnnee.ga_setDonnees(null, new Vector<Agent>(), new Vector<Charge>(), new Vector<Classe>(), new Vector<Cours>(), new Vector<Frais>(), new Vector<Monnaie>(), new Vector<Revenu>(), new Vector<>());
-                            gestionAnnee.ga_initUI("Nouvel Exercice");
-                        }
-                    }.start();
+                if (comboListeAnneesScolairesDemarrer.getSelectedIndex() == 0) {
+                    demarrerNouvelleAnneeScolaire();
                 } else {
                     if (canWeOpenAndLoadData(GestionExercice.NOM) == true) {
                         new Thread() {
@@ -717,7 +764,7 @@ public class Principal extends javax.swing.JFrame {
                                 //On ouvre une année scolaire existante
                                 //System.out.println("Modification et/ou Suppression de l'année scolaire " + comboListeAnneesScolaires.getSelectedItem());
                                 gestionAnnee = new GestionExercice(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
-                                gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "");
+                                gestionAnnee.ga_setDonneesFromFileManager(comboListeAnneesScolairesDemarrer.getSelectedItem() + "");
                             }
                         }.start();
                     }
@@ -731,14 +778,14 @@ public class Principal extends javax.swing.JFrame {
         btInscription = new Bouton(12, "Adhésion", "Inscrire des étudiants", true, icones.getAjouter_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
+                if (comboListeAnneesScolairesDemarrer.getSelectedIndex() != 0) {
                     if (canWeOpenAndLoadData(GestionAdhesion.NOM) == true) {
                         new Thread() {
                             public void run() {
                                 //On ouvre les inscriptions
                                 //System.out.println("Ouverture des adhésions");
                                 gestionAdhesion = new GestionAdhesion(ecouteurGestionInscription, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
-                                gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                                gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolairesDemarrer.getSelectedItem() + "", true);
                             }
                         }.start();
                     }
@@ -752,14 +799,14 @@ public class Principal extends javax.swing.JFrame {
         btPaie = new Bouton(12, "Salaire", "Paie des Agents de l'établissement", true, icones.getRecette_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
+                if (comboListeAnneesScolairesDemarrer.getSelectedIndex() != 0) {
                     if (canWeOpenAndLoadData(GestionSalaire.NOM) == true) {
                         new Thread() {
                             public void run() {
                                 //On ouvre les inscriptions
                                 System.out.println("Ouverture des fiches de paie");
                                 gestionSalaire = new GestionSalaire(ecouteurGestionPaie, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
-                                gestionSalaire.gp_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                                gestionSalaire.gp_setDonneesFromFileManager(comboListeAnneesScolairesDemarrer.getSelectedItem() + "", true);
                             }
                         }.start();
                     }
@@ -779,7 +826,7 @@ public class Principal extends javax.swing.JFrame {
                             //On ouvre les inscriptions
                             //System.out.println("Ouverture de la trésorerie");
                             gestionTresorerie = new GestionTresorerie(ecouteurGestionTresorerie, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
-                            gestionTresorerie.gt_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                            gestionTresorerie.gt_setDonneesFromFileManager(comboListeAnneesScolairesDemarrer.getSelectedItem() + "", true);
                         }
                     }.start();
                 }
@@ -792,14 +839,14 @@ public class Principal extends javax.swing.JFrame {
         btLitige = new Bouton(12, "Litiges", "Litiges et reglèment des dettes", true, icones.getFournisseur_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                if (comboListeAnneesScolaires.getSelectedIndex() != 0) {
+                if (comboListeAnneesScolairesDemarrer.getSelectedIndex() != 0) {
                     if (canWeOpenAndLoadData(GestionLitiges.NOM) == true) {
                         new Thread() {
                             public void run() {
                                 //On ouvre les inscriptions
                                 //System.out.println("Ouverture des litiges");
                                 gestionLitiges = new GestionLitiges(ecouteurGestionLitige, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
-                                gestionLitiges.gl_setDonneesFromFileManager(comboListeAnneesScolaires.getSelectedItem() + "", true);
+                                gestionLitiges.gl_setDonneesFromFileManager(comboListeAnneesScolairesDemarrer.getSelectedItem() + "", true);
                             }
                         }.start();
                     }
@@ -812,7 +859,7 @@ public class Principal extends javax.swing.JFrame {
         btUtilisateur = new Bouton(12, "Utilisateurs", "Gérer les utilisateurs ainsi que leurs droits d'accès.", true, icones.getUtilisateur_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_LISTER_UTILISATEUR, icones.getAlarme_02());
+                pageWeb_modifierInfoUtilisateur();
             }
         });
         btUtilisateur.setForeground(UtilFees.COULEUR_ORANGE);
@@ -820,10 +867,34 @@ public class Principal extends javax.swing.JFrame {
         btBackup = new Bouton(12, "Back-up", "Sauvegarder vos données en ligne", true, icones.getServeur_02(), new BoutonListener() {
             @Override
             public void OnEcouteLeClick() {
-                lf_synchroniser(true);
+                UtilFileManager.isNewWorkAvailable("http://www.google.com", new EcouteurInternet() {
+                    @Override
+                    public void onInternet(String adresseWebDisponible) {
+                        lf_synchroniser(true);
+                    }
+
+                    @Override
+                    public void onError() {
+                        JOptionPane.showMessageDialog(moi, "Désolé, il n'y a pas de connexion Internet.\nImpossible de lancer la page web.", "Pas de connexion Internet", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
+                    }
+
+                    @Override
+                    public void onVerification(String message) {
+                        //lf_progress(false, "", progressLogin, 0);
+                    }
+                });
             }
         });
         btBackup.setForeground(UtilFees.COULEUR_ORANGE);
+
+        btFermer = new Bouton(12, "Fermer", "Quitter l'année scolaire ouverte", true, icones.getAnnuler_02(), new BoutonListener() {
+            @Override
+            public void OnEcouteLeClick() {
+                comboListeAnneesScolairesDemarrer.setSelectedIndex(0);
+                lf_chargerOngletDemarrer();
+            }
+        });
+        btFermer.setForeground(UtilFees.COULEUR_ORANGE);
 
         bOutils.AjouterBouton(btLogo);
         bOutils.AjouterBouton(btLicence);
@@ -835,11 +906,23 @@ public class Principal extends javax.swing.JFrame {
         bOutils.AjouterBouton(btPaie);
         bOutils.AjouterBouton(btUtilisateur);
         bOutils.AjouterBouton(btBackup);
+        bOutils.AjouterBouton(btFermer);
 
         panOutils.setVisible(true);
         barreOutils.setVisible(true);
 
-        appliquerDroit();
+        appliquerDroit(comboListeAnneesScolairesDemarrer);
+    }
+
+    private void demarrerNouvelleAnneeScolaire() {
+        new Thread() {
+            public void run() {
+                //Nouvelle année scolaire
+                gestionAnnee = new GestionExercice(ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur(), null, ecouteurExercice);
+                gestionAnnee.ga_setDonnees(null, new Vector<Agent>(), new Vector<Charge>(), new Vector<Classe>(), new Vector<Cours>(), new Vector<Frais>(), new Vector<Monnaie>(), new Vector<Revenu>(), new Vector<>());
+                gestionAnnee.ga_initUI("Nouvel Exercice");
+            }
+        }.start();
     }
 
     private void lf_chargerEspaceTravail(Session session) {
@@ -850,7 +933,7 @@ public class Principal extends javax.swing.JFrame {
         labLoginMessage.setText("Prêt.");
         lf_progress(false, "", progressLogin, 0);
         lf_progress(false, "", progressEtat, 0);
-        labInfoEtat.setText("Connecté!");
+        labInfoEtat.setText("Sélectionnez une année scolaire");
         backProgress.setVisible(false);
 
         //on doit directement commencer à écouter le suiveur d'édition
@@ -883,10 +966,10 @@ public class Principal extends javax.swing.JFrame {
         lf_synchroniser(false);
     }
 
-    private void lf_construireListeAnneesScolaires() {
+    private void lf_construireListeAnneesScolaires(JComboBox combo) {
         //on enlèves les autres elements du combo, sauf le premier element
-        comboListeAnneesScolaires.removeAllItems();
-        comboListeAnneesScolaires.addItem("-- Liste d'Années --");
+        combo.removeAllItems();
+        combo.addItem("-- Liste d'Années --");
         System.out.println("CHARGEMENT DES ANNEES SCOLAIRES....");
         fm.fm_ouvrirTout(0, Annee.class, UtilObjet.DOSSIER_ANNEE, 1, 1000, new EcouteurOuverture() {
 
@@ -900,7 +983,7 @@ public class Principal extends javax.swing.JFrame {
                 Annee annee = (Annee) data;
                 System.out.println("\t - " + annee.toString());
                 if (!listeExercTempo.contains(annee)) {
-                    comboListeAnneesScolaires.addItem(annee.getNom());
+                    combo.addItem(annee.getNom());
                     listeExercTempo.add(annee);
                 }
             }
@@ -973,14 +1056,13 @@ public class Principal extends javax.swing.JFrame {
 
         barreEtat = new javax.swing.JPanel();
         jToolBar1 = new javax.swing.JToolBar();
-        comboListeAnneesScolaires = new javax.swing.JComboBox<>();
-        jSeparator6 = new javax.swing.JToolBar.Separator();
         btEtatEntreprise = new javax.swing.JButton();
         btEtatUser = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         btEtatLicence = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
         labInfoEtat = new javax.swing.JLabel();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
         progressEtat = new javax.swing.JProgressBar();
         backUpToolbar = new javax.swing.JToolBar();
         backBouton = new javax.swing.JButton();
@@ -998,6 +1080,12 @@ public class Principal extends javax.swing.JFrame {
         panLoginMessage = new javax.swing.JPanel();
         labLoginMessage = new javax.swing.JLabel();
         progressLogin = new javax.swing.JProgressBar();
+        panDemarrer = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        comboListeAnneesScolairesDemarrer = new javax.swing.JComboBox<>();
         panOutils = new javax.swing.JPanel();
         barreOutils = new javax.swing.JToolBar();
         jButton2 = new javax.swing.JButton();
@@ -1016,23 +1104,6 @@ public class Principal extends javax.swing.JFrame {
         jToolBar1.setFloatable(false);
         jToolBar1.setRollover(true);
         jToolBar1.setBorderPainted(false);
-
-        comboListeAnneesScolaires.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Liste d'Années --" }));
-        comboListeAnneesScolaires.setToolTipText("Liste d'années scolaires actuellement stockées en base de données");
-        comboListeAnneesScolaires.setMaximumSize(new java.awt.Dimension(500, 32767));
-        comboListeAnneesScolaires.setPreferredSize(new java.awt.Dimension(200, 22));
-        comboListeAnneesScolaires.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                comboListeAnneesScolairesItemStateChanged(evt);
-            }
-        });
-        comboListeAnneesScolaires.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboListeAnneesScolairesActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(comboListeAnneesScolaires);
-        jToolBar1.add(jSeparator6);
 
         btEtatEntreprise.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Facture01.png"))); // NOI18N
         btEtatEntreprise.setText("Ecole");
@@ -1075,8 +1146,10 @@ public class Principal extends javax.swing.JFrame {
         jToolBar1.add(btEtatLicence);
         jToolBar1.add(jSeparator5);
 
-        labInfoEtat.setText("Info");
+        labInfoEtat.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        labInfoEtat.setText("Sélectionnez une année");
         jToolBar1.add(labInfoEtat);
+        jToolBar1.add(jSeparator3);
 
         progressEtat.setIndeterminate(true);
         jToolBar1.add(progressEtat);
@@ -1242,7 +1315,7 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(panLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(panLoginInfos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panLoginMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(249, Short.MAX_VALUE))
+                .addContainerGap(250, Short.MAX_VALUE))
         );
         panLoginLayout.setVerticalGroup(
             panLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1255,6 +1328,81 @@ public class Principal extends javax.swing.JFrame {
         );
 
         tabPrincipal.addTab("Login", panLogin);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(26, 45, 77));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Pour commencer, créez une année scolaire");
+
+        jButton1.setBackground(new java.awt.Color(251, 155, 12));
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(26, 45, 77));
+        jButton1.setText("Démarrer");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setForeground(new java.awt.Color(26, 45, 77));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("ou séléctionnez une année existante ici");
+
+        comboListeAnneesScolairesDemarrer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboListeAnneesScolairesDemarrer.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboListeAnneesScolairesDemarrerItemStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(comboListeAnneesScolairesDemarrer, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addGap(30, 30, 30)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comboListeAnneesScolairesDemarrer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22))
+        );
+
+        javax.swing.GroupLayout panDemarrerLayout = new javax.swing.GroupLayout(panDemarrer);
+        panDemarrer.setLayout(panDemarrerLayout);
+        panDemarrerLayout.setHorizontalGroup(
+            panDemarrerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panDemarrerLayout.createSequentialGroup()
+                .addContainerGap(180, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(210, Short.MAX_VALUE))
+        );
+        panDemarrerLayout.setVerticalGroup(
+            panDemarrerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panDemarrerLayout.createSequentialGroup()
+                .addContainerGap(58, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(143, Short.MAX_VALUE))
+        );
+
+        tabPrincipal.addTab("Démarrer", panDemarrer);
 
         panOutils.setBackground(new java.awt.Color(26, 46, 77));
         panOutils.setForeground(new java.awt.Color(255, 255, 255));
@@ -1392,37 +1540,99 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_labLoginNouveauCompteMouseClicked
 
     private void btEtatLicenceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatLicenceActionPerformed
-        // TODO add your handling code here:
-        UtilObjet.lancerPagePaiementEnLigne(session.getUtilisateur(), session.getEntreprise());
+        
+        pageWeb_paiementLicence();
+        
     }//GEN-LAST:event_btEtatLicenceActionPerformed
 
-    private void comboListeAnneesScolairesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboListeAnneesScolairesItemStateChanged
+    private void pageWeb_paiementLicence() {
         // TODO add your handling code here:
-        if (evt.getStateChange() == ItemEvent.SELECTED) {
-            System.out.println("Combo: Selection - " + evt.getItem());
-            appliquerDroit();
-        }
-
-    }//GEN-LAST:event_comboListeAnneesScolairesItemStateChanged
-
-    private void comboListeAnneesScolairesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboListeAnneesScolairesActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboListeAnneesScolairesActionPerformed
+        
+        UtilFileManager.isNewWorkAvailable("http://www.google.com", new EcouteurInternet() {
+            @Override
+            public void onInternet(String adresseWebDisponible) {
+                UtilObjet.lancerPagePaiementEnLigne(session.getUtilisateur(), session.getEntreprise());
+            }
+            
+            @Override
+            public void onError() {
+                JOptionPane.showMessageDialog(moi, "Désolé, il n'y a pas de connexion Internet.\nImpossible de lancer la page web.", "Pas de connexion Internet", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
+            }
+            
+            @Override
+            public void onVerification(String message) {
+                //lf_progress(false, "", progressLogin, 0);
+            }
+        });
+    }
 
     private void backBoutonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBoutonActionPerformed
         // TODO add your handling code here:
-        lf_synchroniser(true);
+        UtilFileManager.isNewWorkAvailable("http://www.google.com", new EcouteurInternet() {
+            @Override
+            public void onInternet(String adresseWebDisponible) {
+                lf_synchroniser(true);
+            }
+
+            @Override
+            public void onError() {
+                JOptionPane.showMessageDialog(moi, "Désolé, il n'y a pas de connexion Internet.\nImpossible de lancer la page web.", "Pas de connexion Internet", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
+            }
+
+            @Override
+            public void onVerification(String message) {
+                //lf_progress(false, "", progressLogin, 0);
+            }
+        });
     }//GEN-LAST:event_backBoutonActionPerformed
 
     private void btEtatUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatUserActionPerformed
         // TODO add your handling code here:
-        UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_LISTER_UTILISATEUR, icones.getAlarme_02());
+        pageWeb_modifierInfoUtilisateur();
     }//GEN-LAST:event_btEtatUserActionPerformed
+
+    private void pageWeb_modifierInfoUtilisateur() {
+        UtilFileManager.isNewWorkAvailable("http://www.google.com", new EcouteurInternet() {
+            @Override
+            public void onInternet(String adresseWebDisponible) {
+                UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_LISTER_UTILISATEUR, icones.getAlarme_02());
+            }
+            
+            @Override
+            public void onError() {
+                JOptionPane.showMessageDialog(moi, "Désolé, il n'y a pas de connexion Internet.\nImpossible de lancer la page web.", "Pas de connexion Internet", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
+            }
+            
+            @Override
+            public void onVerification(String message) {
+                //lf_progress(false, "", progressLogin, 0);
+            }
+        });
+    }
 
     private void btEtatEntrepriseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEtatEntrepriseActionPerformed
         // TODO add your handling code here:
-        UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_MODIFIER_INFO_ECOLE, icones.getAlarme_02());
+        pageWeb_modifierInfoEcole();
     }//GEN-LAST:event_btEtatEntrepriseActionPerformed
+
+    private void pageWeb_modifierInfoEcole() {
+        UtilFileManager.isNewWorkAvailable("http://www.google.com", new EcouteurInternet() {
+            @Override
+            public void onInternet(String adresseWebDisponible) {
+                UtilObjet.lancerPageWebAdmin(moi, session.getUtilisateur(), session.getEntreprise(), UtilObjet.ACTION_MODIFIER_INFO_ECOLE, icones.getAlarme_02());
+            }
+            
+            @Override
+            public void onError() {
+                JOptionPane.showMessageDialog(moi, "Désolé, il n'y a pas de connexion Internet.\nImpossible de lancer la page web.", "Pas de connexion Internet", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
+            }
+            
+            @Override
+            public void onVerification(String message) {
+                //lf_progress(false, "", progressLogin, 0);
+            }
+        });
+    }
 
     private void menuSynchroniserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSynchroniserActionPerformed
         // TODO add your handling code here:
@@ -1433,6 +1643,26 @@ public class Principal extends javax.swing.JFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_tabPrincipalStateChanged
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        demarrerNouvelleAnneeScolaire();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void comboListeAnneesScolairesDemarrerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboListeAnneesScolairesDemarrerItemStateChanged
+
+        lf_connecterAnneeScolaire(evt, comboListeAnneesScolairesDemarrer);
+
+    }//GEN-LAST:event_comboListeAnneesScolairesDemarrerItemStateChanged
+
+    private void lf_connecterAnneeScolaire(ItemEvent evt, JComboBox combo) {
+        // TODO add your handling code here:
+
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            System.out.println("Combo: Selection - " + evt.getItem());
+            appliquerDroit(combo);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -1483,14 +1713,18 @@ public class Principal extends javax.swing.JFrame {
     private UI.JS2bTextField chLoginEmail;
     private UI.JS2bTextField chLoginIDEcole;
     private UI.JS2BPassword chLoginMotDePasse;
-    private javax.swing.JComboBox<String> comboListeAnneesScolaires;
+    private javax.swing.JComboBox<String> comboListeAnneesScolairesDemarrer;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator5;
-    private javax.swing.JToolBar.Separator jSeparator6;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel labInfoEtat;
     private javax.swing.JLabel labLoginMessage;
@@ -1499,6 +1733,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuDeconnexion;
     private javax.swing.JMenuItem menuQuitter;
     private javax.swing.JMenuItem menuSynchroniser;
+    private javax.swing.JPanel panDemarrer;
     private javax.swing.JPanel panLogin;
     private javax.swing.JPanel panLoginInfos;
     private javax.swing.JPanel panLoginMessage;

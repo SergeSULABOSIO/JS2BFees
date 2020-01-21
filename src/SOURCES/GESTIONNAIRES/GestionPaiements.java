@@ -454,6 +454,11 @@ public class GestionPaiements {
             public void onDetruitTousLesPaiements(int idEleve, int idExercice) {
                 //System.out.println("DESTRUCTION DES PAIEMENTS DE L'ELEVE " + idEleve + ", POUR l'ANNEE SCOLAIRE " + idExercice);
             }
+
+            @Override
+            public boolean onCanDelete(int idPaiement, long signature) {
+                return true;
+            }
         }, new EcouteurActualisationFacture() {
             @Override
             public DataFacture onRechargeDonneesEtParametres() {

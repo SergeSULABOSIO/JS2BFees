@@ -681,7 +681,7 @@ public class GestionAdhesion {
                                     progress.setVisible(false);
                                     progress.setIndeterminate(false);
                                     progress.setString("Prêt.");
-                                    
+
                                 }
 
                                 @Override
@@ -723,7 +723,7 @@ public class GestionAdhesion {
                                     progress.setVisible(false);
                                     progress.setIndeterminate(false);
                                     progress.setString("Prêt.");
-                                    
+
                                 }
 
                                 @Override
@@ -740,7 +740,7 @@ public class GestionAdhesion {
                                     progress.setString("Suppression en cours");
                                 }
                             });
-                            
+
                             break;
                         default:
                     }
@@ -750,6 +750,20 @@ public class GestionAdhesion {
             @Override
             public void onClose() {
                 ei.onClosed();
+            }
+
+            @Override
+            public boolean onCanDelete(int idElement, int index, long signature) {
+                boolean canDelete = true;
+                switch (index) {
+                    case 0://ELEVE
+                        canDelete = true;
+                        break;
+                    case 1://AYANT DROIT
+                        canDelete = true;
+                        break;
+                }
+                return canDelete;
             }
         }, new EcouteurCrossCanal() {
             @Override

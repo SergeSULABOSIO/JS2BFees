@@ -447,6 +447,11 @@ public class GestionSalaire {
                     ep.onClosed();
                 }
             }
+
+            @Override
+            public boolean onCanDelete(int idElement, long signature) {
+                return true;
+            }
         });
 
         NavigateurPages navigateurPages = panel.getNavigateurPagesFichePaie();

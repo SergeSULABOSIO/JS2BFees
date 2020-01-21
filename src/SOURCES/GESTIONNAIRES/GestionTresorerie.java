@@ -813,6 +813,21 @@ public class GestionTresorerie {
                     et.onClosed();
                 }
             }
+
+            @Override
+            public boolean onCanDelete(int idElement, int index, long signature) {
+                boolean canDelete = true;
+                switch (index) {
+                    case 0://ENCAISSEMENT
+                        canDelete = true;
+                        break;
+                    case 1://DECAISSEMENT
+                        canDelete = true;
+                        break;
+                    default:
+                }
+                return canDelete;
+            }
         });
 
         //Navigateur pour Encaissements

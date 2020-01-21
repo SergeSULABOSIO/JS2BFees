@@ -1,0 +1,18 @@
+{
+  "id" : 8,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 1,
+  "signature" : 4963096316598360866,
+  "classe" : "1e",
+  "adresse" : "RDC",
+  "telephonesParents" : "(+243)848803514",
+  "nom" : "MUTA",
+  "postnom" : "KANKU",
+  "prenom" : "CHRISTIAN",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1579360047821,
+  "beta" : 0
+}

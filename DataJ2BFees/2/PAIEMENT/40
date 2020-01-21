@@ -1,0 +1,18 @@
+{
+  "id" : 40,
+  "idEleve" : 10,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 5,
+  "idPeriode" : 6,
+  "mode" : 0,
+  "reference" : "1579453650635",
+  "nomEleve" : "MUNDA MAKWAYANGA GUILLAUME",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MUNDA MAKWAYANGA GUILLAUME",
+  "montant" : 10.0,
+  "date" : 1579453650635,
+  "signature" : -7755938590191208617,
+  "beta" : 0,
+  "referenceTransaction" : "1579453650635"
+}

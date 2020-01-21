@@ -1,5 +1,5 @@
 {
-  "id" : 2,
+  "id" : 4,
   "idEntreprise" : 2,
   "idUtilisateur" : 12,
   "idExercice" : 1,
@@ -7,6 +7,6 @@
   "code" : "Fc",
   "nature" : 0,
   "tauxMonnaieLocale" : 1.0,
-  "signature" : -3611765376619496341,
+  "signature" : 611562244195248395,
   "beta" : 0
 }

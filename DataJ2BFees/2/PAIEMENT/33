@@ -1,0 +1,18 @@
+{
+  "id" : 33,
+  "idEleve" : 9,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 4,
+  "idPeriode" : 4,
+  "mode" : 0,
+  "reference" : "1579451055131",
+  "nomEleve" : "MATONDO BATANTU ARNOLD",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "MATONDO BATANTU ARNOLD",
+  "montant" : 20.0,
+  "date" : 1579451055131,
+  "signature" : -1451799745504143846,
+  "beta" : 0,
+  "referenceTransaction" : "1579451055131"
+}

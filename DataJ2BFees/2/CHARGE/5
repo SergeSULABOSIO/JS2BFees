@@ -5,8 +5,8 @@
   "idExercice" : 1,
   "nom" : "SOINS MEDICAUX",
   "limiteAnnuelle" : 1000.0,
-  "idMonnaie" : 1,
-  "signatureMonnaie" : 8995297021524780276,
+  "idMonnaie" : 3,
+  "signatureMonnaie" : -3410546328996870766,
   "monnaie" : "$",
   "signature" : 6797225329695380339,
   "beta" : 0

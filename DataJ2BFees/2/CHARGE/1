@@ -5,8 +5,8 @@
   "idExercice" : 1,
   "nom" : "SALAIRE DU PERSONNEL",
   "limiteAnnuelle" : 5000.0,
-  "idMonnaie" : 1,
-  "signatureMonnaie" : 8995297021524780276,
+  "idMonnaie" : 3,
+  "signatureMonnaie" : -3410546328996870766,
   "monnaie" : "$",
   "signature" : -2962713559725411843,
   "beta" : 0

@@ -1,0 +1,18 @@
+{
+  "id" : 20,
+  "idEleve" : 7,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 4,
+  "idPeriode" : 4,
+  "mode" : 0,
+  "reference" : "1579364738461",
+  "nomEleve" : "ELEMBO ENDJINGA JEAN-PAUL",
+  "nomFrais" : "INSCRIPTION",
+  "nomDepositaire" : "ELEMBO ENDJINGA JEAN-PAUL",
+  "montant" : 20.0,
+  "date" : 1579364738461,
+  "signature" : 5710100053565521731,
+  "beta" : 0,
+  "referenceTransaction" : "1579364738461"
+}

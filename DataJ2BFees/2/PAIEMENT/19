@@ -1,0 +1,18 @@
+{
+  "id" : 19,
+  "idEleve" : 6,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 5,
+  "idPeriode" : 4,
+  "mode" : 0,
+  "reference" : "1579360098498",
+  "nomEleve" : "BATUBENGA MAKANDA DIDIER",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "BATUBENGA MAKANDA DIDIER",
+  "montant" : 33.33,
+  "date" : 1579360098498,
+  "signature" : 6275129813905436799,
+  "beta" : 0,
+  "referenceTransaction" : "1579360098498"
+}

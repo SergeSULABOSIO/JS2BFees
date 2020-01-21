@@ -5,8 +5,8 @@
   "idExercice" : 1,
   "nom" : "AUTRES",
   "limiteAnnuelle" : 1000.0,
-  "idMonnaie" : 1,
-  "signatureMonnaie" : 8995297021524780276,
+  "idMonnaie" : 3,
+  "signatureMonnaie" : -3410546328996870766,
   "monnaie" : "$",
   "signature" : -8564895271299157288,
   "beta" : 0

@@ -5,8 +5,8 @@
   "idExercice" : 1,
   "nom" : "CONSOMMABLES DU BUREAU",
   "limiteAnnuelle" : 500.0,
-  "idMonnaie" : 1,
-  "signatureMonnaie" : 8995297021524780276,
+  "idMonnaie" : 3,
+  "signatureMonnaie" : -3410546328996870766,
   "monnaie" : "$",
   "signature" : 4466295997269766586,
   "beta" : 0

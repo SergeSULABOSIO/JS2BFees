@@ -1,0 +1,18 @@
+{
+  "id" : 7,
+  "idEntreprise" : 2,
+  "idUtilisateur" : 12,
+  "idExercice" : 1,
+  "idClasse" : 2,
+  "signature" : -5104211809378813421,
+  "classe" : "2e",
+  "adresse" : "RDC",
+  "telephonesParents" : "(+243)844803514",
+  "nom" : "ELEMBO",
+  "postnom" : "ENDJINGA",
+  "prenom" : "JEAN-PAUL",
+  "status" : 0,
+  "sexe" : 0,
+  "dateNaissance" : 1579359977945,
+  "beta" : 0
+}

@@ -749,7 +749,9 @@ public class GestionAdhesion {
 
             @Override
             public void onClose() {
-                ei.onClosed();
+                if(ei != null){
+                    ei.onClosed();
+                }
             }
 
             @Override

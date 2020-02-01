@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exe4j version="7.0" transformSequenceNumber="3">
+  <directoryPresets config="F:/BOMBA ELEMENTS/SEP/SEP CONGO/NewData/JS2BFees/dist" />
+  <application name="e-kelasi" distributionSourceDir="F:/BOMBA ELEMENTS/SEP/SEP CONGO/NewData/JS2BFees/dist">
+    <languages>
+      <principalLanguage id="fr" />
+    </languages>
+  </application>
+  <executable name="e-kelasi_win64" iconSet="true" iconFile="F:/BOMBA ELEMENTS/SEP/SEP CONGO/NewData/JS2BFees/adresse03_Hn8_icon.ico" executableMode="gui" singleInstance="true" />
+  <java mainClass="SOURCES.UI.Principal" minVersion="1.8" maxVersion="1.8">
+    <classPath>
+      <archive location="F:/BOMBA ELEMENTS/SEP/SEP CONGO/NewData/JS2BFees/dist/JS2BFees.jar" failOnError="false" />
+    </classPath>
+  </java>
+</exe4j>

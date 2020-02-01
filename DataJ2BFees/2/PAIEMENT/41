@@ -1,0 +1,18 @@
+{
+  "id" : 41,
+  "idEleve" : 9,
+  "idExercice" : 1,
+  "idEntreprise" : 2,
+  "idFrais" : 5,
+  "idPeriode" : 5,
+  "mode" : 0,
+  "reference" : "1579809343429",
+  "nomEleve" : "MATONDO BATANTU ARNOLD",
+  "nomFrais" : "MINERVALE",
+  "nomDepositaire" : "MATONDO BATANTU ARNOLD",
+  "montant" : 33.34,
+  "date" : 1579809343429,
+  "signature" : 148023155977619047,
+  "beta" : 0,
+  "referenceTransaction" : "1579809343429"
+}

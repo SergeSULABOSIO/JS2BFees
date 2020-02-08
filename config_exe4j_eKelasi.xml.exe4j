@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exe4j version="7.0" transformSequenceNumber="3">
+  <directoryPresets config="F:/BOMBA ELEMENTS/SEP/SEP CONGO/NewData/JS2BFees/production/bin" />
+  <application name="[e]-kelasi" distributionSourceDir="F:/BOMBA ELEMENTS/SEP/SEP CONGO/NewData/JS2BFees/production">
+    <languages>
+      <principalLanguage id="fr" />
+    </languages>
+  </application>
+  <executable name="[e]-kelasi" iconSet="true" iconFile="adresse03_Hn8_icon.ico" executableMode="gui">
+    <versionInfo include="true" fileVersion="1.0" fileDescription="[e]-kelasi" legalCopyright="[e]-kelasi, 2020" internalName="[e]-kelasi" companyName="[e]-kelasi" productVersion="1.0" />
+  </executable>
+  <splashScreen show="true" bitmapFile="Adresse03.png" />
+  <java mainClass="SOURCES.UI.Principal" minVersion="1.8.0_202" maxVersion="1.8.0_202">
+    <searchSequence>
+      <directory location="bin/jre" />
+    </searchSequence>
+    <classPath>
+      <archive location="JS2BFees.jar" failOnError="false" />
+    </classPath>
+  </java>
+</exe4j>

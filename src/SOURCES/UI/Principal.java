@@ -480,7 +480,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void lf_logout() {
         if (fm != null) {
-
             fm.fm_logout(new EcouteurStandard() {
                 @Override
                 public void onDone(String message) {

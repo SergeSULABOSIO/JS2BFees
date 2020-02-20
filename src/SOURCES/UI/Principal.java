@@ -28,6 +28,7 @@ import SOURCES.GESTIONNAIRES.GestionTresorerie;
 import SOURCES.Objets.FileManager;
 import SOURCES.Objets.PaiementLicence;
 import SOURCES.Objets.Session;
+import SOURCES.Synchronisateur.SynchronisateurProgressListener;
 import SOURCES.UTILITAIRES.UtilFees;
 import SOURCES.Utilitaires.UtilFileManager;
 import Source.Callbacks.EcouteurFreemium;
@@ -89,6 +90,8 @@ public class Principal extends javax.swing.JFrame {
     public int idExerciceSelected;
     public String texteTitre = "";
     public EcouteurFreemium ef = null;
+    public Date synchro_date_debut = null;
+    public Date synchro_date_fin = null;
 
     /**
      * Creates new form Principal
@@ -397,44 +400,8 @@ public class Principal extends javax.swing.JFrame {
         UtilFileManager.isNewWorkAvailable("http://www.google.com", new EcouteurInternet() {
             @Override
             public void onInternet(String adresseWebDisponible) {
-                fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
-                    @Override
-                    public void onSuccess(String message) {
-                        if (idExerciceSelected == -1) {
-                            //lf_construireListeAnneesScolaires(comboListeAnneesScolaires);
-                            lf_construireListeAnneesScolaires(comboListeAnneesScolairesDemarrer);
-                        }
-                        lf_progressBackUpToobar(false, "Prêt", backProgress, 0);
-                        backBouton.setEnabled(true);
-                        btBackup.getBouton().setEnabled(true);
-                        menuSynchroniser.setEnabled(true);
-                        //comboListeAnneesScolaires.setEnabled(true);
-                        comboListeAnneesScolairesDemarrer.setEnabled(true);
-                        backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur.");
-                    }
-
-                    @Override
-                    public void onEchec(String message) {
-                        lf_progressBackUpToobar(false, "Erreur !", backProgress, 0);
-                        backBouton.setEnabled(true);
-                        btBackup.getBouton().setEnabled(true);
-                        menuSynchroniser.setEnabled(true);
-                        //comboListeAnneesScolaires.setEnabled(true);
-                        comboListeAnneesScolairesDemarrer.setEnabled(true);
-                        backLabel.setText(message);
-                    }
-
-                    @Override
-                    public void onProcessing(String message, int pourcentage) {
-                        lf_progressBackUpToobar(true, "(" + pourcentage + "%) Patientez...", backProgress, pourcentage);
-                        backBouton.setEnabled(false);
-                        btBackup.getBouton().setEnabled(false);
-                        menuSynchroniser.setEnabled(false);
-                        //comboListeAnneesScolaires.setEnabled(false);
-                        comboListeAnneesScolairesDemarrer.setEnabled(false);
-                        backLabel.setText("Back-up en cours: " + message);
-                    }
-                });
+                syncViaJSON();
+                //syncViaMySQL();
             }
 
             @Override
@@ -458,6 +425,93 @@ public class Principal extends javax.swing.JFrame {
                 //comboListeAnneesScolaires.setEnabled(false);
                 comboListeAnneesScolairesDemarrer.setEnabled(false);
                 backLabel.setText(message);
+            }
+        });
+    }
+
+    public void syncViaJSON() {
+        synchro_date_debut = new Date();
+        fm.fm_synchroniser_Json(session.getUtilisateur(), idExerciceSelected, new SynchronisateurProgressListener() {
+            @Override
+            public void onAffiche(int total, int actuel, String message) {
+                backProgress.setMaximum(total);
+                lf_progressBackUpToobar(true, " " + message + " ", backProgress, actuel);
+                backBouton.setEnabled(false);
+                btBackup.getBouton().setEnabled(false);
+                menuSynchroniser.setEnabled(false);
+                //comboListeAnneesScolaires.setEnabled(false);
+                comboListeAnneesScolairesDemarrer.setEnabled(false);
+                backLabel.setText("Back-up en cours: " + message);
+            }
+
+            @Override
+            public void onSuccess(String message) {
+                if (idExerciceSelected == -1) {
+                    //lf_construireListeAnneesScolaires(comboListeAnneesScolaires);
+                    lf_construireListeAnneesScolaires(comboListeAnneesScolairesDemarrer);
+                }
+                lf_progressBackUpToobar(false, "Prêt", backProgress, 0);
+                backBouton.setEnabled(true);
+                btBackup.getBouton().setEnabled(true);
+                menuSynchroniser.setEnabled(true);
+                //comboListeAnneesScolaires.setEnabled(true);
+                comboListeAnneesScolairesDemarrer.setEnabled(true);
+                synchro_date_fin = new Date();
+                long temps = synchro_date_fin.getTime() - synchro_date_debut.getTime();
+                backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur. (durée totale de synchronisation: " + (temps/1000) + " Sec).");
+            }
+
+            @Override
+            public void onEchec(String message) {
+                lf_progressBackUpToobar(false, "Erreur !", backProgress, 0);
+                backBouton.setEnabled(true);
+                btBackup.getBouton().setEnabled(true);
+                menuSynchroniser.setEnabled(true);
+                //comboListeAnneesScolaires.setEnabled(true);
+                comboListeAnneesScolairesDemarrer.setEnabled(true);
+                backLabel.setText(message);
+            }
+        });
+    }
+    
+    
+    public void syncViaMySQL() {
+        fm.fm_synchroniser(session.getUtilisateur(), idExerciceSelected, new EcouteurSynchronisation() {
+            @Override
+            public void onSuccess(String message) {
+                if (idExerciceSelected == -1) {
+                    //lf_construireListeAnneesScolaires(comboListeAnneesScolaires);
+                    lf_construireListeAnneesScolaires(comboListeAnneesScolairesDemarrer);
+                }
+                lf_progressBackUpToobar(false, "Prêt", backProgress, 0);
+                backBouton.setEnabled(true);
+                btBackup.getBouton().setEnabled(true);
+                menuSynchroniser.setEnabled(true);
+                //comboListeAnneesScolaires.setEnabled(true);
+                comboListeAnneesScolairesDemarrer.setEnabled(true);
+                backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur.");
+            }
+            
+            @Override
+            public void onEchec(String message) {
+                lf_progressBackUpToobar(false, "Erreur !", backProgress, 0);
+                backBouton.setEnabled(true);
+                btBackup.getBouton().setEnabled(true);
+                menuSynchroniser.setEnabled(true);
+                //comboListeAnneesScolaires.setEnabled(true);
+                comboListeAnneesScolairesDemarrer.setEnabled(true);
+                backLabel.setText(message);
+            }
+            
+            @Override
+            public void onProcessing(String message, int pourcentage) {
+                lf_progressBackUpToobar(true, "(" + pourcentage + "%) Patientez...", backProgress, pourcentage);
+                backBouton.setEnabled(false);
+                btBackup.getBouton().setEnabled(false);
+                menuSynchroniser.setEnabled(false);
+                //comboListeAnneesScolaires.setEnabled(false);
+                comboListeAnneesScolairesDemarrer.setEnabled(false);
+                backLabel.setText("Back-up en cours: " + message);
             }
         });
     }

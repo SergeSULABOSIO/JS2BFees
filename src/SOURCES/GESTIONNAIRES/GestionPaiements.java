@@ -6,6 +6,7 @@
 package SOURCES.GESTIONNAIRES;
 
 import ICONES.Icones;
+import SOURCES.CALLBACK.EcouteurGestionLitige;
 import SOURCES.CallBackFacture.EcouteurActualisationFacture;
 import SOURCES.CallBackFacture.EcouteurFacture;
 import SOURCES.Callback.EcouteurOuverture;
@@ -69,9 +70,11 @@ public class GestionPaiements {
     public boolean canBeSaved = false;
     public Icones icones = null;
     public EcouteurFreemium ef = null;
+    public EcouteurGestionLitige egl = null;
 
-    public GestionPaiements(EcouteurFreemium ef, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleve) {
+    public GestionPaiements(EcouteurGestionLitige egl, EcouteurFreemium ef, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleve) {
         this.ef = ef;
+        this.egl = egl;
         this.couleurBasique = couleurBasique;
         this.icones = icones;
         this.fm = fm;
@@ -419,6 +422,11 @@ public class GestionPaiements {
                     //System.out.println(message);
                     //Après enregistrement
                     ee.onDone("Paiements enregistrés !");
+                    
+                    //On lance très vite la synchronisation
+                    if(egl != null){
+                        egl.onSynchronise();
+                    }
                 }
 
                 @Override
@@ -447,6 +455,13 @@ public class GestionPaiements {
             public void onDetruitPaiement(int idPaiement, long signature) {
                 if (idPaiement != -1 && fm != null) {
                     boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_PAIEMENT, idPaiement, signature);
+                    
+                    if(rep == true){
+                        //On lance très vite la synchronisation
+                        if (egl != null) {
+                            egl.onSynchronise();
+                        }
+                    }
                 }
             }
 

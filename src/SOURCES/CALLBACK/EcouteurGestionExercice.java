@@ -13,5 +13,6 @@ public abstract class EcouteurGestionExercice {
     public abstract void onExerciceAdded(String nomExercice);
     public abstract void onExerciceDeleteded(String nom);
     public abstract void onClosed();
+    public abstract void onSynchronise();
 }
 

@@ -42,6 +42,7 @@ import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 import javax.swing.JTabbedPane;
 import Source.Interface.InterfaceAnnee;
+import Source.Objet.Ayantdroit;
 import Source.Objet.Decaissement;
 import Source.Objet.Eleve;
 import Source.Objet.Encaissement;
@@ -442,12 +443,12 @@ public class GestionExercice {
         });
     }
 
-    private void detruireChields() {
+    private void detruireChields(int idExercice) {
         //Destruction des AGENTS
         donneesExercice.getAgents().forEach((iAgent) -> {
             fm.fm_supprimer(UtilObjet.DOSSIER_AGENT, iAgent.getId(), iAgent.getSignature());
         });
-        //Destruction des AGENTS
+        //Destruction des CHARGES
         donneesExercice.getCharges().forEach((iCharge) -> {
             fm.fm_supprimer(UtilObjet.DOSSIER_CHARGE, iCharge.getId(), iCharge.getSignature());
         });
@@ -477,6 +478,170 @@ public class GestionExercice {
         });
     }
 
+    public void deleteAyantDroits(int idExercice) {
+        fm.fm_ouvrirTout(0, Ayantdroit.class, UtilObjet.DOSSIER_AYANT_DROIT, 1, 1000000, new EcouteurOuverture() {
+            @Override
+            public boolean isCriteresRespectes(Object object) {
+                Ayantdroit aya = (Ayantdroit) object;
+                return aya.getIdExercice() == idExercice;
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Ayantdroit aya = (Ayantdroit) data;
+                boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_AYANT_DROIT, aya.getId(), aya.getSignature());
+                System.out.println("SUPRESSION = " + rep);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                deleteDecaissement(idExercice);
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onProcessing(String message) {
+
+            }
+        });
+    }
+
+    public void deleteDecaissement(int idExercice) {
+        fm.fm_ouvrirTout(0, Decaissement.class, UtilObjet.DOSSIER_DECAISSEMENT, 1, 1000000, new EcouteurOuverture() {
+            @Override
+            public boolean isCriteresRespectes(Object object) {
+                Decaissement aya = (Decaissement) object;
+                return aya.getIdExercice() == idExercice;
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Decaissement aya = (Decaissement) data;
+                boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_DECAISSEMENT, aya.getId(), aya.getSignature());
+                System.out.println("SUPRESSION = " + rep);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                deleteEleve(idExercice);
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onProcessing(String message) {
+
+            }
+        });
+    }
+
+    public void deleteEleve(int idExercice) {
+        fm.fm_ouvrirTout(0, Eleve.class, UtilObjet.DOSSIER_ELEVE, 1, 1000000, new EcouteurOuverture() {
+            @Override
+            public boolean isCriteresRespectes(Object object) {
+                Eleve aya = (Eleve) object;
+                return aya.getIdExercice() == idExercice;
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Eleve aya = (Eleve) data;
+                boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_ELEVE, aya.getId(), aya.getSignature());
+                System.out.println("SUPRESSION = " + rep);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                deleteEncaissement(idExercice);
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onProcessing(String message) {
+
+            }
+        });
+    }
+
+    public void deleteEncaissement(int idExercice) {
+        fm.fm_ouvrirTout(0, Encaissement.class, UtilObjet.DOSSIER_ENCAISSEMENT, 1, 1000000, new EcouteurOuverture() {
+            @Override
+            public boolean isCriteresRespectes(Object object) {
+                Encaissement aya = (Encaissement) object;
+                return aya.getIdExercice() == idExercice;
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Encaissement aya = (Encaissement) data;
+                boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_ENCAISSEMENT, aya.getId(), aya.getSignature());
+                System.out.println("SUPRESSION = " + rep);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                deletePaiement(idExercice);
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onProcessing(String message) {
+
+            }
+        });
+    }
+
+    public void deletePaiement(int idExercice) {
+        fm.fm_ouvrirTout(0, Paiement.class, UtilObjet.DOSSIER_PAIEMENT, 1, 1000000, new EcouteurOuverture() {
+            @Override
+            public boolean isCriteresRespectes(Object object) {
+                Paiement aya = (Paiement) object;
+                return aya.getIdExercice() == idExercice;
+            }
+
+            @Override
+            public void onElementLoaded(String message, Object data) {
+                Paiement aya = (Paiement) data;
+                boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_PAIEMENT, aya.getId(), aya.getSignature());
+                System.out.println("SUPRESSION = " + rep);
+            }
+
+            @Override
+            public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
+                detruireChields(idExercice);
+                if (ecouteurExercice != null) {
+                    ecouteurExercice.onSynchronise();
+                    ecouteurExercice.onExerciceDeleteded(anneeSupp.getNom());
+                }
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+
+            @Override
+            public void onProcessing(String message) {
+
+            }
+        });
+    }
+
     private void action_save(SortiesExercice se) {
         if (se != null) {
             Thread th = new Thread() {
@@ -503,6 +668,10 @@ public class GestionExercice {
                         }
 
                         se.getEcouteurEnregistrement().onDone("Enregistré!");
+
+                        if (ecouteurExercice != null) {
+                            ecouteurExercice.onSynchronise();
+                        }
 
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -984,6 +1153,7 @@ public class GestionExercice {
     }
 
     boolean rep = false;
+    Annee anneeSupp = null;
 
     public void ga_initUI(String nomTab) {
         panel = new PanelExercice(ef, couleurBasique, tabOnglet, parametreExercice, donneesExercice, new EcouteurExerice() {
@@ -999,13 +1169,12 @@ public class GestionExercice {
             public void onDetruitExercice(int idExercice, long signature) {
                 System.out.println("DANGER !!!!!! EXERCICE: Destruction de l'Exercice " + idExercice);
                 if (idExercice != -1) {
-                    Annee anneeSupp = (Annee) fm.fm_ouvrir(Annee.class, UtilObjet.DOSSIER_ANNEE, idExercice);
+                    anneeSupp = (Annee) fm.fm_ouvrir(Annee.class, UtilObjet.DOSSIER_ANNEE, idExercice);
                     if (anneeSupp != null) {
                         fm.fm_supprimer(UtilObjet.DOSSIER_ANNEE, idExercice, anneeSupp.getSignature());
-                        detruireChields();
-                        if (ecouteurExercice != null) {
-                            ecouteurExercice.onExerciceDeleteded(anneeSupp.getNom());
-                        }
+
+                        //Destruction des AYANT DROIT
+                        deleteAyantDroits(idExercice);
                     }
                 }
             }
@@ -1040,6 +1209,10 @@ public class GestionExercice {
                             fm.fm_supprimer(UtilObjet.DOSSIER_COURS, idElement, signature);
                             break;
                         default:
+                    }
+                    //On lance la syncrhonisation avec le serveur
+                    if (ecouteurExercice != null) {
+                        ecouteurExercice.onSynchronise();
                     }
                 }
             }
@@ -1137,254 +1310,253 @@ public class GestionExercice {
         fm.fm_ouvrirTout(0, Paiement.class, UtilObjet.DOSSIER_PAIEMENT, 1, 100000000, new EcouteurOuverture() {
             @Override
             public boolean isCriteresRespectes(Object object) {
-                Paiement pp = (Paiement)object;
+                Paiement pp = (Paiement) object;
                 return (pp.getIdPeriode() == idElement);
             }
-            
+
             @Override
             public void onElementLoaded(String message, Object data) {
-                
+
             }
-            
+
             @Override
             public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 System.out.println("IsEmpty = " + resultatTotalObjets.isEmpty());
                 canDelete = (resultatTotalObjets.isEmpty());
-                if(canDelete == false){
+                if (canDelete == false) {
                     JOptionPane.showMessageDialog(panel, "Impossible de supprimer cette infos car elle actuellement indispensable pour d'autres renregistrements.", "Impossible!", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
                 }
             }
-            
+
             @Override
             public void onError(String message) {
-                
+
             }
-            
+
             @Override
             public void onProcessing(String message) {
-                
+
             }
         });
     }
-    
+
     private void isThisFraisUsedInPaiement(int idElement) {
         canDelete = false;
         //On doit s'assurer que cette période n'est pas encore utilisée dans les frais payés
         fm.fm_ouvrirTout(0, Paiement.class, UtilObjet.DOSSIER_PAIEMENT, 1, 100000000, new EcouteurOuverture() {
             @Override
             public boolean isCriteresRespectes(Object object) {
-                Paiement pp = (Paiement)object;
+                Paiement pp = (Paiement) object;
                 return (pp.getIdFrais() == idElement);
             }
-            
+
             @Override
             public void onElementLoaded(String message, Object data) {
-                
+
             }
-            
+
             @Override
             public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 System.out.println("IsEmpty = " + resultatTotalObjets.isEmpty());
                 canDelete = (resultatTotalObjets.isEmpty());
-                if(canDelete == false){
+                if (canDelete == false) {
                     JOptionPane.showMessageDialog(panel, "Impossible de supprimer cette infos car elle actuellement indispensable pour d'autres renregistrements.", "Impossible!", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
                 }
             }
-            
+
             @Override
             public void onError(String message) {
-                
+
             }
-            
+
             @Override
             public void onProcessing(String message) {
-                
+
             }
         });
     }
-    
+
     private void isThisChargeUsedInDecaissement(int idElement) {
         canDelete = false;
         //On doit s'assurer que cette période n'est pas encore utilisée dans les frais payés
         fm.fm_ouvrirTout(0, Decaissement.class, UtilObjet.DOSSIER_DECAISSEMENT, 1, 100000000, new EcouteurOuverture() {
             @Override
             public boolean isCriteresRespectes(Object object) {
-                Decaissement pp = (Decaissement)object;
-                return (pp.getIdCharge()== idElement);
+                Decaissement pp = (Decaissement) object;
+                return (pp.getIdCharge() == idElement);
             }
-            
+
             @Override
             public void onElementLoaded(String message, Object data) {
-                
+
             }
-            
+
             @Override
             public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 System.out.println("IsEmpty = " + resultatTotalObjets.isEmpty());
                 canDelete = (resultatTotalObjets.isEmpty());
-                if(canDelete == false){
+                if (canDelete == false) {
                     JOptionPane.showMessageDialog(panel, "Impossible de supprimer cette infos car elle actuellement indispensable pour d'autres renregistrements.", "Impossible!", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
                 }
             }
-            
+
             @Override
             public void onError(String message) {
-                
+
             }
-            
+
             @Override
             public void onProcessing(String message) {
-                
+
             }
         });
     }
-    
-    
+
     private void isThisMonnaieUsedInPaiement(int idElement) {
         canDelete = false;
         //On doit s'assurer que cette période n'est pas encore utilisée dans les frais payés
         fm.fm_ouvrirTout(0, Paiement.class, UtilObjet.DOSSIER_PAIEMENT, 1, 100000000, new EcouteurOuverture() {
             @Override
             public boolean isCriteresRespectes(Object object) {
-                Paiement pp = (Paiement)object;
+                Paiement pp = (Paiement) object;
                 boolean rep = false;
-                if(pp.getIdFrais() != -1){
-                    Frais ff = (Frais)fm.fm_ouvrir(Frais.class, UtilObjet.DOSSIER_FRAIS, pp.getIdFrais());
+                if (pp.getIdFrais() != -1) {
+                    Frais ff = (Frais) fm.fm_ouvrir(Frais.class, UtilObjet.DOSSIER_FRAIS, pp.getIdFrais());
                     rep = (ff.getIdMonnaie() == idElement);
                 }
                 return rep;
             }
-            
+
             @Override
             public void onElementLoaded(String message, Object data) {
-                
+
             }
-            
+
             @Override
             public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 System.out.println("IsEmpty = " + resultatTotalObjets.isEmpty());
                 canDelete = (resultatTotalObjets.isEmpty());
-                if(canDelete == false){
+                if (canDelete == false) {
                     JOptionPane.showMessageDialog(panel, "Impossible de supprimer cette infos car elle actuellement indispensable pour d'autres renregistrements.", "Impossible!", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
                 }
             }
-            
+
             @Override
             public void onError(String message) {
-                
+
             }
-            
+
             @Override
             public void onProcessing(String message) {
-                
+
             }
         });
     }
-    
+
     private void isThisRevenuUsedInEncaissement(int idElement) {
         canDelete = false;
         //On doit s'assurer que cette période n'est pas encore utilisée dans les frais payés
         fm.fm_ouvrirTout(0, Encaissement.class, UtilObjet.DOSSIER_ENCAISSEMENT, 1, 100000000, new EcouteurOuverture() {
             @Override
             public boolean isCriteresRespectes(Object object) {
-                Encaissement pp = (Encaissement)object;
+                Encaissement pp = (Encaissement) object;
                 return (pp.getIdRevenu() == idElement);
             }
-            
+
             @Override
             public void onElementLoaded(String message, Object data) {
-                
+
             }
-            
+
             @Override
             public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 System.out.println("IsEmpty = " + resultatTotalObjets.isEmpty());
                 canDelete = (resultatTotalObjets.isEmpty());
-                if(canDelete == false){
+                if (canDelete == false) {
                     JOptionPane.showMessageDialog(panel, "Impossible de supprimer cette infos car elle actuellement indispensable pour d'autres renregistrements.", "Impossible!", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
                 }
             }
-            
+
             @Override
             public void onError(String message) {
-                
+
             }
-            
+
             @Override
             public void onProcessing(String message) {
-                
+
             }
         });
     }
-    
+
     private void isThisAgentUsedInPaie(int idElement) {
         canDelete = false;
         //On doit s'assurer que cette période n'est pas encore utilisée dans les frais payés
         fm.fm_ouvrirTout(0, Fiche_paie.class, UtilObjet.DOSSIER_FICHE_DE_PAIE, 1, 100000000, new EcouteurOuverture() {
             @Override
             public boolean isCriteresRespectes(Object object) {
-                Fiche_paie pp = (Fiche_paie)object;
-                return (pp.getIdAgent()== idElement);
+                Fiche_paie pp = (Fiche_paie) object;
+                return (pp.getIdAgent() == idElement);
             }
-            
+
             @Override
             public void onElementLoaded(String message, Object data) {
-                
+
             }
-            
+
             @Override
             public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 System.out.println("IsEmpty = " + resultatTotalObjets.isEmpty());
                 canDelete = (resultatTotalObjets.isEmpty());
-                if(canDelete == false){
+                if (canDelete == false) {
                     JOptionPane.showMessageDialog(panel, "Impossible de supprimer cette infos car elle actuellement indispensable pour d'autres renregistrements.", "Impossible!", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
                 }
             }
-            
+
             @Override
             public void onError(String message) {
-                
+
             }
-            
+
             @Override
             public void onProcessing(String message) {
-                
+
             }
         });
     }
-    
+
     private void isThisClasseUsedInInscription(int idElement) {
         canDelete = false;
         //On doit s'assurer que cette période n'est pas encore utilisée dans les frais payés
         fm.fm_ouvrirTout(0, Eleve.class, UtilObjet.DOSSIER_ELEVE, 1, 100000000, new EcouteurOuverture() {
             @Override
             public boolean isCriteresRespectes(Object object) {
-                Eleve pp = (Eleve)object;
+                Eleve pp = (Eleve) object;
                 return (pp.getIdClasse() == idElement);
             }
-            
+
             @Override
             public void onElementLoaded(String message, Object data) {
-                
+
             }
-            
+
             @Override
             public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                 System.out.println("IsEmpty = " + resultatTotalObjets.isEmpty());
                 canDelete = (resultatTotalObjets.isEmpty());
-                if(canDelete == false){
+                if (canDelete == false) {
                     JOptionPane.showMessageDialog(panel, "Impossible de supprimer cette infos car elle actuellement indispensable pour d'autres renregistrements.", "Impossible!", JOptionPane.ERROR_MESSAGE, icones.getAlert_03());
                 }
             }
-            
+
             @Override
             public void onError(String message) {
-                
+
             }
-            
+
             @Override
             public void onProcessing(String message) {
-                
+
             }
         });
     }

@@ -11,5 +11,6 @@ package SOURCES.CALLBACK;
  */
 public abstract class EcouteurGestionInscription {
     public abstract void onClosed();
+    public abstract void onSynchronise();
 }
 

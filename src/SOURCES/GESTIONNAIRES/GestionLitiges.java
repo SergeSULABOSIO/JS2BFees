@@ -6,6 +6,7 @@
 package SOURCES.GESTIONNAIRES;
 
 import ICONES.Icones;
+import SOURCES.CALLBACK.EcouteurGestionInscription;
 import SOURCES.CALLBACK.EcouteurGestionLitige;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.EcouteurLitiges.EcouteurLitiges;
@@ -85,10 +86,12 @@ public class GestionLitiges {
     public Litige litige = null;
     public EcouteurFreemium ef = null;
     public EcouteurGestionLitige el = null;
+    public EcouteurGestionInscription egi = null;
 
-    public GestionLitiges(EcouteurGestionLitige el, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionLitiges(EcouteurGestionInscription egi, EcouteurGestionLitige el, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.ef = ef;
         this.el = el;
+        this.egi = egi;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -100,9 +103,10 @@ public class GestionLitiges {
         this.eleveConcerned = null;
     }
 
-    public GestionLitiges(EcouteurGestionLitige el, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+    public GestionLitiges(EcouteurGestionInscription egi, EcouteurGestionLitige el, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
         this.ef = ef;
         this.el = el;
+        this.egi = egi;
         this.couleurBasique = couleurBasique;
         this.fenetre = fenetre;
         this.icones = icones;
@@ -540,7 +544,7 @@ public class GestionLitiges {
             public void onOuvrirPaiements(Eleve eleve) {
                 new Thread() {
                     public void run() {
-                        new GestionPaiements(ef, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve)
+                        new GestionPaiements(el, ef, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve)
                                 .gl_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();
@@ -550,7 +554,7 @@ public class GestionLitiges {
             public void onOuvrirInscription(Eleve eleve) {
                 new Thread() {
                     public void run() {
-                        new GestionAdhesion(null, ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve)
+                        new GestionAdhesion(el, egi, ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve)
                                 .gi_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();

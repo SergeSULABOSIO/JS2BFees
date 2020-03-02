@@ -303,6 +303,11 @@ public class Principal extends javax.swing.JFrame {
                 btAnnee.setIsClosed();
             }
 
+            @Override
+            public void onSynchronise() {
+                lf_synchroniser(false);
+            }
+
         };
     }
 
@@ -311,6 +316,11 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onClosed() {
                 btInscription.setIsClosed();
+            }
+
+            @Override
+            public void onSynchronise() {
+                lf_synchroniser(false);
             }
         };
     }
@@ -321,6 +331,11 @@ public class Principal extends javax.swing.JFrame {
             public void onClosed() {
                 btLitige.setIsClosed();
             }
+
+            @Override
+            public void onSynchronise() {
+                lf_synchroniser(false);
+            }
         };
     }
 
@@ -330,6 +345,11 @@ public class Principal extends javax.swing.JFrame {
             public void onClosed() {
                 btPaie.setIsClosed();
             }
+
+            @Override
+            public void onSynchronise() {
+                lf_synchroniser(false);
+            }
         };
     }
 
@@ -338,6 +358,11 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onClosed() {
                 btTresorerie.setIsClosed();
+            }
+
+            @Override
+            public void onSynchronise() {
+                lf_synchroniser(false);
             }
         };
     }
@@ -435,7 +460,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public void onAffiche(int total, int actuel, String message) {
                 backProgress.setMaximum(total);
-                lf_progressBackUpToobar(true, " " + message + " ", backProgress, actuel);
+                lf_progressBackUpToobar(true, "  Synchronisation - (" + actuel + "/" + total + ")  ", backProgress, actuel);
                 backBouton.setEnabled(false);
                 btBackup.getBouton().setEnabled(false);
                 menuSynchroniser.setEnabled(false);
@@ -459,6 +484,7 @@ public class Principal extends javax.swing.JFrame {
                 synchro_date_fin = new Date();
                 long temps = synchro_date_fin.getTime() - synchro_date_debut.getTime();
                 backLabel.setText("Vos données viennent d'être sauvegardées sur le serveur. (durée totale de synchronisation: " + (temps/1000) + " Sec).");
+                System.out.println("Fin - Synchronisation.");
             }
 
             @Override
@@ -470,6 +496,7 @@ public class Principal extends javax.swing.JFrame {
                 //comboListeAnneesScolaires.setEnabled(true);
                 comboListeAnneesScolairesDemarrer.setEnabled(true);
                 backLabel.setText(message);
+                System.out.println("Fin - Synchronisation.");
             }
         });
     }
@@ -520,11 +547,11 @@ public class Principal extends javax.swing.JFrame {
         System.out.println("lf_synchroniser " + fm);
         if (fm != null) {
             if (isDialogBoxNeeded == true) {
-                if (fm.fm_isLicenceValide(moi, icones.getAdresse_02(), session.getPaiement()) == true) {
+                if (fm.fm_isLicenceValide(" (Sauvegarde de données sur Serveur)", moi, icones.getAdresse_02(), session.getPaiement()) == true) {
                     synchroniser();
                 }
             } else {
-                if (fm.fm_isLicenceValide(null, null, session.getPaiement()) == true) {
+                if (fm.fm_isLicenceValide(" (Sauvegarde de données sur Serveur)", null, null, session.getPaiement()) == true) {
                     synchroniser();
                 }
             }
@@ -669,7 +696,7 @@ public class Principal extends javax.swing.JFrame {
 
         PaiementLicence licence = session.getPaiement();
         if (licence != null) {
-            if (fm.fm_isLicenceValide(null, null, licence) == true) {
+            if (fm.fm_isLicenceValide("", null, null, licence) == true) {
                 String dateExpirationL = UtilFees.convertDatePaiement(licence.getDateExpiration()).toLocaleString();
                 btEtatLicence.setText(dateExpirationL);
                 texteTitre += " - Echéance: " + dateExpirationL;
@@ -761,7 +788,7 @@ public class Principal extends javax.swing.JFrame {
             @Override
             public boolean onVerifie() {
                 if (fm != null) {
-                    return fm.fm_isLicenceValide(moi, icones.getAdresse_02(), session.getPaiement());
+                    return fm.fm_isLicenceValide("", moi, icones.getAdresse_02(), session.getPaiement());
                 } else {
                     return false;
                 }
@@ -777,14 +804,14 @@ public class Principal extends javax.swing.JFrame {
                         if (nomActuelData < 21) {   //On ne fait que quand on a au maximum 20 étudiants
                             return true;
                         } else {
-                            return fm.fm_isLicenceValide(moi, icones.getAdresse_02(), session.getPaiement()) == true;
+                            return fm.fm_isLicenceValide(" (Production d'états en PDF & Impression)", moi, icones.getAdresse_02(), session.getPaiement()) == true;
                         }
                     } else {
                         nomActuelData = fm.fm_getContenusDossier(nomTable).length;
                         if (nomActuelData < nombreMax) {
                             return true;
                         } else {
-                            return fm.fm_isLicenceValide(moi, icones.getAdresse_02(), session.getPaiement()) == true;
+                            return fm.fm_isLicenceValide(" (Inscription de plus de "+nombreMax+" élèves)", moi, icones.getAdresse_02(), session.getPaiement()) == true;
                         }
                     }
                 } else {
@@ -837,7 +864,7 @@ public class Principal extends javax.swing.JFrame {
                             public void run() {
                                 //On ouvre les inscriptions
                                 //System.out.println("Ouverture des adhésions");
-                                gestionAdhesion = new GestionAdhesion(ecouteurGestionInscription, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                                gestionAdhesion = new GestionAdhesion(ecouteurGestionLitige, ecouteurGestionInscription, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                                 gestionAdhesion.gi_setDonneesFromFileManager(comboListeAnneesScolairesDemarrer.getSelectedItem() + "", true);
                             }
                         }.start();
@@ -898,7 +925,7 @@ public class Principal extends javax.swing.JFrame {
                             public void run() {
                                 //On ouvre les inscriptions
                                 //System.out.println("Ouverture des litiges");
-                                gestionLitiges = new GestionLitiges(ecouteurGestionLitige, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
+                                gestionLitiges = new GestionLitiges(ecouteurGestionInscription, ecouteurGestionLitige, ef, moi, icones, couleurBasique, fm, tabPrincipal, progressEtat, session.getEntreprise(), session.getUtilisateur());
                                 gestionLitiges.gl_setDonneesFromFileManager(comboListeAnneesScolairesDemarrer.getSelectedItem() + "", true);
                             }
                         }.start();

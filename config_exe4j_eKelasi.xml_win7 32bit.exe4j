@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<exe4j version="6.0" transformSequenceNumber="2">
+  <directoryPresets config="Z:/UAP - PROCES VERBAUX/[e]-kelasi/JS2BFees/production/lib" />
+  <application name="[e]-kalsi" distributionSourceDir="F:/UAP DATA/UAP - PROCES VERBAUX/[e]-kelasi/JS2BFees/production">
+    <languages>
+      <principalLanguage id="fr" customLocalizationFile="" />
+    </languages>
+  </application>
+  <executable name="[e]-kalsi 1.0 win32 - win7" type="1" iconSet="true" iconFile="./adresse03_Hn8_icon.ico" executableDir="" redirectStderr="true" stderrFile="error.log" stderrMode="overwrite" redirectStdout="false" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false" singleInstanceActivate="true" dpiAware="java9+" amd64="false">
+    <messageSet />
+    <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" productName="" companyName="" productVersion="" />
+  </executable>
+  <splashScreen show="true" width="0" height="0" bitmapFile="./Adresse03.png" textOverlay="false">
+    <text>
+      <statusLine x="20" y="20" text="" fontSize="8" fontColor="0,0,0" bold="false" />
+      <versionLine x="20" y="40" text="version %VERSION%" fontSize="8" fontColor="0,0,0" bold="false" />
+    </text>
+  </splashScreen>
+  <java mainClass="SOURCES.UI.Principal" mainMode="1" vmParameters="" arguments="" allowVMPassthroughParameters="true" preferredVM="" bundleRuntime="true" minVersion="8.0.2020.8" maxVersion="8.0.2020.8" allowBetaVM="false" jdkOnly="false">
+    <searchSequence>
+      <directory location="./bin/jre_32" />
+    </searchSequence>
+    <classPath>
+      <archive location="JS2BFees.jar" failOnError="false" />
+    </classPath>
+    <modulePath />
+    <nativeLibraryDirectories />
+    <vmOptions />
+  </java>
+  <includedFiles />
+  <unextractableFiles />
+</exe4j>

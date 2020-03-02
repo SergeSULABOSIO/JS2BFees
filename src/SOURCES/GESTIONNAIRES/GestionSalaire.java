@@ -398,6 +398,11 @@ public class GestionSalaire {
 
                         se.getEcouteurEnregistrement().onDone("Enregistré!");
 
+                        //On ance la syncrhonisation avec le serveur
+                        if (ep != null) {
+                            ep.onSynchronise();
+                        }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -431,13 +436,25 @@ public class GestionSalaire {
                         return ((Fiche_paie) objToDelete).getIdExercice() == exercice.getId();
                     }
                 });
+
+                //On ance la syncrhonisation avec le serveur
+                if (ep != null) {
+                    ep.onSynchronise();
+                }
             }
 
             @Override
             public void onDetruitElement(int idElement, long signature) {
                 //System.out.println("Suppression de la fiche " + idElement);
                 if (idElement != -1) {
-                    fm.fm_supprimer(UtilObjet.DOSSIER_FICHE_DE_PAIE, idElement, signature);
+                    boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_FICHE_DE_PAIE, idElement, signature);
+                    if (rep == true) {
+                        //On ance la syncrhonisation avec le serveur
+                        if (ep != null) {
+                            ep.onSynchronise();
+                        }
+                    }
+
                 }
             }
 

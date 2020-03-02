@@ -7,6 +7,7 @@ package SOURCES.GESTIONNAIRES;
 
 import ICONES.Icones;
 import SOURCES.CALLBACK.EcouteurGestionInscription;
+import SOURCES.CALLBACK.EcouteurGestionLitige;
 import SOURCES.Callback.EcouteurContains;
 import SOURCES.Callback.EcouteurOuverture;
 import SOURCES.Callback_Insc.EcouteurInscription;
@@ -80,10 +81,12 @@ public class GestionAdhesion {
     public boolean canBeSaved;
     public EcouteurFreemium ef = null;
     private EcouteurGestionInscription ei;
+    private EcouteurGestionLitige egl = null;
 
-    public GestionAdhesion(EcouteurGestionInscription ei, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
+    public GestionAdhesion(EcouteurGestionLitige egl, EcouteurGestionInscription ei, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur) {
         this.ef = ef;
         this.ei = ei;
+        this.egl = egl;
         this.fenetre = fenetre;
         this.icones = icones;
         this.couleurBasique = couleurBasique;
@@ -95,7 +98,7 @@ public class GestionAdhesion {
         this.eleveConcerned = null;
     }
 
-    public GestionAdhesion(EcouteurGestionInscription ei, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
+    public GestionAdhesion(EcouteurGestionLitige egl, EcouteurGestionInscription ei, EcouteurFreemium ef, JFrame fenetre, Icones icones, CouleurBasique couleurBasique, FileManager fm, JTabbedPane tabOnglet, JProgressBar progress, Entreprise entreprise, Utilisateur utilisateur, Eleve eleveConcerned) {
         this.ef = ef;
         this.ei = ei;
         this.fenetre = fenetre;
@@ -486,6 +489,10 @@ public class GestionAdhesion {
 
                         se.getEcouteurEnregistrement().onDone("Enregistré!");
 
+                        if (ei != null) {
+                            ei.onSynchronise();
+                        }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -677,11 +684,17 @@ public class GestionAdhesion {
                                 @Override
                                 public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                                     //C'est quand on a finit de supprimer les paiements de cet élève que l'on va lui supprimer lui-même
-                                    fm.fm_supprimer(UtilObjet.DOSSIER_ELEVE, idElement, signature);
+                                    boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_ELEVE, idElement, signature);
                                     progress.setVisible(false);
                                     progress.setIndeterminate(false);
                                     progress.setString("Prêt.");
 
+                                    if (rep == true) {
+                                        //On doit vite lancer la synchronisation avec le serveur
+                                        if (ei != null) {
+                                            ei.onSynchronise();
+                                        }
+                                    }
                                 }
 
                                 @Override
@@ -719,11 +732,17 @@ public class GestionAdhesion {
                                 @Override
                                 public void onDone(String message, int resultatTotal, Vector resultatTotalObjets) {
                                     //C'est quand on a finit de supprimer les paiements de cet élève que l'on va lui supprimer lui-même
-                                    fm.fm_supprimer(UtilObjet.DOSSIER_AYANT_DROIT, idElement, signature);
+                                    boolean rep = fm.fm_supprimer(UtilObjet.DOSSIER_AYANT_DROIT, idElement, signature);
                                     progress.setVisible(false);
                                     progress.setIndeterminate(false);
                                     progress.setString("Prêt.");
 
+                                    if (rep == true) {
+                                        //On doit vite lancer la synchronisation avec le serveur
+                                        if (ei != null) {
+                                            ei.onSynchronise();
+                                        }
+                                    }
                                 }
 
                                 @Override
@@ -749,7 +768,7 @@ public class GestionAdhesion {
 
             @Override
             public void onClose() {
-                if(ei != null){
+                if (ei != null) {
                     ei.onClosed();
                 }
             }
@@ -772,7 +791,7 @@ public class GestionAdhesion {
             public void onOuvrirPaiements(Eleve eleve) {
                 new Thread() {
                     public void run() {
-                        new GestionPaiements(ef, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
+                        new GestionPaiements(egl, ef, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();
             }
@@ -787,7 +806,7 @@ public class GestionAdhesion {
                 new Thread() {
                     public void run() {
                         System.out.println("Ouverture des litiges de " + eleve.getNom());
-                        new GestionLitiges(null, ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
+                        new GestionLitiges(ei, egl, ef, fenetre, icones, couleurBasique, fm, tabOnglet, progress, entreprise, utilisateur, eleve).gl_setDonneesFromFileManager(selectedAnnee, true);
                     }
                 }.start();
             }

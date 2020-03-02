@@ -631,6 +631,10 @@ public class GestionTresorerie {
 
                         se.getEcouteurEnregistrement().onDone("Enregistré!");
 
+                        //On lance la synchronisation - juste après enregistrement
+                        if (et != null) {
+                            et.onSynchronise();
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -795,14 +799,21 @@ public class GestionTresorerie {
             @Override
             public void onDetruitElement(int idElement, int index, long signature) {
                 if (idElement != -1 && idElement != -100) {
+                    boolean rep = false;
                     switch (index) {
                         case 0://ENCAISSEMENT
-                            fm.fm_supprimer(UtilObjet.DOSSIER_ENCAISSEMENT, idElement, signature);
+                            rep = fm.fm_supprimer(UtilObjet.DOSSIER_ENCAISSEMENT, idElement, signature);
                             break;
                         case 1://DECAISSEMENT
-                            fm.fm_supprimer(UtilObjet.DOSSIER_DECAISSEMENT, idElement, signature);
+                            rep = fm.fm_supprimer(UtilObjet.DOSSIER_DECAISSEMENT, idElement, signature);
                             break;
                         default:
+                    }
+                    if (rep == true) {
+                        //On lance la synchronisation - juste après enregistrement
+                        if (et != null) {
+                            et.onSynchronise();
+                        }
                     }
                 }
             }

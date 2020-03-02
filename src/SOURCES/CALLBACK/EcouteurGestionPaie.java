@@ -11,5 +11,6 @@ package SOURCES.CALLBACK;
  */
 public abstract class EcouteurGestionPaie {
     public abstract void onClosed();
+    public abstract void onSynchronise();
 }
 

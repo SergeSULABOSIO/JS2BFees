@@ -229,7 +229,7 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void lf_initFileManaer() {
-        fm = new FileManager("http://www.visiterlardc.com/s2b", "processeurS2B.php", btLogo.getBouton());
+        fm = new FileManager(UtilObjet.pageWeb + "/mon-compte", "processeurS2B.php", btLogo.getBouton());
         fm.fm_setEcouteurFenetre(moi);  // On écoute désormais les mouvements de la fenetre
     }
 

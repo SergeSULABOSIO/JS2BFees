@@ -159,6 +159,8 @@ public class Principal extends javax.swing.JFrame {
             return true;
         }
     }
+    
+    
 
     private void initEffectSelectionTab() {
         tabPrincipal.addChangeListener(new ChangeListener() {

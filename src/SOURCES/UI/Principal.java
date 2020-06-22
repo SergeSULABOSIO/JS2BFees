@@ -627,7 +627,7 @@ public class Principal extends javax.swing.JFrame {
 
         chLoginIDEcole.setIcon(icones.getEnseignant_01());
         chLoginIDEcole.setText("");
-        chLoginIDEcole.setTextInitial("ID Ecole");
+        chLoginIDEcole.setTextInitial("ID de l'établissement");
 
         panOutils.setVisible(false);
         barreEtat.setVisible(false);
@@ -1327,7 +1327,7 @@ public class Principal extends javax.swing.JFrame {
         });
 
         chLoginIDEcole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/IMG/Facture01.png"))); // NOI18N
-        chLoginIDEcole.setTextInitial("ID de l'école");
+        chLoginIDEcole.setTextInitial("ID de l'établissement");
         chLoginIDEcole.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 chLoginIDEcoleKeyReleased(evt);
